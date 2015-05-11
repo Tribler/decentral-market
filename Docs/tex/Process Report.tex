@@ -29,6 +29,9 @@
  \hline
 \end{tabular} 
 \section{Sprint layout}
+The development of Tsukiji followed aspects of the Scrum methodology.
 \subsection{Sprint 1: Sockets and broadcasting}
-The goal of the first sprint was to create a local simulation of the decentral market, using socket connections. The peers had to be able to communicate with each other. The implementation of this sprint used broadcasting as a way for peers to reach one another. 
+The goal of the first sprint was to create a local simulation of the decentral market, using socket connections. The peers had to be able to communicate with each other. The options considered for this were approaching a subset and relaying the information of your subset to other subsets and broadcasting your information to the entire network. The issue that arose with the subset approach was that in a competitive market, someone that is selling an item is not easily motivated to advertise in the name of another seller. This could lead to certain peers that are offering an item for sale, not to relay other offers that would endanger the profits of the peer. This could lead to a disjoint of the network and therefor destroy the communication between certain peers. \\
+Broadcasting would not have this issue. Everyone personally takes care of his own advertising and there is no peer between origin and destination that could disrupt the communication. The issue that rises with broadcasting though, is that is scales rather poorly. The increase of data over the network increases exponentially as the amount of users rises. Because of this, using broadcasting in a large scale project is not advised, but since this project is mostly aiming to be a proof of concept and this is also the first iteration, broadcasting would suffice for the time being.
+
 \end{document}
