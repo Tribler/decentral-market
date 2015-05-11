@@ -1,3 +1,5 @@
+import datetime
+import json
 import socket
 import threading
 import SocketServer
@@ -6,10 +8,11 @@ import SocketServer
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 
     def handle(self):
-        data = self.request.recv(1024)
-        cur_thread = threading.current_thread()
-        response = "{}: {}".format(cur_thread.name, data)
-        self.request.sendall(response)
+        while True:
+            data = self.request.recv(1024)
+            cur_thread = threading.current_thread()
+            response = "{}: {}".format(cur_thread.name, data)
+            self.request.sendall(response)
 
 
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
@@ -41,7 +44,9 @@ if __name__ == "__main__":
     server_list = [create_server(HOST, PORT) for x in range(8)]
     address_list = [server.server_address for server in server_list]
 
-    for ip, port in address_list:
-        send_msg(ip, port, "I want {} fishes".format(3))
-
-    map(lambda server: server.shutdown(), server_list)
+    print address_list
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        map(lambda server: server.shutdown(), server_list)
