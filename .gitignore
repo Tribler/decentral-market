@@ -74,3 +74,6 @@ target/
 *.pdfsync
 *.bbl
 *.blg
+
+# PyCharm
+.idea/*
