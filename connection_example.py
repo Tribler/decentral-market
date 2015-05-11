@@ -15,7 +15,7 @@ class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
     pass
 
 
-def client(ip, port, message):
+def send_msg(ip, port, message):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((ip, port))
     try:
@@ -31,22 +31,16 @@ def create_server(host, port):
     server_thread = threading.Thread(target=server.serve_forever)
     server_thread.daemon = True
     server_thread.start()
-    print "Server loop running in thread:", server_thread.name
     return server
+
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 0
 
-    server = create_server(HOST, PORT)
-    server2 = create_server(HOST, PORT)
+    server_list = [create_server(HOST, PORT) for x in range(8)]
+    address_list = [server.server_address for server in server_list]
 
-    ip, port = server.server_address
-    ip, port2 = server2.server_address
+    for ip, port in address_list:
+        send_msg(ip, port, "I want {} fishes".format(3))
 
-    client(ip, port, "Hi world")
-    client(ip, port2, "Hullo world")
-    client(ip, port, "Sup world")
-    client(ip, port2, "Goodbye world")
-
-    server.shutdown()
-    server2.shutdown()
+    map(lambda server: server.shutdown(), server_list)
