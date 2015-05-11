@@ -1,3 +1,4 @@
+import json
 import socket
 
 
@@ -10,3 +11,7 @@ def send_msg(ip, port, message):
         print "Received: {}".format(response)
     finally:
         sock.close()
+
+def send_offer(ip, port, offer):
+    offer = json.dumps(offer)
+    send_msg(ip, port, offer)
