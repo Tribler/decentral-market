@@ -1,5 +1,6 @@
 import json
 import socket
+import hashlib
 
 
 def send_msg(ip, port, message):
@@ -12,6 +13,16 @@ def send_msg(ip, port, message):
     finally:
         sock.close()
 
-def send_offer(ip, port, offer):
-    offer = json.dumps(offer)
-    send_msg(ip, port, offer)
+
+def send_offer(ip, port, offer, price=1):
+    d = {'id': create_id(ip, port), 'offer': offer, 'price': price}
+    msg = json.dumps(d)
+    send_msg(ip, port, msg)
+
+
+#Assuming ip and port is known
+def create_id(ip, port):
+    plaintext = ip + str(port)
+    hash_object = hashlib.sha256(plaintext)
+    id_string = hash_object.hexdigest()
+    return id_string
