@@ -14,13 +14,17 @@ def send_msg(ip, port, message):
         sock.close()
 
 
-def send_offer(ip, port, offer, price=1):
-    d = {'id': create_id(ip, port), 'offer': offer, 'price': price}
+def send_offer(ip, port, id, offer, price=1):
+    d = {
+        'id': id,
+        'offer': offer,
+        'price': price
+    }
     msg = json.dumps(d)
     send_msg(ip, port, msg)
 
 
-#Assuming ip and port is known
+# Assuming ip and port is known
 def create_id(ip, port):
     plaintext = ip + str(port)
     hash_object = hashlib.sha256(plaintext)
