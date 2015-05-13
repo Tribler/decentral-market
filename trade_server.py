@@ -1,6 +1,9 @@
+import json
 import threading
 import socket
 import SocketServer
+
+from orderbook import match_bid, offers, bids
 
 messages = []
 
@@ -12,10 +15,15 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
             while True:
                 data = self.request.recv(1024)
                 if data:
+                    data = json.loads(data)
                     messages.append(data)
                     print "MESSAGES: {}".format(messages)
+                    if data['type'] == 'bid':
+                        response = handle_bid(data)
+                    elif data['type'] == 'offer':
+                        response = handle_offer(data)
                 cur_thread = threading.current_thread()
-                response = "{}: {}".format(cur_thread.name, data)
+                response = "\n{}: {}".format(cur_thread.name, data)
                 self.request.sendall(response)
         except socket.error:
             # Surpress errno 13 Broken Pipe
@@ -32,3 +40,10 @@ def create_server(host="localhost", port=0):
     server_thread.daemon = True
     server_thread.start()
     return server
+
+
+def handle_offer(offer):
+    offers.append(offer)
+
+def handle_bid(bid):
+    bids.append(bid)
