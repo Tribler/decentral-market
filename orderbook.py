@@ -4,15 +4,15 @@ bids = []
 asks = []
 message_id = 0
 
-def create_offer(id, type=None, price=None, quantity=None, timeout=None, trade_id=None):
+def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=None):
     '''
-    Creates an offer.
+    Standard for message passing.
 
-    Offer can have 5 types: ask, bid, trade, cancel, greeting.
-    Depending on the type of offer, an argument might be mandatory.
+    Message can have 5 types: ask, bid, trade, cancel, greeting.
+    Depending on the type of message, an argument might be mandatory.
     '''
 
-    offer = {
+    message = {
         "id": id,
         "message-id": message_id,
         "timestamp": datetime.datetime.now().isoformat(),
@@ -20,22 +20,22 @@ def create_offer(id, type=None, price=None, quantity=None, timeout=None, trade_i
     }
 
     if type in ["ask", "bid"]:
-        offer.update({
+        message.update({
             "price": price,
             "quantity": quantity,
             "timeout": timeout
         })
     elif type == "trade":
-        offer.update({
+        message.update({
             "quantity": quantity,
             "trade-id": trade_id,
         })
     elif type == "cancel":
-        offer.update({
+        message.update({
             "trade-id": trade_id,
         })
 
-    return offer
+    return message 
 
 
 def match_bid(bid):
@@ -43,5 +43,5 @@ def match_bid(bid):
     return ask if ask['price'] <= bid['price'] else None
 
 
-def lowest_ask(offers=offers):
+def lowest_ask(asks=asks):
     return min(asks, key=lambda x: x['price'])
