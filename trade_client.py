@@ -14,14 +14,9 @@ def send_msg(ip, port, message):
         sock.close()
 
 
-def send_offer(ip, port, id, offer, price=1):
-    d = {
-        'id': id,
-        'offer': offer,
-        'price': price
-    }
-    msg = json.dumps(d)
-    send_msg(ip, port, msg)
+def send_offer(ip, port, offer):
+    message = json.dumps(offer)
+    send_msg(ip, port, message)
 
 
 # Assuming ip and port is known
