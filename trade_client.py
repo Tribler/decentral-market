@@ -1,5 +1,6 @@
 import json
 import socket
+import hashlib
 
 
 def send_msg(ip, port, message):
@@ -21,3 +22,6 @@ def send_offer(ip, port, id, offer, price=1):
     }
     msg = json.dumps(d)
     send_msg(ip, port, msg)
+
+
+
