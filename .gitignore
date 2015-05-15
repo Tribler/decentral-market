@@ -1,3 +1,7 @@
+# Ignore public/private key file
+*.pem
+
+# Ignore compiled documentation files
 *.pdf
 
 # vim
