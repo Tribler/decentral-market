@@ -4,6 +4,7 @@ bids = []
 asks = []
 message_id = 0
 
+
 def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=None):
     '''
     Standard for message passing.
@@ -35,7 +36,7 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
             "trade-id": trade_id,
         })
 
-    return message 
+    return message
 
 
 def match_bid(bid):
@@ -43,5 +44,14 @@ def match_bid(bid):
     return ask if ask['price'] <= bid['price'] else None
 
 
+def match_ask(ask):
+    bid = highest_bid()
+    return bid if bid['price'] >= ask['price'] else None
+
+
 def lowest_ask(asks=asks):
     return min(asks, key=lambda x: x['price'])
+
+
+def highest_bid(bids=bids):
+    return max(bids, key=lambda x: x['price'])
