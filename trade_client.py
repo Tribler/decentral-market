@@ -1,6 +1,9 @@
+import datetime
 import json
 import socket
 import hashlib
+
+message_id = 0
 
 
 def send_msg(ip, port, message):
@@ -12,6 +15,39 @@ def send_msg(ip, port, message):
         print "Received: {}".format(response)
     finally:
         sock.close()
+
+
+def create_offer(id, type=None, price=None, quantity=None, timeout=None, trade_id=None):
+    '''
+    Creates an offer.
+
+    Offer can have 5 types: ask, bid, trade, cancel, greeting.
+    Depending on the type of offer, an argument might be mandatory.
+    '''
+    offer = {
+        "id": id,
+        "message-id": message_id,
+        "timestamp": datetime.datetime.now().isoformat(),
+        "type": type,
+    }
+
+    if type in ["ask", "bid"]:
+        offer.update({
+            "price": price,
+            "quantity": quantity,
+            "timeout": timeout
+        })
+    elif type == "trade":
+        offer.update({
+            "quantity": quantity,
+            "trade-id": trade_id,
+        })
+    elif type == "cancel":
+        offer.update({
+            "trade-id": trade_id,
+        })
+
+    return offer
 
 
 def send_offer(ip, port, offer):
