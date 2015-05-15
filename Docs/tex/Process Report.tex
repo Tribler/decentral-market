@@ -40,7 +40,11 @@ Broadcasting would not have this issue. Everyone personally takes care of his ow
 Testing the socket connection showed a couple of issues. Whenever a client would disconnect from a peer, the server that it was connected to reported a Broken Pipe error. This however did not stop the server from running but it did add 2 empty string to the collection of received strings. However if the server received an empty string that was sent intentionally, it ignores that message. Therefor it would not hinder the communication if the Broken Pipe errors are suppressed, since the program will not change behaviour. The empty strings that resulted from this error are now filtered out.
 
 \subsubsection{Identifiers}
-TODO: identifier
+With the lack of a central authority confirming the identity of peers within the network, the users need an identifier of their own that distinguishes them from others. This id needs to be unique to the peer and needs to be constructed as such that it cannot be imitated by someone else. A regular username and password structure is not possible in a decentralised network since there is no entity that is trusted to store and confirm the passwords.
+
+Simply using a username without a password is possible by broadcasting a request to receive all the usernames and allowing only nonexistent names to be used during creation. While this creates a unique identifier for the user, it does not create a safety measure against impostors. Anyone can declare that his username is Alice and can then validate transactions in the name of Alice, without the consent of the actual real Alice.
+
+A solution to this problem is cryptography. We need a way for users to prove that they are authentic. Asymmetric encryption provides this perfectly. The peers can use their public key as a unique identifier, since the chances of a SHA256 collision happening are incredibly low. Users can now use the public key of the recipient of their message to force them to authenticate themselves. As long as everyone stays the sole owner of their private key, no one but themselves will be able to respond correctly to the authentication request. This enables a network where everyone can read every message, but can only answer to authentication requests when they are the original sender of the message.
 
 \subsubsection{Cancelling}
 We discussed how to cancel an ask or bid. Our first proposal was to broadcast a special cancel message to all peers. However, there are two major problems with this approach: authentication and flooding.
