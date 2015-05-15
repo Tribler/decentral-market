@@ -12,10 +12,11 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
         try:
             while True:
                 data = self.request.recv(1024)
+                response = ''
                 if data:
-                    response = handle_data(data)
-                cur_thread = threading.current_thread()
-                response = "\n{}: {}".format(cur_thread.name, data)
+                    response += handle_data(data)
+                    cur_thread = threading.current_thread()
+                    response += "\n{}: {}".format(cur_thread.name, data)
                 self.request.sendall(response)
         except socket.error:
             # Surpress errno 13 Broken Pipe
