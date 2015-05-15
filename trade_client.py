@@ -1,9 +1,6 @@
-import datetime
 import json
 import socket
 import hashlib
-
-message_id = 0
 
 
 def send_msg(ip, port, message):
@@ -15,7 +12,6 @@ def send_msg(ip, port, message):
         print "Received: {}".format(response)
     finally:
         sock.close()
-
 
 
 def send_offer(ip, port, offer):

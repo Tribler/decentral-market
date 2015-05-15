@@ -3,7 +3,7 @@ import threading
 import socket
 import SocketServer
 
-from orderbook import match_bid, offers, bids
+from orderbook import match_bid, offers, asks
 
 messages = []
 
@@ -20,8 +20,8 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
                     print "MESSAGES: {}".format(messages)
                     if data['type'] == 'bid':
                         response = handle_bid(data)
-                    elif data['type'] == 'offer':
-                        response = handle_offer(data)
+                    elif data['type'] == 'ask':
+                        response = handle_asks(data)
                 cur_thread = threading.current_thread()
                 response = "\n{}: {}".format(cur_thread.name, data)
                 self.request.sendall(response)
@@ -42,8 +42,8 @@ def create_server(host="localhost", port=0):
     return server
 
 
-def handle_offer(offer):
-    offers.append(offer)
+def handle_ask(ask):
+    asks.append(ask)
 
 def handle_bid(bid):
     bids.append(bid)

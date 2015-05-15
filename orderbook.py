@@ -1,7 +1,7 @@
 import datetime
 
 bids = []
-offers = []
+asks = []
 message_id = 0
 
 def create_offer(id, type=None, price=None, quantity=None, timeout=None, trade_id=None):
@@ -39,9 +39,9 @@ def create_offer(id, type=None, price=None, quantity=None, timeout=None, trade_i
 
 
 def match_bid(bid):
-    offer = lowest_offer()
-    return offer if offer['price'] <= bid['price'] else None
+    ask = lowest_ask()
+    return ask if ask['price'] <= bid['price'] else None
 
 
-def lowest_offer(offers=offers):
-    return min(offers, key=lambda x: x['price'])
+def lowest_ask(offers=offers):
+    return min(asks, key=lambda x: x['price'])
