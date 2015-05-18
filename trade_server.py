@@ -3,7 +3,7 @@ import threading
 import socket
 import SocketServer
 
-from orderbook import asks, bids
+from orderbook import asks, bids, match_incoming_ask
 
 
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
@@ -45,18 +45,24 @@ def handle_data(data):
     try:
         data = json.loads(data)
         if data['type'] == 'ask':
-            return handle_ask(data), 'ask'
+            response_dict = handle_ask(data)
         elif data['type'] == 'bid':
-            return handle_bid(data), 'bid'
+            response_dict = handle_bid(data)
         elif data['type'] == 'greeting':
-            return handle_greeting(data), 'greeting'
+            response_dict = handle_greeting(data)
+        return json.dumps(response_dict), data['type']
     except ValueError, e:
         print e.message
         return e.message
 
 
 def handle_ask(ask):
-    asks.append(ask)
+    bid = match_incoming_ask(ask)
+    if bid:
+        return bid
+    else:
+        asks.append(ask)
+        return 'Your ask got processed!'
 
 
 def handle_bid(bid):
