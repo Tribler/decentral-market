@@ -7,6 +7,22 @@ asks = []
 message_id = 0
 
 
+def create_ask(id, price, quantity, timeout):
+    return create_msg(id, type='ask', price=price, quantity=quantity, timeout=timeout)
+
+
+def create_bid(id, price, quantity, timeout):
+    return create_msg(id, type='bid', price=price, quantity=quantity, timeout=timeout)
+
+
+def create_trade(id, quantity, trade_id):
+    return create_msg(id, type='trade', quantity=quantity, trade_id=trade_id)
+
+
+def create_greeting(id):
+    return create_msg(id, type='greeting')
+
+
 def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=None):
     '''
     Standard for message passing.
@@ -45,20 +61,14 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
     return message
 
 
-def match_incoming_bid(bid):
-    return match_bid(bid, own_asks)
-
-
-def match_bid(bid, asks=asks):
+def match_bid(bid):
+    '''Match a bid of your own with the lowest ask from the other party.'''
     ask = lowest_ask(asks)
     return ask if ask and ask['price'] <= bid['price'] else None
 
 
-def match_incoming_ask(ask):
-    return match_ask(ask, own_bids)
-
-
-def match_ask(ask, bids=bids):
+def match_ask(ask):
+    '''Match an ask of your own with the highest bid from the other party.'''
     bid = highest_bid(bids)
     return bid if bid and bid['price'] >= ask['price'] else None
 
