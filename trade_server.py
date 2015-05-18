@@ -52,6 +52,8 @@ def handle_data(data):
             response_dict = handle_greeting(data)
         elif data['type'] == 'trade':
             response_dict = handle_trade(data)
+        elif data['type'] == 'confirm':
+            response_dict = handle_confirm(data)
         return json.dumps(response_dict), data['type']
     except ValueError, e:
         print e.message
@@ -72,6 +74,10 @@ def handle_bid(bid):
 
 
 def handle_trade(trade):
+    return 'Trade succesful!'
+
+
+def handle_confirm(confirm):
     return 'Trade succesful!'
 
 

@@ -1,9 +1,8 @@
 import json
 import socket
-import hashlib
 
 
-from orderbook import trade_offer, create_trade
+from orderbook import create_confirm
 
 
 def send_msg(ip, port, message):
@@ -25,15 +24,16 @@ def send_offer(ip, port, offer):
 
 def handle_response(response):
     response = json.loads(response)
-    if response['type'] == 'trade':
-        return handle_trade(response)
+    if response:
+        if response['type'] == 'trade':
+            return handle_trade(response)
     return "Nothing"
+
 
 def handle_trade(trade):
     id = trade['trade-id'].split(';')[0]
 
-    return create_trade(
+    return create_confirm(
         id = id,
-        quantity=trade['quantity'],
         trade_id = trade['trade-id']
     )
