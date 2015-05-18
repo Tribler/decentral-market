@@ -1,5 +1,7 @@
 import datetime
 
+own_bids = []
+own_asks = []
 bids = []
 asks = []
 message_id = 0
@@ -26,6 +28,10 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
             "quantity": quantity,
             "timeout": timeout
         })
+        if type == "ask":
+            own_asks.append(message)
+        else:
+            own_bids.append(message)
     elif type == "trade":
         message.update({
             "quantity": quantity,
@@ -39,19 +45,27 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
     return message
 
 
-def match_bid(bid):
-    ask = lowest_ask()
-    return ask if ask['price'] <= bid['price'] else None
+def match_incoming_bid(bid):
+    return match_bid(bid, own_asks)
 
 
-def match_ask(ask):
-    bid = highest_bid()
-    return bid if bid['price'] >= ask['price'] else None
+def match_bid(bid, asks=asks):
+    ask = lowest_ask(asks)
+    return ask if ask and ask['price'] <= bid['price'] else None
+
+
+def match_incoming_ask(ask):
+    return match_ask(ask, own_bids)
+
+
+def match_ask(ask, bids=bids):
+    bid = highest_bid(bids)
+    return bid if bid and bid['price'] >= ask['price'] else None
 
 
 def lowest_ask(asks=asks):
-    return min(asks, key=lambda x: x['price'])
+    return min(asks, key=lambda x: x['price']) if asks else None
 
 
 def highest_bid(bids=bids):
-    return max(bids, key=lambda x: x['price'])
+    return max(bids, key=lambda x: x['price']) if bids else None
