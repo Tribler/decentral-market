@@ -69,5 +69,9 @@ def handle_bid(bid):
     bids.append(bid)
 
 
+def handle_trade(trade):
+    return 'Hello Trade'
+
+
 def handle_greeting(greeting):
     return 'Hi!'
