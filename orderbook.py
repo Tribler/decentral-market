@@ -2,6 +2,7 @@ import datetime
 
 own_bids = []
 own_asks = []
+trades = []
 bids = []
 asks = []
 message_id = 0
@@ -18,6 +19,9 @@ def create_bid(id, price, quantity, timeout):
 def create_trade(id, quantity, trade_id):
     return create_msg(id, type='trade', quantity=quantity, trade_id=trade_id)
 
+
+def create_confirm(id, trade_id):
+    return create_msg(id, type='confirm', trade_id=trade_id)
 
 def create_greeting(id):
     return create_msg(id, type='greeting')
@@ -56,6 +60,10 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
             "quantity": quantity,
             "trade-id": trade_id,
         })
+    elif type == 'confirm':
+        message.update({
+            "trade-id": trade_id,
+        })
     elif type == "cancel":
         message.update({
             "trade-id": trade_id,
@@ -65,6 +73,14 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
 
 
 def trade_offer(their_offer, own_offer):
+    if their_offer['type'] == 'bid':
+        own_asks.remove(own_offer)
+        print own_asks
+    else:
+        own_bids.remove(own_offer)
+        print own_bids
+    trades.append(own_offer)
+    print trades
     return create_trade(
         id = own_offer['id'],
         quantity = own_offer['quantity'],
