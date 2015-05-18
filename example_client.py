@@ -2,7 +2,6 @@ from datetime import datetime
 
 from orderbook import create_ask, create_bid
 from trade_client import send_offer, handle_response
-
 ip = raw_input("Enter ip address: ")
 port = raw_input("Enter port nr: ")
 

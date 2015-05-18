@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from Crypto.PublicKey import RSA
 from trade_server import create_server
 from orderbook import create_bid, bids, asks, own_bids, own_asks, trades
 
@@ -46,6 +46,9 @@ open_ip_address = raw_input("Do you want to connect to the world? y/n ")
 host = "0.0.0.0" if open_ip_address == 'y' else "localhost"
 server = create_server(host=host)
 print server.server_address
+create_bid(price=6, quantity=4, timeout=datetime.now().isoformat())
+create_bid(price=3, quantity=4, timeout=datetime.now().isoformat())
+create_bid(price=2, quantity=4, timeout=datetime.now().isoformat())
 
 # Create 3 bids with prices 6, 3, and 2.
 create_bid(price=6, quantity=4, timeout=datetime.now().isoformat())
