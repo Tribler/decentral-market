@@ -63,14 +63,14 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
 
 def match_bid(bid):
     '''Match a bid of your own with the lowest ask from the other party.'''
-    ask = lowest_ask(asks)
-    return ask if ask and ask['price'] <= bid['price'] else None
+    matching_asks = filter(lambda ask: ask['price'] <= bid['price'], asks)
+    return lowest_ask(matching_asks)
 
 
 def match_ask(ask):
     '''Match an ask of your own with the highest bid from the other party.'''
-    bid = highest_bid(bids)
-    return bid if bid and bid['price'] >= ask['price'] else None
+    matching_bids = filter(lambda bid: bid['price'] >= ask['price'], bids)
+    return highest_bid(matching_bids)
 
 
 def lowest_ask(asks=asks):
