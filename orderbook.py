@@ -64,27 +64,28 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
 def match_bid(bid, asks=asks):
     '''Match a bid of your own with the lowest ask from the other party.'''
     matching_asks = filter(lambda ask: ask['price'] <= bid['price'], asks)
-    return lowest_ask(matching_asks)
+    return lowest_offer(matching_asks)
 
 
 def match_incoming_bid(bid):
     '''Match a bid from the other party with your own asks.'''
-    return match_bid(bid, asks=own_asks)
+    matching_asks = filter(lambda ask: ask['price'] >= bid['price'], asks)
+    return highest_offer(matching_asks)
 
 def match_ask(ask, bids=bids):
     '''Match an ask of your own with the highest bid from the other party.'''
     matching_bids = filter(lambda bid: bid['price'] >= ask['price'], bids)
-    return highest_bid(matching_bids)
+    return highest_offer(matching_bids)
 
 
 def match_incoming_ask(ask):
     '''Match an ask from the other party with your own bids'''
-    return match_ask(ask, bids=own_bids)
+    matching_bids = filter(lambda bid: bid['price'] <= ask['price'], own_bids)
+    return lowest_offer(matching_bids)
+
+def lowest_offer(offers):
+    return min(offers, key=lambda x: x['price']) if offers else None
 
 
-def lowest_ask(asks=asks):
-    return min(asks, key=lambda x: x['price']) if asks else None
-
-
-def highest_bid(bids=bids):
-    return max(bids, key=lambda x: x['price']) if bids else None
+def highest_offer(offers):
+    return max(offers, key=lambda x: x['price']) if offers else None
