@@ -30,6 +30,7 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
     Message can have 5 types: ask, bid, trade, cancel, greeting.
     Depending on the type of message, an argument might be mandatory.
     '''
+    global message_id
 
     message = {
         "id": id,
@@ -37,6 +38,8 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
         "timestamp": datetime.datetime.now().isoformat(),
         "type": type,
     }
+
+    message_id = message_id + 1
 
     if type in ["ask", "bid"]:
         message.update({
@@ -60,6 +63,13 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
 
     return message
 
+
+def trade_offer(their_offer, own_offer):
+    return create_trade(
+        id = own_offer['id'],
+        quantity = own_offer['quantity'],
+        trade_id = "{};{}".format(their_offer['id'], their_offer['message-id'])
+    )
 
 def match_bid(bid, asks=asks):
     '''Match a bid of your own with the lowest ask from the other party.'''
@@ -89,3 +99,9 @@ def lowest_offer(offers):
 
 def highest_offer(offers):
     return max(offers, key=lambda x: x['price']) if offers else None
+
+
+def remove_offer(id, message_id, offers=[]):
+    for offer in offers:
+        if offers['id'] == id and offers['message-id'] == message_id:
+            offers.remove(offer)
