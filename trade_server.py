@@ -3,7 +3,7 @@ import threading
 import socket
 import SocketServer
 
-from orderbook import asks, bids, match_incoming_ask
+from orderbook import asks, bids, match_incoming_ask, trade_offer
 
 
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
@@ -50,6 +50,8 @@ def handle_data(data):
             response_dict = handle_bid(data)
         elif data['type'] == 'greeting':
             response_dict = handle_greeting(data)
+        elif data['type'] == 'trade':
+            response_dict = handle_trade(data)
         return json.dumps(response_dict), data['type']
     except ValueError, e:
         print e.message
@@ -59,7 +61,7 @@ def handle_data(data):
 def handle_ask(ask):
     bid = match_incoming_ask(ask)
     if bid:
-        return bid
+        return trade_offer(ask, bid)
     else:
         asks.append(ask)
         return 'Your ask got processed!'
@@ -70,7 +72,7 @@ def handle_bid(bid):
 
 
 def handle_trade(trade):
-    return 'Hello Trade'
+    return 'Trade succesful!'
 
 
 def handle_greeting(greeting):
