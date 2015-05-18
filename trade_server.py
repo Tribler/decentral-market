@@ -3,7 +3,7 @@ import threading
 import socket
 import SocketServer
 
-from orderbook import asks, bids
+from orderbook import asks, bids, match_incoming_ask, match_incoming_bid
 
 
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
@@ -15,17 +15,15 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
                 response = ''
 
                 if data:
-                    handled_data = handle_data(data)
+                    handled_data, data_type = handle_data(data)
                     if handled_data:
-                        response += str(handled_data)
-                    cur_thread = threading.current_thread()
-                    response += "\n{}: {}".format(cur_thread.name, data)
+                        response = handled_data
 
                 self.request.sendall(response)
 
-                if data and handled_data:
-                    if handled_data['type'] == 'greeting':
-                        break
+                if data:
+                    break
+
         except socket.error:
             # Surpress errno 13 Broken Pipe
             pass
@@ -47,18 +45,24 @@ def handle_data(data):
     try:
         data = json.loads(data)
         if data['type'] == 'ask':
-            return handle_ask(data)
+            return handle_ask(data), 'ask'
         elif data['type'] == 'bid':
-            return handle_bid(data)
+            return handle_bid(data), 'bid'
         elif data['type'] == 'greeting':
-            return handle_greeting(data)
+            return handle_greeting(data), 'greeting'
     except ValueError, e:
         print e.message
         return e.message
 
 
 def handle_ask(ask):
-    asks.append(ask)
+    own_bid = match_incoming_ask(ask)
+    if own_bid:
+        return ''
+    else:
+        asks.append(ask)
+        print asks
+        return ''
 
 
 def handle_bid(bid):
@@ -66,4 +70,4 @@ def handle_bid(bid):
 
 
 def handle_greeting(greeting):
-    return greeting
+    return 'Hi!'
