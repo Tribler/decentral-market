@@ -33,6 +33,7 @@ def handle_response(response):
 
 
 def handle_trade(trade):
+    # id is not yet properly implemented so we use this ugly hack for now
     id = trade['trade-id'].split(';')[0]
 
     return create_confirm(
