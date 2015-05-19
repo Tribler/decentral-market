@@ -7,7 +7,7 @@ ip = raw_input("Enter ip address: ")
 port = raw_input("Enter port nr: ")
 
 while True:
-    o = raw_input("Ask (1) or bid (2)?")
+    o = raw_input("Ask (1) or bid (2)? ")
     if o == "1":
         offer = create_ask(price='3', quantity='6', timeout=datetime.now().isoformat())
 

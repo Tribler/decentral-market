@@ -6,6 +6,8 @@ from orderbook import create_bid, own_bids, bids, asks, own_bids, own_asks, trad
 def offer_to_string(offer):
     s = "{\n"
     for k, v in offer.iteritems():
+        if k == 'id':
+            v = v.split('\n')[1][:20] + '...'
         s += "\t{}: {}\n".format(k, v)
     s += "    }"
     return s
@@ -38,7 +40,7 @@ def print_all_offers():
     {}
     '''.format(*[offers_to_string(o) for o in (bids, asks, own_bids, own_asks, trades)])
 
-open_ip_address = raw_input("Do you want to connect to the world? y/n")
+open_ip_address = raw_input("Do you want to connect to the world? y/n ")
 host = "0.0.0.0" if open_ip_address else "localhost"
 server = create_server(host=host)
 print server.server_address
