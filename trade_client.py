@@ -1,7 +1,6 @@
 import json
 import socket
 
-from crypto import retrieve_key
 from orderbook import create_confirm
 
 
