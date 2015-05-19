@@ -32,7 +32,11 @@ def print_all_offers():
     Own Asks
     ========
     {}
-    '''.format(*[offers_to_string(o) for o in (asks, bids, own_asks, own_bids)])
+
+    Trades
+    ========
+    {}
+    '''.format(*[offers_to_string(o) for o in (bids, asks, own_bids, own_asks, trades)])
 
 
 server = create_server()
@@ -52,7 +56,5 @@ except KeyboardInterrupt:
     print "Shutting down server..."
     server.server_close()
     print "Server shut down. Goodbye."
-
-
 
 print_all_offers()
