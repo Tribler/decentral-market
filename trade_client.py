@@ -1,7 +1,7 @@
 import json
 import socket
 
-
+from crypto import retrieve_key
 from orderbook import create_confirm
 
 
@@ -36,11 +36,9 @@ def handle_response(response):
 
 def handle_trade(trade):
     # id is not yet properly implemented so we use this ugly hack for now
-    id = trade['trade-id'].split(';')[0]
 
     # Cancel messages are not yet implemented. See issue #7.
 
     return create_confirm(
-        id=id,
         trade_id=trade['trade-id']
     )
