@@ -2,9 +2,11 @@ import datetime
 
 own_bids = []
 own_asks = []
-trades = []
+
 bids = []
 asks = []
+trades = []
+
 message_id = 0
 
 
@@ -23,6 +25,7 @@ def create_trade(id, quantity, trade_id):
 def create_confirm(id, trade_id):
     return create_msg(id, type='confirm', trade_id=trade_id)
 
+
 def create_greeting(id):
     return create_msg(id, type='greeting')
 
@@ -31,7 +34,7 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
     '''
     Standard for message passing.
 
-    Message can have 5 types: ask, bid, trade, cancel, greeting.
+    Message can have 5 types: ask, bid, trade, confirm, cancel, greeting.
     Depending on the type of message, an argument might be mandatory.
     '''
     global message_id
@@ -73,6 +76,9 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
 
 
 def trade_offer(their_offer, own_offer):
+    '''
+    Create a trade message replying to one of their offers.
+    '''
     if their_offer['type'] == 'bid':
         own_asks.remove(own_offer)
     else:
@@ -80,10 +86,11 @@ def trade_offer(their_offer, own_offer):
     trades.append(own_offer)
 
     return create_trade(
-        id = own_offer['id'],
-        quantity = own_offer['quantity'],
-        trade_id = "{};{}".format(their_offer['id'], their_offer['message-id'])
+        id=own_offer['id'],
+        quantity=own_offer['quantity'],
+        trade_id="{};{}".format(their_offer['id'], their_offer['message-id'])
     )
+
 
 def match_bid(bid, asks=asks):
     '''Match a bid of your own with the lowest ask from the other party.'''
@@ -96,6 +103,7 @@ def match_incoming_bid(bid):
     matching_asks = filter(lambda ask: ask['price'] >= bid['price'], asks)
     return highest_offer(matching_asks)
 
+
 def match_ask(ask, bids=bids):
     '''Match an ask of your own with the highest bid from the other party.'''
     matching_bids = filter(lambda bid: bid['price'] >= ask['price'], bids)
@@ -107,6 +115,7 @@ def match_incoming_ask(ask):
     matching_bids = filter(lambda bid: bid['price'] <= ask['price'], own_bids)
     return lowest_offer(matching_bids)
 
+
 def lowest_offer(offers):
     return min(offers, key=lambda x: x['price']) if offers else None
 
@@ -115,7 +124,7 @@ def highest_offer(offers):
     return max(offers, key=lambda x: x['price']) if offers else None
 
 
-def remove_offer(id, message_id, offers=[]):
+def remove_offer(id, message_id, offers):
     for offer in offers:
         if offers['id'] == id and offers['message-id'] == message_id:
             offers.remove(offer)
