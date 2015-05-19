@@ -12,6 +12,7 @@ from Crypto.PublicKey import RSA
 
 KEYFILE_NAME = 'key.pem'
 
+
 def create_key():
     '''Generates and writes byte string with object of RSA key object.'''
     key = RSA.generate(2048)

@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from trade_server import create_server
-from orderbook import create_bid, own_bids, bids, asks, own_bids, own_asks, trades
+from orderbook import create_bid, bids, asks, own_bids, own_asks, trades
+
 
 def offer_to_string(offer):
     s = "{\n"
@@ -11,6 +12,7 @@ def offer_to_string(offer):
         s += "\t{}: {}\n".format(k, v)
     s += "    }"
     return s
+
 
 def offers_to_string(offers):
     return '\n    '.join(offer_to_string(offer) for offer in offers)
