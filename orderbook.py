@@ -12,42 +12,45 @@ trades = []
 message_id = 0
 
 
-def create_ask(id, price, quantity, timeout):
+def create_ask(price, quantity, timeout):
     message = create_msg(options={
-            'type': 'ask',
-            'price': price,
-            'quantity': quantity,
-            'timeout': timeout
-        })
+        'type': 'ask',
+        'price': price,
+        'quantity': quantity,
+        'timeout': timeout
+    })
     own_asks.append(message)
     return message
 
 
-def create_bid(id, price, quantity, timeout):
+def create_bid(price, quantity, timeout):
     message = create_msg(options={
-            'type': 'bid',
-            'price': price,
-            'quantity': quantity,
-            'timeout': timeout
-        })
+        'type': 'bid',
+        'price': price,
+        'quantity': quantity,
+        'timeout': timeout
+    })
     own_bids.append(message)
     return message
 
 
-def create_trade(id, quantity, trade_id):
+def create_trade(quantity, trade_id):
     return create_msg(options={
-            "quantity": quantity,
-            "trade-id": trade_id,
-        })
+        "quantity": quantity,
+        "trade-id": trade_id,
+    })
 
 
-def create_confirm(id, trade_id):
+def create_confirm(trade_id):
     return create_msg(options={
         "trade-id": trade_id,
     })
 
-def create_greeting(id):
-    return create_msg(id, type='greeting')
+
+def create_greeting():
+    return create_msg(options={
+        'type': 'greeting'
+    })
 
 
 def create_msg(options=None):
