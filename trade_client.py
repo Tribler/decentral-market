@@ -11,7 +11,6 @@ def send_msg(ip, port, message):
     try:
         sock.sendall(message)
         response = sock.recv(1024)
-        print "Received: {}".format(response)
     finally:
         sock.close()
     return response
@@ -23,11 +22,14 @@ def send_offer(ip, port, offer):
 
 
 def handle_response(response):
-    response = json.loads(response)
-    if response:
-        if response['type'] == 'trade':
-            return handle_trade(response)
-    return "Nothing"
+    try:
+        response = json.loads(response)
+        if response and isinstance(response, basestring):
+            return None
+        if response and response['type'] == 'trade':
+                return handle_trade(response)
+    except ValueError:
+        return None
 
 
 def handle_trade(trade):
