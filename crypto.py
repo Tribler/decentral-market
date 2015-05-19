@@ -6,19 +6,30 @@ Reading a message
     Use decrypt_message and validate contents
 """
 
+import os
+
 from Crypto.PublicKey import RSA
 
+KEYFILE_NAME = 'key.pem'
 
-# Generates and writes byte string with object of RSA key object
 def create_key():
+    '''Generates and writes byte string with object of RSA key object.'''
     key = RSA.generate(2048)
-    with open('key.pem', 'w') as f:
+    with open(KEYFILE_NAME, 'w') as f:
         f.write(key.exportKey('PEM'))
+    return key
 
 
-# Reads an exported key-bytestring from file and returns an RSA key object
 def retrieve_key():
-    with open('key.pem', 'r') as f:
+    '''
+    Reads an exported key-bytestring from file.
+    If the file does not exist, create one.
+    Returns an RSA key object.
+    '''
+    if not os.path.isfile(KEYFILE_NAME):
+        return create_key()
+
+    with open(KEYFILE_NAME, 'r') as f:
         key = RSA.importKey(f.read())
         return key
 
@@ -28,13 +39,13 @@ def get_public_bytestring():
     return key.publickey().exportKey()
 
 
-# Use own private key to decrypt broadcasted message
 def decrypt_message(message):
+    '''Use your own private key to decrypt a message.'''
     key = retrieve_key()
     return key.decrypt(message)
 
 
-# Use given id to encrypt message
 def encrypt_message(key_string, message):
+    '''Use the given public key to encrypt a message.'''
     key = RSA.importKey(key_string)
     return key.encrypt(message, 123)
