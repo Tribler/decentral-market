@@ -38,10 +38,10 @@ def print_all_offers():
     {}
     '''.format(*[offers_to_string(o) for o in (bids, asks, own_bids, own_asks, trades)])
 
-
-server = create_server()
+open_ip_address = raw_input("Do you want to connect to the world? y/n")
+host = "0.0.0.0" if open_ip_address else "localhost"
+server = create_server(host=host)
 print server.server_address
-
 
 # Create 3 bids with prices 6, 3, and 2.
 create_bid(1234, price=6, quantity=4, timeout=datetime.now().isoformat())
