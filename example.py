@@ -41,7 +41,7 @@ def print_all_offers():
     '''.format(*[offers_to_string(o) for o in (bids, asks, own_bids, own_asks, trades)])
 
 open_ip_address = raw_input("Do you want to connect to the world? y/n ")
-host = "0.0.0.0" if open_ip_address else "localhost"
+host = "0.0.0.0" if open_ip_address == 'y' else "localhost"
 server = create_server(host=host)
 print server.server_address
 
