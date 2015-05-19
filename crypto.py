@@ -12,16 +12,15 @@ from Crypto.PublicKey import RSA
 # Generates and writes byte string with object of RSA key object
 def create_key():
     key = RSA.generate(2048)
-    f = open('key.pem', 'w')
-    f.write(key.exportKey('PEM'))
-    f.close()
+    with open('key.pem', 'w') as f:
+        f.write(key.exportKey('PEM'))
 
 
 # Reads an exported key-bytestring from file and returns an RSA key object
 def retrieve_key():
-    f = open('key.pem', 'r')
-    key = RSA.importKey(f.read())
-    return key
+    with open('key.pem', 'r') as f:
+        key = RSA.importKey(f.read())
+        return key
 
 
 def get_public_bytestring():
@@ -31,8 +30,8 @@ def get_public_bytestring():
 
 # Use own private key to decrypt broadcasted message
 def decrypt_message(message):
-    key_obj = retrieve_key()
-    return key_obj.decrypt(message)
+    key = retrieve_key()
+    return key.decrypt(message)
 
 
 # Use given id to encrypt message
