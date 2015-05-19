@@ -75,12 +75,10 @@ def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=
 def trade_offer(their_offer, own_offer):
     if their_offer['type'] == 'bid':
         own_asks.remove(own_offer)
-        print own_asks
     else:
         own_bids.remove(own_offer)
-        print own_bids
     trades.append(own_offer)
-    print trades
+
     return create_trade(
         id = own_offer['id'],
         quantity = own_offer['quantity'],
