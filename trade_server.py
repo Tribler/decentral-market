@@ -3,7 +3,7 @@ import threading
 import socket
 import SocketServer
 
-from orderbook import asks, bids, match_incoming_ask, trade_offer
+from orderbook import asks, bids, match_incoming_ask, match_incoming_bid, trade_offer
 
 
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
@@ -70,7 +70,12 @@ def handle_ask(ask):
 
 
 def handle_bid(bid):
-    bids.append(bid)
+    ask = match_incoming_bid(bid)
+    if ask:
+        return trade_offer(bid, ask)
+    else:
+        bids.append(bid)
+        return "Your bid got processed!"
 
 
 def handle_trade(trade):
