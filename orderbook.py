@@ -1,5 +1,7 @@
 import datetime
 
+from crypto import retrieve_key
+
 own_bids = []
 own_asks = []
 
@@ -11,66 +13,67 @@ message_id = 0
 
 
 def create_ask(id, price, quantity, timeout):
-    return create_msg(id, type='ask', price=price, quantity=quantity, timeout=timeout)
+    message = create_msg(options={
+            'type': 'ask',
+            'price': price,
+            'quantity': quantity,
+            'timeout': timeout
+        })
+    own_asks.append(message)
+    return message
 
 
 def create_bid(id, price, quantity, timeout):
-    return create_msg(id, type='bid', price=price, quantity=quantity, timeout=timeout)
+    message = create_msg(options={
+            'type': 'bid',
+            'price': price,
+            'quantity': quantity,
+            'timeout': timeout
+        })
+    own_bids.append(message)
+    return message
 
 
 def create_trade(id, quantity, trade_id):
-    return create_msg(id, type='trade', quantity=quantity, trade_id=trade_id)
+    return create_msg(options={
+            "quantity": quantity,
+            "trade-id": trade_id,
+        })
 
 
 def create_confirm(id, trade_id):
-    return create_msg(id, type='confirm', trade_id=trade_id)
-
+    return create_msg(options={
+        "trade-id": trade_id,
+    })
 
 def create_greeting(id):
     return create_msg(id, type='greeting')
 
 
-def create_msg(id, type=None, price=None, quantity=None, timeout=None, trade_id=None):
+def create_msg(options=None):
     '''
     Standard for message passing.
 
-    Message can have 5 types: ask, bid, trade, confirm, cancel, greeting.
-    Depending on the type of message, an argument might be mandatory.
+    All messages contain an id, a message-id and a timestamp.
+
+    id: public key
+    message-id: global incremented value
+    timestamp: current time in iso format
     '''
+
+    if options is None:
+        options = {}
+
     global message_id
 
     message = {
-        "id": id,
+        "id": retrieve_key(),
         "message-id": message_id,
         "timestamp": datetime.datetime.now().isoformat(),
-        "type": type,
     }
+    message.update(options)
 
     message_id = message_id + 1
-
-    if type in ["ask", "bid"]:
-        message.update({
-            "price": price,
-            "quantity": quantity,
-            "timeout": timeout
-        })
-        if type == "ask":
-            own_asks.append(message)
-        else:
-            own_bids.append(message)
-    elif type == "trade":
-        message.update({
-            "quantity": quantity,
-            "trade-id": trade_id,
-        })
-    elif type == 'confirm':
-        message.update({
-            "trade-id": trade_id,
-        })
-    elif type == "cancel":
-        message.update({
-            "trade-id": trade_id,
-        })
 
     return message
 
