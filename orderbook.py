@@ -1,6 +1,6 @@
 import datetime
 
-from crypto import retrieve_key
+from crypto import get_public_bytestring
 
 own_bids = []
 own_asks = []
@@ -36,14 +36,16 @@ def create_bid(price, quantity, timeout):
 
 def create_trade(quantity, trade_id):
     return create_msg(options={
-        "quantity": quantity,
-        "trade-id": trade_id,
+        'type': 'trade',
+        'quantity': quantity,
+        'trade-id': trade_id,
     })
 
 
 def create_confirm(trade_id):
     return create_msg(options={
-        "trade-id": trade_id,
+        'type': 'confirm',
+        'trade-id': trade_id,
     })
 
 
@@ -70,7 +72,7 @@ def create_msg(options=None):
     global message_id
 
     message = {
-        "id": retrieve_key(),
+        "id": get_public_bytestring(),
         "message-id": message_id,
         "timestamp": datetime.datetime.now().isoformat(),
     }
@@ -92,7 +94,6 @@ def trade_offer(their_offer, own_offer):
     trades.append(own_offer)
 
     return create_trade(
-        id=own_offer['id'],
         quantity=own_offer['quantity'],
         trade_id="{};{}".format(their_offer['id'], their_offer['message-id'])
     )
