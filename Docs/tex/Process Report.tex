@@ -2,6 +2,14 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 
+% Itemize with custom spacing
+\newenvironment{myitemize}
+{ \begin{itemize}
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}     }
+{ \end{itemize}                  } 
+
 %opening
 \title{Tsukiji}
 \author{Michael The \and Hugo Reinbergen}
@@ -27,23 +35,79 @@
  Mailtje van Pouwelse & Credit Based P2P \\
  Book: Computer Networks & DHT, P2P \\
  \hline
-\end{tabular} 
+\end{tabular}
+
+\section{Requirements}
+
+The goal of this project is to create a decentralised marketplace.
+The basics of a marketplace should work, so users have to be able to trade (virtual) commodities.
+The system should be decentralised.
+It should scale to thousands of users.
+A nice user interface is not a priority, so only command line input is required.
+
+Spoofing of message would of course be a big problem in a trading network.
+However, since this is a solved problem, the focus of the project should be on other areas.
+
+It would be nice to ensure the privacy of the users.
+In order to achieve this, strong encryption of messages is required.
+Further thought is also necessary on what information is exposed.
+It would be nice to have a network resistant against hostile takeover.
+Having a decentralised system plays a big role in this.
+However, other attack vectors could also be possible.
+Finally, it would be nice to trade real, verified commodities.
+Before we can do this however, the requirements listed above should be satisfied first.
+
+
+The requirements are summarized in this MoSCoW list: \\
+
+\begin{myitemize}
+\item Must
+\begin{myitemize}
+	\item Place an ask/bid
+	\item Trade an ask/bid
+    \item Find each other (peer discovery)
+    \item Decentralised
+    \item Scalable to 1000s of users
+    \item Command line input
+\end{myitemize}
+\item Should
+\begin{myitemize}
+	\item Anti-spoofing
+\end{myitemize}
+\item Could
+\begin{myitemize}
+	\item Nice User Interface
+\end{myitemize}
+\item Would
+\begin{myitemize}
+	\item Privacy
+	\item Protection against attacks
+	\item Trade real commodities (like Bitcoins)
+\end{myitemize}
+\end{myitemize}
+
 \section{Sprint layout}
 The development of Tsukiji followed aspects of the Scrum methodology.
 
-\subsection{Sprint 1: Sockets and broadcasting}
-The goal of the first sprint was to create a local simulation of the decentral market, using socket connections.
+\subsection{Sprint 1: Sockets, broadcasting and protocol definition}
+The goal of the first sprint was to create a local simulation of the decentral market using socket connections.
 The peers had to be able to communicate with each other.
 The options considered for this were approaching a subset and relaying the information of your subset to other subsets and broadcasting your information to the entire network.
 The issue that arose with the subset approach was that in a competitive market, someone that is selling an item is not easily motivated to advertise in the name of another seller.
-This could lead to certain peers that are offering an item for sale, not to relay other offers that would endanger the profits of the peer.
-This could lead to a disjoint of the network and therefore destroy the communication between certain peers.
-Broadcasting would not have this issue.
+This could lead to certain peers, that are offering an item for sale, to not relay other offers that would endanger the profits of the peer.
+This could lead to a disjoint of the network and therefor destroy the communication between certain peers.
+
+Broadcasting does not have this issue.
+In broadcasting, every peer in the network is directly connected to each other.
 Everyone personally takes care of his own advertising and there is no peer between origin and destination that could disrupt the communication.
-The issue that rises with broadcasting though, is that is scales rather poorly.
+The issue with broadcasting is that it scales rather poorly.
 The increase of data over the network increases exponentially as the amount of users rises.
 Because of this, using broadcasting in a large scale project is not advised.
-But since this project is mostly aiming to be a proof of concept and this is also the first iteration, broadcasting suffices for the time being.
+However, broadcasting suffices for the first iteration.
+Implementation is simple and it's easily replaced by a more complex system in later sprints.
+
+% Protocol
+
 
 
 \subsection{Problems and solutions}
@@ -66,9 +130,9 @@ While this creates a unique identifier for the user, it does not create a safety
 Anyone can declare that his username is Alice and can then validate transactions in the name of Alice, without the consent of the actual real Alice.
 
 
-A solution to this problem is cryptography.
+A solution to this problem lies in cryptography.
 We need a way for users to prove that they are authentic.
-Asymmetric encryption provides this perfectly.
+Asymmetric encryption provides the solution.
 The peers can use their public key as a unique identifier, since the chances of a SHA256 collision happening are incredibly low.
 Users can now use the public key of the recipient of their message to force them to authenticate themselves.
 As long as everyone stays the sole owner of their private key, no one but themselves will be able to respond correctly to the authentication request.
@@ -112,6 +176,12 @@ In the cancel message Alice responds with, she will also verify her identity wit
 This protocol only needs two messages, instead of three.
 This exchange only happens between interested parties, instead of the entire network.
 Lastly, this only occurs until the time of expiration.
+
+\subsection{Sprint 2: Twisted and peer discovery}
+
+% Twisted
+% Peer discovery
+% Gossip
 
 
 \end{document}
