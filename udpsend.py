@@ -1,6 +1,7 @@
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
-
+from orderbook import create_ask, create_bid
+import json
 
 class UdpSender(DatagramProtocol):
 
@@ -22,7 +23,9 @@ class UdpSender(DatagramProtocol):
         print "received %r from %s:%d" % (data, host, port)
 
     def send_message(self):
-        self.transport.write("whatsup mang", (self.host, self.port))
+        msg = create_ask(price='3', quantity='6', timeout=1)
+        msg = json.dumps(msg)
+        self.transport.write(msg, (self.host, self.port))
 
 
 senderObj = UdpSender("meh", "224.0.0.1", 8005)
