@@ -90,6 +90,7 @@ The requirements are summarized in this MoSCoW list: \\
 The development of Tsukiji followed aspects of the Scrum methodology.
 
 \subsection{Sprint 1: Sockets, broadcasting and protocol definition}
+\subsubsection{Broadcasting}
 The goal of the first sprint was to create a local simulation of the decentral market using socket connections.
 The peers had to be able to communicate with each other.
 The options considered for this were approaching a subset and relaying the information of your subset to other subsets and broadcasting your information to the entire network.
@@ -106,9 +107,49 @@ Because of this, using broadcasting in a large scale project is not advised.
 However, broadcasting suffices for the first iteration.
 Implementation is simple and it's easily replaced by a more complex system in later sprints.
 
-% Protocol
+\subsubsection{Protocol}
 
+In this sprint, the protocol was also defined.
+A message formatted as a JSON object is exchanged over TCP.
+Each message has 4 required fields:
+\begin{myitemize}
+\item id: Contains the user's public key. See \ref{sprint1:identifiers} for more information.
+\item message-id: Incremented counter unique across messages from one user.
+\item timestamp: Time of message creation in UTC in ISO format.
+\item type: The type of message.
+\end{myitemize}
 
+There are 6 types of messages: ask, bid, trade, confirm, cancel, and greeting.
+Depending on the type of message, other fields may be required.
+
+An 'ask' is posted when a user wants to buy.
+A 'bid' is posted when a user wants to sell.
+The following fields are required for an ask or a bid:
+\begin{myitemize}
+	\item price: Sets the price per quantity.
+	\item quantity: The quantity to be traded.
+	\item timeout: Expiration time of the offer in UTC in ISO format.
+\end{myitemize}
+
+A 'trade' message is sent as a response to an ask or bid message.
+The following fields are required for a trade:
+\begin{myitemize}
+	\item quantity: The quantity to be traded. This may be less than the quantity stated in the ask/bid.
+	\item trade-id: Contains the id and message-id of the ask/bid the trade is requested for. This way the receiver knows which ask/bid the trade is requested for.
+\end{myitemize}
+
+A 'confirm' or a 'cancel' message is sent as a response to a trade message.
+A 'confirm' message confirms the trade.
+A 'cancel' message is sent when the ask/bid the trade is requested for no longer exists, either because it is already traded or the user has decided to cancel their ask/bid.
+See \ref{sprint1:cancelling} for the motivation behind this design.
+The following field is required for a confirm or a cancel:
+\begin{myitemize}
+\item trade-id: the trade-id of the trade responded to.
+\end{myitemize}
+
+A 'greeting' message is sent when a user wants to announce its existence to the network.
+This is used later on for peer discovery.
+No additional fields are required.
 
 \subsection{Problems and solutions}
 \subsubsection{Broken Pipes}
@@ -120,6 +161,7 @@ Therefor it would not hinder the communication if the Broken Pipe errors are sup
 The empty strings that resulted from this error are now filtered out.
 
 \subsubsection{Identifiers}
+\label{sprint1:identifiers}
 With the lack of a central authority confirming the identity of peers within the network, the users need an identifier of their own that distinguishes them from others.
 This id needs to be unique to the peer and needs to be constructed as such that it cannot be imitated by someone else.
 A regular username and password structure is not possible in a decentralised network since there is no entity that is trusted to store and confirm the passwords.
@@ -128,7 +170,6 @@ A regular username and password structure is not possible in a decentralised net
 Simply using a username without a password is possible by broadcasting a request to receive all the usernames and allowing only nonexistent names to be used during creation.
 While this creates a unique identifier for the user, it does not create a safety measure against impostors.
 Anyone can declare that his username is Alice and can then validate transactions in the name of Alice, without the consent of the actual real Alice.
-
 
 A solution to this problem lies in cryptography.
 We need a way for users to prove that they are authentic.
@@ -140,6 +181,7 @@ This enables a network where everyone can read every message, but can only answe
 
 
 \subsubsection{Cancelling}
+\label{sprint1:cancelling}
 We discussed how to cancel an ask or bid.
 Our first proposal was to broadcast a special cancel message to all peers.
 However, there are two major problems with this approach: authentication and flooding.
