@@ -30,17 +30,27 @@ def create_bid(price, quantity, timeout):
     return message
 
 
-def create_trade(quantity, trade_id):
+def create_trade(recipient, quantity, trade_id):
     return create_msg(options={
+        'recipient': recipient,
         'type': 'trade',
         'quantity': quantity,
         'trade-id': trade_id,
     })
 
 
-def create_confirm(trade_id):
+def create_confirm(recipient, trade_id):
     return create_msg(options={
+        'recipient', recipient,
         'type': 'confirm',
+        'trade-id': trade_id,
+    })
+
+
+def create_cancel(recipient, trade_id):
+    return create_msg(options={
+        'recipient', recipient,
+        'type': 'cancel',
         'trade-id': trade_id,
     })
 

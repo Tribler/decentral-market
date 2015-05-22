@@ -4,9 +4,9 @@ import random
 
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
-import time, random, json
-from orderbook import match_incoming_ask, match_incoming_bid, trade_offer, create_confirm, get_bids, get_asks, get_own_bids, get_own_asks, trades
-from orderbook import offers, get_offer
+
+from crypto import get_public_bytestring
+from orderbook import match_incoming_ask, match_incoming_bid, trade_offer, create_confirm, get_bids, get_asks, get_own_bids, get_own_asks, trades, offers, get_offer, create_cancel
 
 # Printing functions for testing
 def offer_to_string(offer):
@@ -126,14 +126,11 @@ def handle_bid(bid):
 
 
 def handle_trade(trade):
-    id, message_id = trade['trade-id'].split(';')
-    offer = get_offer(id, message_id)
+    offer = get_offer(id=get_public_bytestring(), message_id=trade['trade-id'])
     if offer:
-        # Send a confirm
-        pass
+        return create_confirm(recipient=trade['id'], trade_id=trade['trade-id'])
     else:
-        # Send a cancel
-        pass
+        return create_cancel(recipient=trade['id'], trade_id=trade['trade-id'])
     return 'Trade succesful!'
 
 
