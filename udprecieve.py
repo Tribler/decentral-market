@@ -1,14 +1,52 @@
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
 import time, random, json
-from orderbook import asks, bids, match_incoming_ask, match_incoming_bid, trade_offer
-from orderbook import create_confirm
+from orderbook import match_incoming_ask, match_incoming_bid, trade_offer, create_confirm, bids, asks, own_bids, own_asks, trades
 
 
-class UdpSender(DatagramProtocol):
+# Printing functions for testing
+def offer_to_string(offer):
+    s = "{\n"
+    for k, v in offer.iteritems():
+        if k == 'id':
+            v = v.split('\n')[1][:20] + '...'
+        s += "\t{}: {}\n".format(k, v)
+    s += "    }"
+    return s
+
+
+def offers_to_string(offers):
+    return '\n    '.join(offer_to_string(offer) for offer in offers)
+
+
+def print_all_offers():
+
+    print '''
+    Bids
+    =========
+    {}
+
+    Asks
+    ========
+    {}
+
+    Own bids
+    ========
+    {}
+
+    Own Asks
+    ========
+    {}
+
+    Trades
+    ========
+    {}
+    '''.format(*[offers_to_string(o) for o in (bids, asks, own_bids, own_asks, trades)])
+
+
+class UdpReceive(DatagramProtocol):
     def __init__(self, name):
         self.name = name
-        self.message_count = 0
         self.history = {}
         self.peers = {}
 
@@ -21,23 +59,21 @@ class UdpSender(DatagramProtocol):
 
     def datagramReceived(self, data, (host, port)):
         real_data = json.loads(data)
-        now = time.localtime(time.time())
-        time_str = str(time.strftime("%H:%M:%S", now))
-        print "%s received %r from %s:%d at %s" % (self.name, data, host, port, time_str)
+        #now = time.localtime(time.time())
+        #time_str = str(time.strftime("%H:%M:%S", now))
+        #print "%s received %r from %s:%d at %s" % (self.name, data, host, port, time_str)
+
         if not real_data['message-id'] in self.history:
             handle_data(data)
             self.relay_message(data)
             self.history[real_data['message-id']] = True
-
-    def send_message(self):
-        message = "%d whatsup mang" % self.message_count
-        if not self.history[message]:
-            self.transport.write(message, ("224.0.0.1", 8005))
-            self.history[message] = True
+            print_all_offers()
+        else:
+            print "duplicate message received. ID:%d" % real_data['message-id']
 
     def relay_message(self, message):
         gossip_targets = random.sample(self.peers, 2)
-        print gossip_targets
+        #print gossip_targets
         for address in gossip_targets:
             self.transport.write(message, (address, int(self.peers[address])))
 
@@ -106,6 +142,10 @@ def handle_trade(trade):
         trade_id=trade['trade-id']
     )
 
-reactor.listenMulticast(8005, UdpSender("listener1"), listenMultiple=True)
+reactor.listenMulticast(8005, UdpReceive("listener1"), listenMultiple=True)
 #reactor.listenMulticast(8005, UdpSender("listener2"), listenMultiple=True)
 reactor.run()
+
+
+
+
