@@ -97,8 +97,9 @@ def trade_offer(their_offer, own_offer):
     trades.append(own_offer)
 
     return create_trade(
+        recipient=their_offer['id'],
         quantity=own_offer['quantity'],
-        trade_id="{};{}".format(their_offer['id'], their_offer['message-id'])
+        trade_id=their_offer['message-id'],
     )
 
 
@@ -171,6 +172,6 @@ def highest_offer(offers):
 
 def remove_offer(id, message_id):
     for offer in offers:
-        if offers['id'] == id and offers['message-id'] == message_id:
+        if offer['id'] == id and offer['message-id'] == message_id:
             offers.remove(offer)
             return offer
