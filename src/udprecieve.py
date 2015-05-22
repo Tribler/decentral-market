@@ -137,7 +137,7 @@ def handle_trade(trade):
 
 
 def handle_confirm(confirm):
-    offer = remove_offer(id=confirm['id'], confirm['trade_id'])
+    offer = remove_offer(id=confirm['id'], message_id=confirm['trade_id'])
     trades.append(offer)
     return 'Trade succesful!'
 
