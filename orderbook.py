@@ -99,6 +99,14 @@ def trade_offer(their_offer, own_offer):
     )
 
 
+def get_offer(id, message_id):
+    offers = asks + bids + own_asks + own_bids
+    for offer in offers:
+        if offer['id'] == id and offer['message-id'] == message_id:
+            return offer
+    return None
+
+
 def match_bid(bid, asks=asks):
     '''Match a bid of your own with the lowest ask from the other party.'''
     matching_asks = filter(lambda ask: ask['price'] <= bid['price'], asks)
