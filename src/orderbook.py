@@ -169,7 +169,7 @@ def highest_offer(offers):
     return max(offers, key=lambda x: x['price']) if offers else None
 
 
-def remove_offer(id, message_id, offers):
+def remove_offer(id, message_id):
     for offer in offers:
         if offers['id'] == id and offers['message-id'] == message_id:
             offers.remove(offer)
