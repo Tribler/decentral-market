@@ -30,7 +30,7 @@ class UdpSender(DatagramProtocol):
         offer = create_bid(price='4', quantity='3', timeout=3)
         offer = json.dumps(offer)
         self.transport.write(offer, (self.host, self.port))
-        sleep(0.3)
+        '''sleep(0.3)
         msg = create_ask(price='6', quantity='6', timeout=1)
         msg = json.dumps(msg)
         self.transport.write(msg, (self.host, self.port))
@@ -41,8 +41,7 @@ class UdpSender(DatagramProtocol):
         self.transport.write(offer, (self.host, self.port))
         msg = create_ask(price='2', quantity='6', timeout=1)
         msg = json.dumps(msg)
-        self.transport.write(msg, (self.host, self.port))
-
+        self.transport.write(msg, (self.host, self.port))'''
 
 
 senderObj = UdpSender("meh", "224.0.0.1", 8005)

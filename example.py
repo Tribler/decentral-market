@@ -1,7 +1,7 @@
 from datetime import datetime
 from Crypto.PublicKey import RSA
 from trade_server import create_server
-from orderbook import create_bid, bids, asks, own_bids, own_asks, trades
+from orderbook import create_bid, trades, get_bids, get_asks, get_own_bids, get_own_asks
 
 
 def offer_to_string(offer):
@@ -40,7 +40,7 @@ def print_all_offers():
     Trades
     ========
     {}
-    '''.format(*[offers_to_string(o) for o in (bids, asks, own_bids, own_asks, trades)])
+    '''.format(*[offers_to_string(o) for o in (get_bids(), get_asks(), get_own_bids(), get_own_asks(), trades)])
 
 open_ip_address = raw_input("Do you want to connect to the world? y/n ")
 host = "0.0.0.0" if open_ip_address == 'y' else "localhost"

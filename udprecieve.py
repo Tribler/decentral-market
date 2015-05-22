@@ -1,8 +1,12 @@
+import json
+import time
+import random
+
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
 import time, random, json
-from orderbook import match_incoming_ask, match_incoming_bid, trade_offer, create_confirm, bids, asks, own_bids, own_asks, trades
-
+from orderbook import match_incoming_ask, match_incoming_bid, trade_offer, create_confirm, get_bids, get_asks, get_own_bids, get_own_asks, trades
+from orderbook import offers, get_offer
 
 # Printing functions for testing
 def offer_to_string(offer):
@@ -41,7 +45,7 @@ def print_all_offers():
     Trades
     ========
     {}
-    '''.format(*[offers_to_string(o) for o in (bids, asks, own_bids, own_asks, trades)])
+    '''.format(*[offers_to_string(o) for o in (get_bids(), get_asks(), get_own_bids(), get_own_asks(), trades)])
 
 
 class UdpReceive(DatagramProtocol):
@@ -108,7 +112,7 @@ def handle_ask(ask):
     if bid:
         return trade_offer(ask, bid)
     else:
-        asks.append(ask)
+        offers.append(ask)
         return 'Your ask got processed!'
 
 
@@ -117,11 +121,19 @@ def handle_bid(bid):
     if ask:
         return trade_offer(bid, ask)
     else:
-        bids.append(bid)
+        offers.append(bid)
         return "Your bid got processed!"
 
 
 def handle_trade(trade):
+    id, message_id = trade['trade-id'].split(';')
+    offer = get_offer(id, message_id)
+    if offer:
+        # Send a confirm
+        pass
+    else:
+        # Send a cancel
+        pass
     return 'Trade succesful!'
 
 
@@ -132,20 +144,6 @@ def handle_confirm(confirm):
 def handle_greeting(greeting):
     return 'Hi!'
 
-
-def handle_trade(trade):
-    # id is not yet properly implemented so we use this ugly hack for now
-
-    # Cancel messages are not yet implemented. See issue #7.
-
-    return create_confirm(
-        trade_id=trade['trade-id']
-    )
-
 reactor.listenMulticast(8005, UdpReceive("listener1"), listenMultiple=True)
-#reactor.listenMulticast(8005, UdpSender("listener2"), listenMultiple=True)
+# reactor.listenMulticast(8005, UdpSender("listener2"), listenMultiple=True)
 reactor.run()
-
-
-
-
