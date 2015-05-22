@@ -49,7 +49,7 @@ def create_confirm(recipient, trade_id):
 
 def create_cancel(recipient, trade_id):
     return create_msg(options={
-        'recipient', recipient,
+        'recipient': recipient,
         'type': 'cancel',
         'trade-id': trade_id,
     })
