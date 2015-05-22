@@ -173,3 +173,4 @@ def remove_offer(id, message_id):
     for offer in offers:
         if offers['id'] == id and offers['message-id'] == message_id:
             offers.remove(offer)
+            return offer

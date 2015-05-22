@@ -130,12 +130,15 @@ def handle_trade(trade):
     offer = get_offer(id=id, message_id=trade_id)
     if offer:
         remove_offer(id=id, message_id=trade_id)
+        trades.append(offer)
         return create_confirm(recipient=trade['id'], trade_id=trade_id)
     else:
         return create_cancel(recipient=trade['id'], trade_id=trade_id)
 
 
 def handle_confirm(confirm):
+    offer = remove_offer(id=confirm['id'], confirm['trade_id'])
+    trades.append(offer)
     return 'Trade succesful!'
 
 
