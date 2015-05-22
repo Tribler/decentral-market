@@ -1,8 +1,11 @@
+import json
+import time
+import random
+
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
-import time, random, json
-from orderbook import asks, bids, match_incoming_ask, match_incoming_bid, trade_offer
-from orderbook import create_confirm
+
+from orderbook import offers, match_incoming_ask, match_incoming_bid, trade_offer, get_offer
 
 
 class UdpSender(DatagramProtocol):
@@ -72,7 +75,7 @@ def handle_ask(ask):
     if bid:
         return trade_offer(ask, bid)
     else:
-        asks.append(ask)
+        offers.append(ask)
         return 'Your ask got processed!'
 
 
@@ -81,11 +84,19 @@ def handle_bid(bid):
     if ask:
         return trade_offer(bid, ask)
     else:
-        bids.append(bid)
+        offers.append(bid)
         return "Your bid got processed!"
 
 
 def handle_trade(trade):
+    id, message_id = trade['trade-id'].split(';')
+    offer = get_offer(id, message_id)
+    if offer:
+        # Send a confirm
+        pass
+    else:
+        # Send a cancel
+        pass
     return 'Trade succesful!'
 
 
@@ -97,15 +108,6 @@ def handle_greeting(greeting):
     return 'Hi!'
 
 
-def handle_trade(trade):
-    # id is not yet properly implemented so we use this ugly hack for now
-
-    # Cancel messages are not yet implemented. See issue #7.
-
-    return create_confirm(
-        trade_id=trade['trade-id']
-    )
-
 reactor.listenMulticast(8005, UdpSender("listener1"), listenMultiple=True)
-#reactor.listenMulticast(8005, UdpSender("listener2"), listenMultiple=True)
+# reactor.listenMulticast(8005, UdpSender("listener2"), listenMultiple=True)
 reactor.run()
