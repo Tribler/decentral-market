@@ -68,7 +68,7 @@ class UdpReceive(DatagramProtocol):
         real_data = json.loads(data)
 
         if not real_data['message-id'] in self.history:
-            handle_data(data)
+            handle_data(real_data)
             self.relay_message(data)
             self.history[real_data['message-id']] = True
             print_all_offers()
