@@ -1,12 +1,15 @@
 import json
-import time
 import random
 
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
 
 from crypto import get_public_bytestring
-from orderbook import match_incoming_ask, match_incoming_bid, trade_offer, create_confirm, get_bids, get_asks, get_own_bids, get_own_asks, trades, offers, get_offer, create_cancel
+from orderbook import (match_incoming_ask, match_incoming_bid,
+        get_bids, get_asks, get_own_bids, get_own_asks,
+        trades, offers, get_offer,
+        trade_offer, create_confirm, create_cancel)
+
 
 # Printing functions for testing
 def offer_to_string(offer):
@@ -63,9 +66,6 @@ class UdpReceive(DatagramProtocol):
 
     def datagramReceived(self, data, (host, port)):
         real_data = json.loads(data)
-        #now = time.localtime(time.time())
-        #time_str = str(time.strftime("%H:%M:%S", now))
-        #print "%s received %r from %s:%d at %s" % (self.name, data, host, port, time_str)
 
         if not real_data['message-id'] in self.history:
             handle_data(data)
@@ -77,7 +77,6 @@ class UdpReceive(DatagramProtocol):
 
     def relay_message(self, message):
         gossip_targets = random.sample(self.peers, 2)
-        #print gossip_targets
         for address in gossip_targets:
             self.transport.write(message, (address, int(self.peers[address])))
 
@@ -90,7 +89,6 @@ class UdpReceive(DatagramProtocol):
 
 def handle_data(data):
     try:
-        data = json.loads(data)
         if data['type'] == 'ask':
             response_dict = handle_ask(data)
         elif data['type'] == 'bid':
@@ -101,6 +99,8 @@ def handle_data(data):
             response_dict = handle_trade(data)
         elif data['type'] == 'confirm':
             response_dict = handle_confirm(data)
+        elif data['type'] == 'cancel':
+            response_dict = handle_cancel(data)
         return json.dumps(response_dict), data['type']
     except ValueError, e:
         print e.message
@@ -131,11 +131,14 @@ def handle_trade(trade):
         return create_confirm(recipient=trade['id'], trade_id=trade['trade-id'])
     else:
         return create_cancel(recipient=trade['id'], trade_id=trade['trade-id'])
-    return 'Trade succesful!'
 
 
 def handle_confirm(confirm):
     return 'Trade succesful!'
+
+
+def handle_cancel(cancel):
+    return 'Trade cancelled'
 
 
 def handle_greeting(greeting):
