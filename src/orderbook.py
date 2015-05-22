@@ -41,7 +41,7 @@ def create_trade(recipient, quantity, trade_id):
 
 def create_confirm(recipient, trade_id):
     return create_msg(options={
-        'recipient', recipient,
+        'recipient': recipient,
         'type': 'confirm',
         'trade-id': trade_id,
     })
