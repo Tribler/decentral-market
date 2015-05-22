@@ -1,6 +1,6 @@
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
-from orderbook import create_ask, create_bid
+from orderbook import create_ask, create_bid, trade_offer
 import json
 from time import sleep
 
@@ -23,11 +23,13 @@ class UdpSender(DatagramProtocol):
         pass
 
     def send_message(self):
-        msg = create_ask(price='3', quantity='6', timeout=1)
-        msg = json.dumps(msg)
-        self.transport.write(msg, (self.host, self.port))
+        offer_ask = create_ask(price='3', quantity='6', timeout=1)
+        offer = json.dumps(offer_ask)
+        self.transport.write(offer, (self.host, self.port))
         sleep(0.3)
-        offer = create_bid(price='4', quantity='3', timeout=3)
+
+        offer_bid = create_bid(price='2', quantity='3', timeout=3)
+        offer = trade_offer(offer_ask, offer_bid)
         offer = json.dumps(offer)
         self.transport.write(offer, (self.host, self.port))
         '''sleep(0.3)
