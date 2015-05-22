@@ -7,7 +7,7 @@ from twisted.internet import reactor
 from crypto import get_public_bytestring
 from orderbook import (match_incoming_ask, match_incoming_bid,
         get_bids, get_asks, get_own_bids, get_own_asks,
-        trades, offers, get_offer,
+        trades, offers, get_offer, remove_offer,
         trade_offer, create_confirm, create_cancel)
 
 
@@ -126,11 +126,13 @@ def handle_bid(bid):
 
 
 def handle_trade(trade):
-    offer = get_offer(id=get_public_bytestring(), message_id=trade['trade-id'])
+    id, trade_id = get_public_bytestring(), trade['trade-id']
+    offer = get_offer(id=id, message_id=trade_id)
     if offer:
-        return create_confirm(recipient=trade['id'], trade_id=trade['trade-id'])
+        remove_offer(id=id, message_id=trade_id)
+        return create_confirm(recipient=trade['id'], trade_id=trade_id)
     else:
-        return create_cancel(recipient=trade['id'], trade_id=trade['trade-id'])
+        return create_cancel(recipient=trade['id'], trade_id=trade_id)
 
 
 def handle_confirm(confirm):
