@@ -51,6 +51,13 @@ def create_greeting():
     })
 
 
+def create_greeting_response(peers):
+    return create_msg(options={
+        'type' : 'greeting_response',
+        'peerlist' : peers
+    })
+
+
 def create_msg(options=None):
     '''
     Standard for message passing.
