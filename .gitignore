@@ -1,3 +1,5 @@
+src/peerlist.txt
+
 # Ignore public/private key file
 *.pem
 
