@@ -153,7 +153,7 @@ class UdpReceive(DatagramProtocol):
         return 'Peerlist sent'
 
     def handle_greeting_response(self, data):
-        self.peers = self.peers + data['peerlist']
+        self.peers.update(data['peerlist'])
         for key, value in self.peers.iteritems():
             self.add_to_peerlist(key, value)
         print self.peers
