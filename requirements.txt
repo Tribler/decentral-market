@@ -1,2 +1,4 @@
 PyCrypto
 twisted
+nose
+coverage
