@@ -90,7 +90,7 @@ class UdpReceive(DatagramProtocol):
 
     def add_to_peerlist(self, host, port):
         with open("peerlist.txt", "a") as f:
-            new_peer = host + ":" + str(port) + "\n"
+            new_peer = host + ":" + str(port)
             f.write(new_peer)
 
     def handle_data(self, data, host='127.0.0.1', port=8005):
@@ -153,6 +153,7 @@ class UdpReceive(DatagramProtocol):
         return 'Peerlist sent'
 
     def handle_greeting_response(self, data):
+        self.read_peerlist()
         self.peers.update(data['peerlist'])
         for key, value in self.peers.iteritems():
             self.add_to_peerlist(key, value)
