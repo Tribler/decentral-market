@@ -36,8 +36,8 @@ class UdpReceive(DatagramProtocol):
             print "duplicate message received. ID:%d" % real_data['message-id']
 
     def relay_message(self, message):
-        gossip_targets = random.sample(self.peers, 2)
-        for address in gossip_targets:
+        #gossip_targets = random.sample(self.peers, 8)
+        for address in self.peers:
             self.transport.write(message, (address, int(self.peers[address])))
 
     def direct_message(self, message, host, port):
