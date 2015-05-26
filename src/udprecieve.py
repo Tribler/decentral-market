@@ -145,7 +145,9 @@ class UdpReceive(DatagramProtocol):
 
     def handle_greeting(self, host, port):
         peer_list = self.read_peerlist()
-        self.add_to_peerlist(host, port)
+        if not host in peer_list:
+            self.add_to_peerlist(("\n" + host), port)
+
         msg = create_greeting_response(peer_list)
         msg = json.dumps(msg)
         self.direct_message(msg, host, port)
