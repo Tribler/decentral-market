@@ -103,6 +103,7 @@ def handle_confirm(confirm):
 
 
 def handle_cancel(cancel):
+    offer = remove_offer(id=confirm['id'], message_id=confirm['trade_id'])
     return 'Trade cancelled'
 
 
