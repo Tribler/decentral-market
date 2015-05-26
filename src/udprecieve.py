@@ -1,47 +1,14 @@
+import json
+import random
+
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
-import random, json
-from orderbook import match_incoming_ask, match_incoming_bid, trade_offer, create_confirm, get_bids, get_asks, get_own_bids, get_own_asks, trades, create_greeting_response
-from orderbook import offers, get_offer
 
-# Printing functions for testing
-def offer_to_string(offer):
-    s = "{\n"
-    for k, v in offer.iteritems():
-        if k == 'id':
-            v = v.split('\n')[1][:20] + '...'
-        s += "\t{}: {}\n".format(k, v)
-    s += "    }"
-    return s
-
-
-def offers_to_string(offers):
-    return '\n    '.join(offer_to_string(offer) for offer in offers)
-
-
-def print_all_offers():
-
-    print '''
-    Bids
-    =========
-    {}
-
-    Asks
-    ========
-    {}
-
-    Own bids
-    ========
-    {}
-
-    Own Asks
-    ========
-    {}
-
-    Trades
-    ========
-    {}
-    '''.format(*[offers_to_string(o) for o in (get_bids(), get_asks(), get_own_bids(), get_own_asks(), trades)])
+from crypto import get_public_bytestring
+from orderbook import (match_incoming_ask, match_incoming_bid,
+        trades, offers, get_offer, remove_offer,
+        trade_offer, create_confirm, create_cancel, create_greeting_response)
+from utils import print_all_offers
 
 
 class UdpReceive(DatagramProtocol):
@@ -70,7 +37,6 @@ class UdpReceive(DatagramProtocol):
 
     def relay_message(self, message):
         gossip_targets = random.sample(self.peers, 2)
-        #print gossip_targets
         for address in gossip_targets:
             self.transport.write(message, (address, int(self.peers[address])))
 
@@ -108,6 +74,8 @@ class UdpReceive(DatagramProtocol):
                 response_dict = self.handle_trade(data)
             elif data['type'] == 'confirm':
                 response_dict = self.handle_confirm(data)
+            elif data['type'] == 'cancel':
+                response_dict = self.handle_cancel(data)
             return json.dumps(response_dict), data['type']
         except ValueError, e:
             print e.message
@@ -130,18 +98,23 @@ class UdpReceive(DatagramProtocol):
             return "Your bid got processed!"
 
     def handle_trade(self, trade):
-        id, message_id = trade['trade-id'].split(';')
-        offer = get_offer(id, message_id)
+        id, trade_id = get_public_bytestring(), trade['trade-id']
+        offer = get_offer(id=id, message_id=trade_id)
         if offer:
-            # Send a confirm
-            pass
+            remove_offer(id=id, message_id=trade_id)
+            trades.append(offer)
+            return create_confirm(recipient=trade['id'], trade_id=trade_id)
         else:
-            # Send a cancel
-            pass
-        return 'Trade succesful!'
+            return create_cancel(recipient=trade['id'], trade_id=trade_id)
 
     def handle_confirm(self, confirm):
+        offer = remove_offer(id=confirm['id'], message_id=confirm['trade_id'])
+        trades.append(offer)
         return 'Trade succesful!'
+
+    def handle_cancel(self, cancel):
+        remove_offer(id=cancel['id'], message_id=cancel['trade_id'])
+        return 'Trade cancelled'
 
     def handle_greeting(self, host, port):
         peer_list = self.read_peerlist()
@@ -155,6 +128,7 @@ class UdpReceive(DatagramProtocol):
         self.peers = data['peerlist']
         print self.peers
         return 'Peers added'
+
 
 reactor.listenMulticast(8005, UdpReceive("listener1"), listenMultiple=True)
 # reactor.listenMulticast(8005, UdpSender("listener2"), listenMultiple=True)

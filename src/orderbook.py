@@ -30,17 +30,27 @@ def create_bid(price, quantity, timeout):
     return message
 
 
-def create_trade(quantity, trade_id):
+def create_trade(recipient, quantity, trade_id):
     return create_msg(options={
+        'recipient': recipient,
         'type': 'trade',
         'quantity': quantity,
         'trade-id': trade_id,
     })
 
 
-def create_confirm(trade_id):
+def create_confirm(recipient, trade_id):
     return create_msg(options={
+        'recipient': recipient,
         'type': 'confirm',
+        'trade-id': trade_id,
+    })
+
+
+def create_cancel(recipient, trade_id):
+    return create_msg(options={
+        'recipient': recipient,
+        'type': 'cancel',
         'trade-id': trade_id,
     })
 
@@ -94,8 +104,9 @@ def trade_offer(their_offer, own_offer):
     trades.append(own_offer)
 
     return create_trade(
+        recipient=their_offer['id'],
         quantity=own_offer['quantity'],
-        trade_id="{};{}".format(their_offer['id'], their_offer['message-id'])
+        trade_id=their_offer['message-id'],
     )
 
 
@@ -166,7 +177,8 @@ def highest_offer(offers):
     return max(offers, key=lambda x: x['price']) if offers else None
 
 
-def remove_offer(id, message_id, offers):
+def remove_offer(id, message_id):
     for offer in offers:
-        if offers['id'] == id and offers['message-id'] == message_id:
+        if offer['id'] == id and offer['message-id'] == message_id:
             offers.remove(offer)
+            return offer
