@@ -1,0 +1,49 @@
+\section{Requirements}
+
+The goal of this project is to create a decentralised marketplace.
+The basics of a marketplace should work, so users have to be able to trade (virtual) commodities.
+The system should be decentralised.
+It should scale to thousands of users.
+A nice user interface is not a priority, so only command line input is required.
+
+Spoofing of message would of course be a big problem in a trading network.
+However, since this is a solved problem, the focus of the project should be on other areas.
+
+It would be nice to ensure the privacy of the users.
+
+In order to achieve this, strong encryption of messages is required.
+Further thought is also necessary on what information is exposed.
+It would be nice to have a network resistant against hostile takeover.
+Having a decentralised system plays a big role in this.
+However, other attack vectors could also be possible.
+Finally, it would be nice to trade real, verified commodities.
+Before we can do this however, the requirements listed above should be satisfied first.
+
+
+The requirements are summarized in this MoSCoW list: \\
+
+\begin{myitemize}
+\item Must
+\begin{myitemize}
+	\item Place an ask/bid
+	\item Trade an ask/bid
+    \item Find each other (peer discovery)
+    \item Decentralised
+    \item Scalable to 1000s of users
+    \item Command line input
+\end{myitemize}
+\item Should
+\begin{myitemize}
+	\item Anti-spoofing
+\end{myitemize}
+\item Could
+\begin{myitemize}
+	\item Nice User Interface
+\end{myitemize}
+\item Would
+\begin{myitemize}
+	\item Privacy
+	\item Protection against attacks
+	\item Trade real commodities (like Bitcoins)
+\end{myitemize}
+\end{myitemize}
