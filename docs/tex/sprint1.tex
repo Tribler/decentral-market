@@ -1,4 +1,6 @@
 \subsection{Sprint 1: Sockets, broadcasting and protocol definition}
+In the first sprint, an early version of tsukiji was implemented. Messages between peers are spread via broadcasting. A basic version of the message protocol is defined. Problems encountered during this sprint are also discussed: broken pipes with disconnected sockets, identifiers, and cancel messages.
+
 \subsubsection{Broadcasting}
 The goal of the first sprint was to create a local simulation of the decentral market using socket connections.
 The peers had to be able to communicate with each other.
@@ -60,7 +62,6 @@ A 'greeting' message is sent when a user wants to announce its existence to the 
 This is used later on for peer discovery.
 No additional fields are required.
 
-\subsection{Problems and solutions}
 \subsubsection{Broken Pipes}
 Testing the socket connection showed a couple of issues.
 Whenever a client would disconnect from a peer, the server that it was connected to reported a Broken Pipe error.
