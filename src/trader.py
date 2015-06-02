@@ -10,7 +10,7 @@ from orderbook import (match_incoming_ask, match_incoming_bid,
 from utils import print_all_offers
 
 
-class UdpReceive(DatagramProtocol):
+class Trader(DatagramProtocol):
     def __init__(self, name):
         self.name = name
         self.history = {}
@@ -128,6 +128,5 @@ class UdpReceive(DatagramProtocol):
         return 'Peers added'
 
 
-reactor.listenMulticast(8005, UdpReceive("listener1"), listenMultiple=True)
-# reactor.listenMulticast(8005, UdpSender("listener2"), listenMultiple=True)
+reactor.listenMulticast(8005, Trader("listener1"), listenMultiple=True)
 reactor.run()
