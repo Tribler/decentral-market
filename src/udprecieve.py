@@ -1,5 +1,4 @@
 import json
-import random
 
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
@@ -18,8 +17,7 @@ class UdpReceive(DatagramProtocol):
         self.peers = {}
 
     def startProtocol(self):
-        self.load_peers()
-        pass
+        self.read_peerlist()
 
     def stopProtocol(self):
         pass
@@ -27,24 +25,17 @@ class UdpReceive(DatagramProtocol):
     def datagramReceived(self, data, (host, port)):
         real_data = json.loads(data)
 
-        if not real_data['message-id'] in self.history:
+        if real_data['message-id'] not in self.history:
             self.handle_data(data, host, port)
             self.relay_message(data)
             self.history[real_data['message-id']] = True
             print_all_offers()
         else:
-            print "duplicate message received. ID:%d" % real_data['message-id']
+            print "Duplicate message received. ID:%d" % real_data['message-id']
 
     def relay_message(self, message):
-        #gossip_targets = random.sample(self.peers, 8)
         for address in self.peers:
             self.transport.write(message, (address, int(self.peers[address])))
-
-    def direct_message(self, message, host, port):
-        self.transport.write(message, (host, port))
-
-    def load_peers(self):
-        self.peers = self.read_peerlist()
 
     def read_peerlist(self):
         peer_dict = {}
@@ -62,21 +53,22 @@ class UdpReceive(DatagramProtocol):
     def handle_data(self, data, host='127.0.0.1', port=8005):
         try:
             data = json.loads(data)
-            if data['type'] == 'ask':
-                response_dict = self.handle_ask(data)
-            elif data['type'] == 'bid':
-                response_dict = self.handle_bid(data)
-            elif data['type'] == 'greeting':
-                response_dict = self.handle_greeting(host, port)
-            elif data['type'] == 'greeting_response':
-                response_dict = self.handle_greeting_response(data)
-            elif data['type'] == 'trade':
-                response_dict = self.handle_trade(data)
-            elif data['type'] == 'confirm':
-                response_dict = self.handle_confirm(data)
-            elif data['type'] == 'cancel':
-                response_dict = self.handle_cancel(data)
-            return json.dumps(response_dict), data['type']
+
+            responses = {
+                'ask': self.handle_ask,
+                'bid': self.handle_bid,
+                'greeting': self.handle_greeting,
+                'greeting_response': self.handle_greeting_response,
+                'trade': self.handle_trade,
+                'confirm': self.handle_confirm,
+                'cancel': self.handle_cancel
+            }
+
+            if data['type'] == 'greeting':
+                response = self.handle_greeting(host, port)
+            else:
+                response = responses[data['type']](data)
+            return json.dumps(response), data['type']
         except ValueError, e:
             print e.message
             return e.message
@@ -118,12 +110,12 @@ class UdpReceive(DatagramProtocol):
 
     def handle_greeting(self, host, port):
         peer_list = self.read_peerlist()
-        if not host in peer_list:
+        if host not in peer_list:
             self.add_to_peerlist(host, str(port) + "\n")
 
         msg = create_greeting_response(peer_list)
         msg = json.dumps(msg)
-        self.direct_message(msg, host, port)
+        self.transport.write(msg, (host, port))
         print "Greeting received from " + host + ":" + str(port)
         return 'Peerlist sent'
 
