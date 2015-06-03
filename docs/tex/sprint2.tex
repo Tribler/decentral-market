@@ -1,55 +1,64 @@
 \subsection{Sprint 2: Twisted and peer discovery}
+In the second sprint, a networking library called Twisted is integrated into tsukiji. Instead of hardcoding peers, a peer discovery mechanism is introduced. Finally, a gossip protocol replaces the broadcasting protocol.
 
 \subsubsection{Twisted}
-The self-created networking protocol of sprint 1 showed how the idea of the implementation would work in practice.
+The networking protocol using raw sockets of sprint 1 showed how the idea of the implementation would work in practice.
 What we need now is a stable and well-tested protocol to further our project into scaling and to prepare it for the real deal.
 To save us the work required to produce such code, we chose to use a library instead.
 
 Twisted is a open source library that offers many options for networking and communication. 
 Their site describes it as an event-based framework for internet applications. Using this framework, rather than our self-made code had a couple of benefits:
 \begin{itemize}
-\item Twisted is well-tested
-\item Twisted is event-driven
-\item Twisted is UDP
-\item Twisted is already implemented
+\item Twisted is well-tested.
+\item Twisted is event-driven.
+\item Twisted has an implementation of the UDP protocol.
+\item Twisted is already implemented.
 \end{itemize}
 The current implementation of the broadcasting protocol of sprint 1 does not contain any tests so there is no guarantee that the code is bug-free and ready to be extended.
 Twisted on the other hand has numerous test cases that cover many use-cases.
 Because of this, a lot of time can be saved by trusting that the imported functions of Twisted will behave as promised instead of writing tests for our own implementation.
 
-The current implementation contains and endless loop that continuously polls for messages.
+The current implementation uses a threaded approach to handling requests.
+Threads are not maintained particularly well.
 This is a enormous strain on the processor and the overall behaviour of the computer running the program.
 Twisted gives a structure that requires a low amount of recourses when it is not handling data for sending or receiving messages with an event-driven engine.
 
 Torrenting networks generally use UDP implementations to transport their data.
-To keep in line with this, it would be useful to have a similar way of handling communication in extensions of these programs.
-Twisted provides options for both TCP and UDP, so again, it provides a built-in solution.
+Keeping in line with this, it would be useful to have a similar way of handling communication in extensions of these programs.
+Twisted provides options for both TCP and UDP.
 
-All the above issues could be made and added to the current TCP implementation made in the previous sprint.
-This would however cost a lot of time that could be spent on trying to solve different issues that do not have such an easy outcome. \\
-\\
-With all these points added up, Twisted seems like a great way to improve the current networking implementation and provide reliability and scalability.
+
+All of the above issues could be made and added to the current TCP implementation made in the previous sprint.
+This would however cost a lot of time that could be spent on trying to solve different issues that do not have such an easy outcome.
+
+Given these advantages, Twisted seems like a great way to improve the current networking implementation and provide reliability and scalability.
+
 \subsubsection{Peer discovery}
 One of the issues of having a decentralised system is that there is no central authority that can provide information about all the users and all the data. 
 Because of this, when a peer is not yet part of the network, it has no knowledge of who to contact for more information about the network and all the peers connected to it. 
 This problem of peer discovery has not yet been solved in a truly decentralised way. 
-The current solution of this protocol is to give a peerlist to the new user. 
+The current solution of this protocol is to give a peerlist to the new user.
 This peerlist contains a number of peers that should always be online. 
-The new peer then connects with a random one peer of this list. 
-This one master-peer then send a list to the new peer of everyone connected to it. 
-This is added to the current peerlist of the new peer so the next time it comes online it can try one of the master peers and if they all happen to be taken down, it can also try to contact one of the peers it has once connected to.
+The new peer then connects with one random peer of this list. 
+This one master-peer then send a list of other peers back to the new peer.
+This list is added to the current peerlist of the new peer so the next time it comes online it can try one of the master peers and, if they all happen to be taken down, it can also try to contact one of the peers it has once connected to.
 With this implementation, the system is still mostly decentralised, but it still requires a number of master-peers to be online to support a first-time connection of new users.
+
 \subsubsection{Gossip}
 The implementation of sprint 1 used the broadcasting protocol to bring information of one peer to all the other peers.
-This protocol is simple to implement but bring the issue of scalability. 
-When the network grows larger, every peer has to send to more recipients and there are more peers sending messages in the first place as well.
-To increase the scalability, a better protocol is required.\\
-\\
-The peer discovery discussed in the previous section inherently creates a situation where subgroups of peers are created that know eachother, with those subgroups connected to other groups through a couple of peers that know of other so-called cliques.
+This protocol is easy to implement but does not scale well. 
+When the network grows larger, every peer has more recipients to contact and there are more peers sending messages all around.
+To increase the scalability, a better protocol is required.
+
+The peer discovery discussed in the previous section inherently creates a situation where subgroups of peers are created that know each other.
+A peer can be in multiple groups and they provide the connection between groups.
+The collection of groups connected to each other is called a clique.
 This property of the network is exactly what an epidemic or gossip protocol uses.
-This type of protocol has a peer relay all the messages it receives to all peers that it has encountered, not every single one peer in the whole network.
-Since the peers in a group have randomly chosen who sends them their peerlist, every peer should have a sligtly different group of other peers that it knows.
-Even in the cases that every peer only encounters users within its own subgroup, the original master-peers can still act as a bridge between the groups.\\
-\\
-This way, the network traffic is severely reduced as opposed to a broadcasting protocol.
-The addition of a new user now only increases load of one group, rather than every peer in the network and with the addition of many new peers, new groups will form to in turn cut down the overall stress.
+In this type of protocol, a peer relays all the messages it receives to all peers in its group, which eventually spreads through the entire clique.
+Since the peers in a group have randomly chosen who sends them their peerlist, every peer should have a slightly different group of other peers that it knows.
+Even in the case that every peer only encounters users within its own subgroup, the original master-peers can still act as a bridge between the groups.
+
+Using the gossip protocol severely reduces network traffic compared to the broadcasting protocol.
+The addition of a new user now only increases load of one group, rather than every peer in the network.
+With the addition of many new peers, new groups will form to cut down the overall stress.
+This protocol has proven itself to be scalable.

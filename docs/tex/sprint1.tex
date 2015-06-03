@@ -1,15 +1,16 @@
 \subsection{Sprint 1: Sockets, broadcasting and protocol definition}
+In the first sprint, an early version of tsukiji was implemented. The goal of the first sprint was to create a local simulation of the decentral market using socket connections. Messages between peers are spread via broadcasting. A basic version of the message protocol is defined. Problems encountered during this sprint are also discussed: broken pipes with disconnected sockets, identifiers, and cancel messages.
+
 \subsubsection{Broadcasting}
-The goal of the first sprint was to create a local simulation of the decentral market using socket connections.
-The peers had to be able to communicate with each other.
+The peers have to be able to communicate with each other by passing messages.
 The options considered for this were approaching a subset and relaying the information of your subset to other subsets and broadcasting your information to the entire network.
 The issue that arose with the subset approach was that in a competitive market, someone that is selling an item is not easily motivated to advertise in the name of another seller.
-This could lead to certain peers, that are offering an item for sale, to not relay other offers that would endanger the profits of the peer.
-This could lead to a disjoint of the network and therefor destroy the communication between certain peers.
+This could lead to certain peers, that are offering an item for sale, to not relay other offers that would endanger their own offer.
+This could lead to a disjoint of the network and therefor destroy communication between certain peers.
 
 Broadcasting does not have this issue.
 In broadcasting, every peer in the network is directly connected to each other.
-Everyone personally takes care of his own advertising and there is no peer between origin and destination that could disrupt the communication.
+Everyone personally takes care of their own advertising and there is no peer between origin and destination that could disrupt the communication.
 The issue with broadcasting is that it scales rather poorly.
 The increase of data over the network increases exponentially as the amount of users rises.
 Because of this, using broadcasting in a large scale project is not advised.
@@ -19,7 +20,7 @@ Implementation is simple and it's easily replaced by a more complex system in la
 \subsubsection{Protocol}
 
 In this sprint, the protocol was also defined.
-A message formatted as a JSON object is exchanged over TCP.
+A message is formatted as a JSON object.
 Each message has 4 required fields:
 \begin{myitemize}
 \item id: Contains the user's public key. See \ref{sprint1:identifiers} for more information.
@@ -60,7 +61,6 @@ A 'greeting' message is sent when a user wants to announce its existence to the 
 This is used later on for peer discovery.
 No additional fields are required.
 
-\subsection{Problems and solutions}
 \subsubsection{Broken Pipes}
 Testing the socket connection showed a couple of issues.
 Whenever a client would disconnect from a peer, the server that it was connected to reported a Broken Pipe error.
