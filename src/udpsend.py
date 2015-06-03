@@ -1,8 +1,10 @@
+import datetime
+import json
+from time import sleep
+
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
 from orderbook import create_ask, create_bid, create_greeting
-import json
-from time import sleep
 
 
 class UdpSender(DatagramProtocol):
@@ -23,23 +25,31 @@ class UdpSender(DatagramProtocol):
         pass
 
     def send_message(self):
+
+        now = datetime.datetime.now()
+        next_year = now.replace(year=now.year + 1).isoformat()
+        last_year = now.replace(year=now.year - 1).isoformat()
+
+        print next_year
+
+
         msg = create_greeting()
         msg = json.dumps(msg)
         self.transport.write(msg, (self.host, self.port))
         sleep(0.3)
-        offer = create_bid(price='4', quantity='3', timeout=3)
+        offer = create_bid(price='4', quantity='3', timeout=last_year)
         offer = json.dumps(offer)
         self.transport.write(offer, (self.host, self.port))
         sleep(0.3)
-        msg = create_ask(price='6', quantity='6', timeout=1)
+        msg = create_ask(price='6', quantity='6', timeout=next_year)
         msg = json.dumps(msg)
         self.transport.write(msg, (self.host, self.port))
         sleep(0.3)
         sleep(0.3)
-        offer = create_bid(price='4', quantity='6', timeout=3)
+        offer = create_bid(price='4', quantity='6', timeout=last_year)
         offer = json.dumps(offer)
         self.transport.write(offer, (self.host, self.port))
-        msg = create_ask(price='2', quantity='6', timeout=1)
+        msg = create_ask(price='2', quantity='6', timeout=next_year)
         msg = json.dumps(msg)
         self.transport.write(msg, (self.host, self.port))
 
