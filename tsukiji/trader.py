@@ -93,7 +93,7 @@ class Trader(DatagramProtocol):
         id, trade_id = get_public_bytestring(), trade['trade-id']
         offer = get_offer(id=id, message_id=trade_id)
         if offer:
-            remove_offer(id=id, message_id=trade_id)
+            offers.remove(offer)
             trades.append(offer)
             return create_confirm(recipient=trade['id'], trade_id=trade_id)
         else:
