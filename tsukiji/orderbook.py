@@ -97,12 +97,7 @@ def create_msg(options=None):
 
 
 def trade_offer(their_offer, own_offer):
-    '''
-    Create a trade message replying to one of their offers.
-    '''
-    offers.remove(their_offer)
-    trades.append(own_offer)
-
+    '''Create a trade message replying to one of their offers.'''
     return create_trade(
         recipient=their_offer['id'],
         quantity=own_offer['quantity'],
