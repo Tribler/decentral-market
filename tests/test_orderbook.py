@@ -1,6 +1,14 @@
 from nose import with_setup
 
 from tsukiji import orderbook as ob
+from tsukiji.crypto import get_public_bytestring
+
+
+import datetime
+now = datetime.datetime.now()
+next_year = now.replace(year=now.year + 1)
+last_year = now.replace(year=now.year - 1)
+public_id = get_public_bytestring()
 
 
 def clear_orderbook():
@@ -13,6 +21,8 @@ def clear_orderbook():
 def test_create_msg():
     message = ob.create_msg()
     assert type(message) == dict
+    assert message['id'] == public_id
+    assert message['message-id'] == 0
 
 
 @with_setup(clear_orderbook)
@@ -48,8 +58,7 @@ def test_create_msg_passing_options_overriding_default():
 
 @with_setup(clear_orderbook)
 def test_create_ask():
-    import datetime
-    ask = ob.create_ask(1, 1, datetime.datetime.now())
+    ask = ob.create_ask(1, 1, now)
     assert ask['type'] == 'ask'
     assert ask['price'] == 1
     assert ask['quantity'] == 1
@@ -102,3 +111,18 @@ def test_create_greeting_response():
     greeting_response = ob.create_greeting_response(['abcd', 'efgh'])
     assert greeting_response['type'] == 'greeting_response'
     assert greeting_response['peerlist'] == ['abcd', 'efgh']
+
+
+@with_setup(clear_orderbook)
+def test_get_offer():
+    ask = ob.create_ask(1, 1, next_year)
+    offer = ob.get_offer(public_id, 0)
+    assert ask == offer, 'Expected {}, got {}'.format(ask, offer)
+
+
+@with_setup(clear_orderbook)
+def test_clean_offers():
+    ob.create_ask(1,1,next_year)
+    mock_function = lambda x: x
+    ob.clean_offers(mock_function)()
+    assert len(ob.offers) == 0
