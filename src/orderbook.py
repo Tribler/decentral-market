@@ -63,8 +63,8 @@ def create_greeting():
 
 def create_greeting_response(peers):
     return create_msg(options={
-        'type' : 'greeting_response',
-        'peerlist' : peers
+        'type': 'greeting_response',
+        'peerlist': peers
     })
 
 
@@ -117,6 +117,16 @@ def get_offer(id, message_id):
     return None
 
 
+def clean_offers(f):
+    def func_wrapper(*args, **kwargs):
+        for offer in offers:
+            if datetime.datetime.strptime(offer['timeout'], '%Y-%m-%dT%H:%M:%S.%f') < datetime.datetime.now():
+                offers.remove(offer)
+        return f(*args, **kwargs)
+    return func_wrapper
+
+
+@clean_offers
 def get_asks():
     return filter(lambda offer:
                 offer['type'] == 'ask' and
@@ -124,6 +134,7 @@ def get_asks():
             offers)
 
 
+@clean_offers
 def get_own_asks():
     return filter(lambda offer:
                 offer['type'] == 'ask' and
@@ -131,6 +142,7 @@ def get_own_asks():
             offers)
 
 
+@clean_offers
 def get_bids():
     return filter(lambda offer:
                 offer['type'] == 'bid' and
@@ -138,6 +150,7 @@ def get_bids():
             offers)
 
 
+@clean_offers
 def get_own_bids():
     return filter(lambda offer:
                 offer['type'] == 'bid' and
@@ -145,24 +158,28 @@ def get_own_bids():
             offers)
 
 
+@clean_offers
 def match_bid(bid):
     '''Match a bid of your own with the lowest ask from the other party.'''
     matching_asks = filter(lambda ask: ask['price'] <= bid['price'], get_asks())
     return lowest_offer(matching_asks)
 
 
+@clean_offers
 def match_incoming_bid(bid):
     '''Match a bid from the other party with your own asks.'''
     matching_asks = filter(lambda ask: ask['price'] >= bid['price'], get_asks())
     return highest_offer(matching_asks)
 
 
+@clean_offers
 def match_ask(ask):
     '''Match an ask of your own with the highest bid from the other party.'''
     matching_bids = filter(lambda bid: bid['price'] >= ask['price'], get_bids())
     return highest_offer(matching_bids)
 
 
+@clean_offers
 def match_incoming_ask(ask):
     '''Match an ask from the other party with your own bids'''
     matching_bids = filter(lambda bid: bid['price'] <= ask['price'], get_own_bids())
