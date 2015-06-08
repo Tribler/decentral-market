@@ -189,28 +189,28 @@ class OrderBookTest(unittest.TestCase):
 
     def test_match_ask(self):
         own_ask = ob.create_ask(11, 1, next_year)
-        their_bid = ob.create_bid(10, 1, next_year)
+        their_bid = ob.create_bid(12, 1, next_year)
         their_bid['id'] = 1234
         matching_bid = ob.match_ask(own_ask)
         assert matching_bid is their_bid, 'Expected {}, got {}'.format(their_bid, matching_bid)
 
     def test_match_ask_without_a_match(self):
         own_ask = ob.create_ask(11, 1, next_year)
-        their_bid = ob.create_bid(12, 1, next_year)
+        their_bid = ob.create_bid(10, 1, next_year)
         their_bid['id'] = 1234
         matching_bid = ob.match_ask(own_ask)
         assert matching_bid is None, 'Expected None, got {}'.format(matching_bid)
 
     def test_match_incoming_ask(self):
-        own_bid = ob.create_bid(11, 1, next_year)
-        their_ask = ob.create_ask(12, 1, next_year)
+        own_bid = ob.create_bid(12, 1, next_year)
+        their_ask = ob.create_ask(11, 1, next_year)
         their_ask['id'] = 1234
         matching_bid = ob.match_incoming_ask(their_ask)
         assert matching_bid is own_bid, 'Expected {}, got {}.'.format(own_bid, matching_bid)
 
     def test_match_incoming_ask_without_a_match(self):
-        own_bid = ob.create_bid(12, 1, next_year)
-        their_ask = ob.create_ask(11, 1, next_year)
+        own_bid = ob.create_bid(11, 1, next_year)
+        their_ask = ob.create_ask(12, 1, next_year)
         their_ask['id'] = 1234
         matching_bid = ob.match_incoming_ask(their_ask)
         assert matching_bid is None, 'Expected None, got {}'.format(matching_bid)
