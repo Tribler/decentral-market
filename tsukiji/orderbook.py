@@ -190,7 +190,6 @@ def highest_offer(offers):
 
 
 def remove_offer(id, message_id):
-    for offer in offers:
-        if offer['id'] == id and offer['message-id'] == message_id:
-            offers.remove(offer)
-            return offer
+    offer = get_offer(id, message_id)
+    offers.remove(offer)
+    return offer
