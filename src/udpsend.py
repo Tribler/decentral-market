@@ -1,5 +1,6 @@
 from twisted.internet.protocol import DatagramProtocol
-from twisted.internet import reactor
+from twisted.internet import reactor, threads
+from twisted.python import threadable
 from orderbook import create_ask, create_bid, create_greeting
 import json
 from time import sleep
@@ -7,11 +8,13 @@ from time import sleep
 
 class UdpSender(DatagramProtocol):
 
-    def __init__(self, name, host, port):
+    def __init__(self, name, host, port, qty, price, msgtype):
         self.name = name
-        self.loopObj = None
         self.host = host
         self.port = port
+        self.msgtype = msgtype
+        self.price = price
+        self.qty = qty
 
     def startProtocol(self):
         self.send_message()
@@ -23,28 +26,22 @@ class UdpSender(DatagramProtocol):
         pass
 
     def send_message(self):
-        msg = create_greeting()
-        msg = json.dumps(msg)
-        self.transport.write(msg, (self.host, self.port))
-        sleep(0.3)
-        offer = create_bid(price='4', quantity='3', timeout=3)
-        offer = json.dumps(offer)
-        self.transport.write(offer, (self.host, self.port))
-        sleep(0.3)
-        msg = create_ask(price='6', quantity='6', timeout=1)
-        msg = json.dumps(msg)
-        self.transport.write(msg, (self.host, self.port))
-        sleep(0.3)
-        sleep(0.3)
-        offer = create_bid(price='4', quantity='6', timeout=3)
-        offer = json.dumps(offer)
-        self.transport.write(offer, (self.host, self.port))
-        msg = create_ask(price='2', quantity='6', timeout=1)
-        msg = json.dumps(msg)
-        self.transport.write(msg, (self.host, self.port))
+        print "Attempting to send message: " + ", " + self.price + ", " + self.qty + ", " + self.msgtype
+        if self.msgtype == 'G':
+            msg = create_greeting()
+            msg = json.dumps(msg)
+            self.transport.write(msg, (self.host, self.port))
+        else:
+            if self.msgtype == 'A':
+                msg = create_ask(self.price, self.qty, timeout=3)
+            elif self.msgtype == 'B':
+                msg = create_bid(self.price, self.qty, timeout=3)
+            msg = json.dumps(msg)
+            print msg
+            self.transport.write(msg, (self.host, self.port))
+            print "Transported message"
 
 
-senderObj = UdpSender("meh", "224.0.0.1", 8005)
-
-reactor.listenMulticast(8005, senderObj, listenMultiple=True)
-# reactor.run()
+def create_peer(id, qty, price, msgtype):
+    senderObj = UdpSender(id, "224.0.0.1", 8005, qty, price, msgtype)
+    reactor.listenMulticast(8005, senderObj, listenMultiple=True)
