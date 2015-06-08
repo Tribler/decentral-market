@@ -7,7 +7,7 @@ from udpsend import create_peer
 from twisted.internet import reactor
 import threading
 
-PEER_AMOUNT = 2
+PEER_AMOUNT = 100
 allocated_msgs = [list() for x in range(PEER_AMOUNT)]
 
 
@@ -24,15 +24,15 @@ def get_orders():
 
 def allocate_msgs():
     orders = get_orders()
-    for order in orders:
-        allocated_msgs[int(order[3]) % PEER_AMOUNT].append(order)
+    for index, order in enumerate(orders):
+        allocated_msgs[index % PEER_AMOUNT].append(order)
     print "Messages allocated."
 
 
 def start_peer(index):
     print "Creating peer and sending messages."
     for message in allocated_msgs[index]:
-        create_peer(str(index), message[4], message[3], message[0])
+        create_peer(str(index), message[4], message[5], message[0])
     return
 
 

@@ -1,6 +1,6 @@
 import datetime
 import json
-from time import sleep
+import os
 
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor, threads
@@ -28,20 +28,22 @@ class UdpSender(DatagramProtocol):
         pass
 
     def send_message(self):
-        print "Attempting to send message: " + ", " + self.price + ", " + self.qty + ", " + self.msgtype
+        now = datetime.datetime.now()
+        next_year = now.replace(year=now.year + 1).isoformat()
+
         if self.msgtype == 'G':
             msg = create_greeting()
             msg = json.dumps(msg)
             self.transport.write(msg, (self.host, self.port))
         else:
             if self.msgtype == 'A':
-                msg = create_ask(self.price, self.qty, timeout=3)
+                msg = create_ask(self.price, self.qty, timeout=next_year)
             elif self.msgtype == 'B':
-                msg = create_bid(self.price, self.qty, timeout=3)
+                msg = create_bid(self.price, self.qty, timeout=next_year)
             msg = json.dumps(msg)
-            print msg
             self.transport.write(msg, (self.host, self.port))
             print "Transported message"
+
 
 
 def create_peer(id, qty, price, msgtype):
