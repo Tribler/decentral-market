@@ -1,4 +1,4 @@
-from unittest import TestCase
+import unittest
 
 from tsukiji import orderbook as ob
 from tsukiji.crypto import get_public_bytestring
@@ -11,7 +11,7 @@ last_year = now.replace(year=now.year - 1)
 public_id = get_public_bytestring()
 
 
-class OrderBookTest(TestCase):
+class OrderBookTest(unittest.TestCase):
     def setUp(self):
         '''Clean the orderbook before every test.'''
         ob.message_id = 0
@@ -97,7 +97,12 @@ class OrderBookTest(TestCase):
         offer = ob.get_offer(public_id, 0)
         assert ask == offer, 'Expected {}, got {}'.format(ask, offer)
 
-    def test_get_offer_empty_orderbook(self):
+    def test_get_offer_wrong_message_id(self):
+        ob.create_ask(1, 1, next_year)
+        offer = ob.get_offer(public_id, 1)
+        assert offer is None, 'Expected {}, got {}'.format(None, offer)
+
+    def test_get_offer_empty(self):
         offer = ob.get_offer(1, 1)
         assert offer is None, 'Expected None, got {}'.format(offer)
 
@@ -154,3 +159,33 @@ class OrderBookTest(TestCase):
         bid = ob.create_bid(1, 1, next_year)
         bids = ob.get_own_bids()
         assert bids == [bid], 'Expected {}, got {}'.format([bid], bids)
+
+    def test_lowest_offer_empty(self):
+        lowest_offer = ob.lowest_offer([])
+        assert lowest_offer is None
+
+    def test_lowest_offer(self):
+        ask1 = ob.create_ask(1, 1, next_year)
+        ask2 = ob.create_ask(2, 1, next_year)
+        lowest_offer = ob.lowest_offer(ob.offers)
+        assert lowest_offer == ask1
+
+    def test_highest_offer_empty(self):
+        highest_offer = ob.highest_offer([])
+        assert highest_offer is None
+
+    def test_highest_offer(self):
+        bid1 = ob.create_bid(1, 1, next_year)
+        bid2 = ob.create_bid(2, 1, next_year)
+        highest_offer = ob.highest_offer(ob.offers)
+        assert highest_offer == bid2
+
+    def test_remove_offer_empty(self):
+        offer = ob.remove_offer(1, 1)
+        assert offer is None
+
+    def test_remove_offer(self):
+        ask = ob.create_ask(1, 1, next_year)
+        offer = ob.remove_offer(ask['id'], ask['message-id'])
+        assert offer is ask, 'Expected {}, got {}.'.format(ask, offer)
+        assert ob.offers == [], 'Expected {}, got {}.'.format([], ob.offers)
