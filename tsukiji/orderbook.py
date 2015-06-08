@@ -97,12 +97,7 @@ def create_msg(options=None):
 
 
 def trade_offer(their_offer, own_offer):
-    '''
-    Create a trade message replying to one of their offers.
-    '''
-    offers.remove(their_offer)
-    trades.append(own_offer)
-
+    '''Create a trade message replying to one of their offers.'''
     return create_trade(
         recipient=their_offer['id'],
         quantity=own_offer['quantity'],
@@ -120,7 +115,7 @@ def get_offer(id, message_id):
 def clean_offers(f):
     def func_wrapper(*args, **kwargs):
         for offer in offers:
-            if datetime.datetime.strptime(offer['timeout'], '%Y-%m-%dT%H:%M:%S.%f') < datetime.datetime.now():
+            if offer['timeout'] < datetime.datetime.now():
                 offers.remove(offer)
         return f(*args, **kwargs)
     return func_wrapper
@@ -168,7 +163,7 @@ def match_bid(bid):
 @clean_offers
 def match_incoming_bid(bid):
     '''Match a bid from the other party with your own asks.'''
-    matching_asks = filter(lambda ask: ask['price'] >= bid['price'], get_asks())
+    matching_asks = filter(lambda ask: ask['price'] <= bid['price'], get_own_asks())
     return highest_offer(matching_asks)
 
 
@@ -182,7 +177,7 @@ def match_ask(ask):
 @clean_offers
 def match_incoming_ask(ask):
     '''Match an ask from the other party with your own bids'''
-    matching_bids = filter(lambda bid: bid['price'] <= ask['price'], get_own_bids())
+    matching_bids = filter(lambda bid: bid['price'] >= ask['price'], get_own_bids())
     return lowest_offer(matching_bids)
 
 
@@ -195,7 +190,7 @@ def highest_offer(offers):
 
 
 def remove_offer(id, message_id):
-    for offer in offers:
-        if offer['id'] == id and offer['message-id'] == message_id:
-            offers.remove(offer)
-            return offer
+    offer = get_offer(id, message_id)
+    if offer:
+        offers.remove(offer)
+    return offer

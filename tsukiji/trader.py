@@ -54,6 +54,10 @@ class Trader(DatagramProtocol):
         try:
             data = json.loads(data)
 
+            # Turn isoformatted datetime into a python datetime
+            if data['timeout']:
+                data['timeout'] = datetime.datetime.strptime(data['timeout'], '%Y-%m-%dT%H:%M:%S.%f')
+
             responses = {
                 'ask': self.handle_ask,
                 'bid': self.handle_bid,
@@ -93,7 +97,7 @@ class Trader(DatagramProtocol):
         id, trade_id = get_public_bytestring(), trade['trade-id']
         offer = get_offer(id=id, message_id=trade_id)
         if offer:
-            remove_offer(id=id, message_id=trade_id)
+            offers.remove(offer)
             trades.append(offer)
             return create_confirm(recipient=trade['id'], trade_id=trade_id)
         else:
