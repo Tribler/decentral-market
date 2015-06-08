@@ -13,6 +13,7 @@ public_id = get_public_bytestring()
 
 class OrderBookTest(TestCase):
     def setUp(self):
+        '''Clean the orderbook before every test.'''
         ob.message_id = 0
         ob.offers = []
         ob.trades = []
@@ -105,3 +106,51 @@ class OrderBookTest(TestCase):
         mock_function = lambda *x: x
         ob.clean_offers(mock_function)()
         assert len(ob.offers) == 0, 'Expected empty list, got {}'.format(ob.offers)
+
+    def test_trade_offer(self):
+        ask = ob.create_ask(1, 2, next_year)
+        ask['id'] = 1234
+        bid = ob.create_ask(1, 1, next_year)
+        trade = ob.trade_offer(ask, bid)
+        assert trade is not None
+        assert trade['recipient'] == 1234
+        assert trade['quantity'] == 1
+        assert trade['trade-id'] == ask['message-id']
+
+    def test_get_asks_empty(self):
+        asks = ob.get_asks()
+        assert asks == []
+
+    def test_get_asks(self):
+        ask = ob.create_ask(1, 1, next_year)
+        ask['id'] = 1234
+        asks = ob.get_asks()
+        assert asks == [ask], 'Expected {}, got {}'.format([ask], asks)
+
+    def test_get_own_asks_empty(self):
+        asks = ob.get_own_asks()
+        assert asks == [], 'Expected {}, got {}'.format([], asks)
+
+    def test_get_own_asks(self):
+        ask = ob.create_ask(1, 1, next_year)
+        asks = ob.get_own_asks()
+        assert asks == [ask], 'Expected {}, got {}'.format([ask], asks)
+
+    def test_get_bids_empty(self):
+        bids = ob.get_bids()
+        assert bids == [], 'Expected {}, got {}'.format([], bids)
+
+    def test_get_bids(self):
+        bid = ob.create_bid(1, 1, next_year)
+        bid['id'] = 1234
+        bids = ob.get_bids()
+        assert bids == [bid], 'Expected {}, got {}'.format([bid], bids)
+
+    def test_get_own_bids_empty(self):
+        bids = ob.get_own_bids()
+        assert bids == [], 'Expected {}, got {}'.format([], bids)
+
+    def test_get_own_bids(self):
+        bid = ob.create_bid(1, 1, next_year)
+        bids = ob.get_own_bids()
+        assert bids == [bid], 'Expected {}, got {}'.format([bid], bids)
