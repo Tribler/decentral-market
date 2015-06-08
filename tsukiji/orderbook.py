@@ -163,7 +163,7 @@ def match_bid(bid):
 @clean_offers
 def match_incoming_bid(bid):
     '''Match a bid from the other party with your own asks.'''
-    matching_asks = filter(lambda ask: ask['price'] >= bid['price'], get_asks())
+    matching_asks = filter(lambda ask: ask['price'] >= bid['price'], get_own_asks())
     return highest_offer(matching_asks)
 
 
