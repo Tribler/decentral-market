@@ -119,10 +119,14 @@ def test_get_offer():
     offer = ob.get_offer(public_id, 0)
     assert ask == offer, 'Expected {}, got {}'.format(ask, offer)
 
+@with_setup(clear_orderbook)
+def test_get_offer_empty_orderbook():
+    offer = ob.get_offer(1, 1)
+    assert offer is None, 'Expected None, got {}'.format(offer)
 
 @with_setup(clear_orderbook)
 def test_clean_offers():
-    ob.create_ask(1,1,next_year)
-    mock_function = lambda x: x
+    ob.create_ask(1,1,last_year)
+    mock_function = lambda *x: x
     ob.clean_offers(mock_function)()
-    assert len(ob.offers) == 0
+    assert len(ob.offers) == 0, 'Expected empty list, got {}'.format(ob.offers)

@@ -54,6 +54,10 @@ class Trader(DatagramProtocol):
         try:
             data = json.loads(data)
 
+            # Turn isoformatted datetime into a python datetime
+            if data['timeout']:
+                data['timeout'] = datetime.datetime.strptime(data['timeout'], '%Y-%m-%dT%H:%M:%S.%f')
+
             responses = {
                 'ask': self.handle_ask,
                 'bid': self.handle_bid,

@@ -115,7 +115,7 @@ def get_offer(id, message_id):
 def clean_offers(f):
     def func_wrapper(*args, **kwargs):
         for offer in offers:
-            if datetime.datetime.strptime(offer['timeout'], '%Y-%m-%dT%H:%M:%S.%f') < datetime.datetime.now():
+            if offer['timeout'] < datetime.datetime.now():
                 offers.remove(offer)
         return f(*args, **kwargs)
     return func_wrapper
