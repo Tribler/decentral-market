@@ -7,10 +7,10 @@ Reading a message
 """
 
 import os
-
+import random
 from Crypto.PublicKey import RSA
 
-KEYFILE_NAME = 'key.pem'
+KEYFILE_NAME = 'key1.pem'
 
 
 def create_key():
@@ -27,10 +27,10 @@ def retrieve_key():
     If the file does not exist, create one.
     Returns an RSA key object.
     '''
-    if not os.path.isfile(KEYFILE_NAME):
-        return create_key()
-
-    with open(KEYFILE_NAME, 'r') as f:
+    #if not os.path.isfile(KEYFILE_NAME):
+    #   return create_key()
+    n = random.randint(1, 5)
+    with open("key"+str(n)+".pem", 'r') as f:
         key = RSA.importKey(f.read())
         return key
 

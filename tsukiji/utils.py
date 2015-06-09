@@ -5,7 +5,7 @@ def offer_to_string(offer):
     s = "{\n"
     for k, v in offer.iteritems():
         if k == 'id':
-            v = v.split('\n')[1][:20] + '...'
+            v = v.split('\n')[1][:60] + '...'
         s += "\t{}: {}\n".format(k, v)
     s += "    }"
     return s
