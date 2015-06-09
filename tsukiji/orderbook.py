@@ -15,7 +15,9 @@ def create_ask(price, quantity, timeout):
         'quantity': quantity,
         'timeout': timeout
     })
+
     offers.append(message)
+
     return message
 
 
@@ -26,7 +28,9 @@ def create_bid(price, quantity, timeout):
         'quantity': quantity,
         'timeout': timeout
     })
+
     offers.append(message)
+
     return message
 
 
@@ -89,6 +93,7 @@ def create_msg(options=None):
         "message-id": message_id,
         "timestamp": datetime.datetime.now().isoformat(),
     }
+
     message.update(options)
 
     message_id = message_id + 1
@@ -106,13 +111,23 @@ def trade_offer(their_offer, own_offer):
 
 
 def get_offer(id, message_id):
+    '''Retrieve an offer given an id and message-id.'''
     for offer in offers:
         if offer['id'] == id and offer['message-id'] == message_id:
             return offer
     return None
 
 
+def remove_offer(id, message_id):
+    '''Remove an offer given an id and message-id. Returns the offer or None if no offer is found.'''
+    offer = get_offer(id, message_id)
+    if offer:
+        offers.remove(offer)
+    return offer
+
+
 def clean_offers(f):
+    '''Decorator that scans the list of offers and removes any offers whose timeout has passed.'''
     def func_wrapper(*args, **kwargs):
         for offer in offers:
             if offer['timeout'] < datetime.datetime.now():
@@ -182,15 +197,10 @@ def match_incoming_ask(ask):
 
 
 def lowest_offer(offers):
+    '''Return the offer with the lowest price from a list of offers.'''
     return min(offers, key=lambda x: x['price']) if offers else None
 
 
 def highest_offer(offers):
+    '''Return the offer with the highest price from a list of offers.'''
     return max(offers, key=lambda x: x['price']) if offers else None
-
-
-def remove_offer(id, message_id):
-    offer = get_offer(id, message_id)
-    if offer:
-        offers.remove(offer)
-    return offer
