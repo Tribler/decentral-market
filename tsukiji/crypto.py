@@ -15,7 +15,7 @@ KEYFILE_NAME = 'key1.pem'
 
 def create_key():
     '''Generates and writes byte string with object of RSA key object.'''
-    key = RSA.generate(2048)
+    key = RSA.generate(1024)
     with open(KEYFILE_NAME, 'w') as f:
         f.write(key.exportKey('PEM'))
     return key
