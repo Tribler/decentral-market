@@ -15,9 +15,11 @@ def get_orders():
     orders = []
     with open("orderlist.csv") as f:
         reader = csv.reader(f)
-        for row in reader:
+        for ind, row in enumerate(reader):
             if not row[0] == 'T':
                 orders.append(row)
+            if ind > 20:
+                break
     print "Orderlist read."
     return orders
 

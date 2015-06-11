@@ -27,7 +27,7 @@ class Trader(DatagramProtocol):
         real_data = json.loads(data)
 
         if real_data['message-id'] not in self.history:
-            self.handle_data(data, host, port)
+            self.relay_message(self.handle_data(data, host, port)[0])
             self.relay_message(data)
             self.history[real_data['message-id']] = True
             print_all_offers()
@@ -111,6 +111,7 @@ class Trader(DatagramProtocol):
 
     def handle_cancel(self, cancel):
         remove_offer(id=cancel['id'], message_id=cancel['trade_id'])
+        print "Trade cancelled"
         return 'Trade cancelled'
 
     def handle_greeting(self, host, port):
