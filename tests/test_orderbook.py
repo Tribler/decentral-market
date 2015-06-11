@@ -9,7 +9,6 @@ import datetime
 now = datetime.datetime.now()
 next_year = now.replace(year=now.year + 1)
 last_year = now.replace(year=now.year - 1)
-public_id = get_public_bytestring()
 
 
 class OrderBookTest(unittest.TestCase):
@@ -19,11 +18,12 @@ class OrderBookTest(unittest.TestCase):
         ob.message_id = 0
         ob.offers = []
         ob.trades = []
+        self.public_id = get_public_bytestring()
 
     def test_create_msg(self):
         message = ob.create_msg()
         assert_equal(type(message), dict)
-        assert_equal(message['id'], public_id)
+        assert_equal(message['id'], self.public_id)
         assert_equal(message['message-id'], 0)
 
     def test_create_msg_incrementing_message_id(self):
@@ -96,12 +96,12 @@ class OrderBookTest(unittest.TestCase):
 
     def test_get_offer(self):
         ask = ob.create_ask(1, 1, next_year)
-        offer = ob.get_offer(public_id, 0)
+        offer = ob.get_offer(self.public_id, 0)
         assert_equal(ask, offer)
 
     def test_get_offer_wrong_message_id(self):
         ob.create_ask(1, 1, next_year)
-        offer = ob.get_offer(public_id, 1)
+        offer = ob.get_offer(self.public_id, 1)
         assert_is_none(offer, None)
 
     def test_get_offer_empty(self):

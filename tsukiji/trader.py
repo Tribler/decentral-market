@@ -18,7 +18,7 @@ class Trader(DatagramProtocol):
         self.peers = {}
 
     def startProtocol(self):
-        self.read_peerlist()
+        pass
 
     def stopProtocol(self):
         pass
@@ -39,12 +39,8 @@ class Trader(DatagramProtocol):
             self.transport.write(message, (address, int(self.peers[address])))
 
     def read_peerlist(self):
-        peer_dict = {}
         with open("peerlist.txt") as f:
-            for line in f:
-                (address, port) = line.split(':')
-                peer_dict[address] = port
-        return peer_dict
+            return dict(line.strip().split(':') for line in f.readlines())
 
     def add_to_peerlist(self, host, port):
         with open("peerlist.txt", "a") as f:
@@ -56,7 +52,7 @@ class Trader(DatagramProtocol):
             data = json.loads(data)
 
             # Turn isoformatted datetime into a python datetime
-            if data['timeout']:
+            if 'timeout' in data:
                 data['timeout'] = datetime.datetime.strptime(data['timeout'], '%Y-%m-%dT%H:%M:%S.%f')
 
             responses = {
@@ -125,7 +121,6 @@ class Trader(DatagramProtocol):
         return 'Peerlist sent'
 
     def handle_greeting_response(self, data):
-        self.read_peerlist()
         self.peers.update(data['peerlist'])
         for key, value in self.peers.iteritems():
             self.add_to_peerlist(key, value)
