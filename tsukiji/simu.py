@@ -18,8 +18,6 @@ def get_orders():
         for ind, row in enumerate(reader):
             if not row[0] == 'T':
                 orders.append(row)
-            if ind > 20:
-                break
     print "Orderlist read."
     return orders
 
