@@ -6,6 +6,8 @@ import csv
 from udpsend import create_peer
 from twisted.internet import reactor
 import threading
+import os.path
+from crypto import create_key
 
 PEER_AMOUNT = 100
 allocated_msgs = [list() for x in range(PEER_AMOUNT)]
@@ -37,11 +39,19 @@ def start_peer(index):
 
 
 def simulate():
+    check_keys()
     print "Starting simulation.."
     allocate_msgs()
     for i in range(PEER_AMOUNT):
         print "Attempting to start thread for peer" + str(i)
         threading.Thread(target=start_peer, args=(i,)).start()
         print "Started peer" + str(i)
+
+
+def check_keys():
+    for i in range(1, 6):
+        name = "key" + str(i) + ".pem"
+        if not os.path.isfile(name):
+            create_key(name)
 
 simulate()

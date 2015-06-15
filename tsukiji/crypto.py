@@ -13,10 +13,10 @@ from Crypto.PublicKey import RSA
 KEYFILE_NAME = 'key1.pem'
 
 
-def create_key():
+def create_key(name=KEYFILE_NAME):
     '''Generates and writes byte string with object of RSA key object.'''
     key = RSA.generate(1024)
-    with open(KEYFILE_NAME, 'w') as f:
+    with open(name, 'w') as f:
         f.write(key.exportKey('PEM'))
     return key
 
