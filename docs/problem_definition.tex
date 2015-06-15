@@ -5,7 +5,7 @@
 
 2. The world of trade or economic activity.}{Merriam-Webster}
 
-To combat the issues associated with centralised marketplaces, tsukiji aims to be a fully decentralised marketplace.
+To combat the issues associated with centralised marketplaces, Tsukiji aims to be a fully decentralised marketplace.
 
 A marketplace is a place where public sales are held.
 In our case, a marketplace is a place where people can place bids or asks.
@@ -16,9 +16,17 @@ Using the example of BitTorrent communities, a transaction would occur as follow
 An interested buyer sees the ask and requests a trade to be made.
 The buyer and seller exchange information necessary for the transaction to occur (e.g. bank account numbers).
 A trade is made and the original ask is taken down.
+A similar transaction occurs when a "bid" is placed.
 
 Current marketplaces are centralised.
 Information passes through one central point.
 This means that if this central point fails, the entire marketplace is shut down.
 A decentralised system operates without such a single point.
 Instead of a central server connected to several users, peers are connected to each other.
+If a single peer fails, this might impact the marketplace, but it will not shut it down.
+
+For a network of such peers to exist, peers first have to find each other.
+Peer discovery is generally done by exchanging information about other peers.
+When a peer first signs on, it knows of no other peers.
+We can bootstrap its network by having them connect to a predefined set of super peers, who are known to be well connected.
+From there, they can exchange information about other peers.
