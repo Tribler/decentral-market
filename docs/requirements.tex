@@ -1,10 +1,25 @@
 \section{Requirements}
+The goal of tsukiji is to create a decentralised market where users can trade commodities.
+Tsukiji is primarily a proof-of-concept, i.e. it should showcase the technologies and viability of a decentralised market.
+While Tsukiji is a proof-of-concept, this does not mean we have to forego a usable application altogether.
 
-The goal of this project is to create a decentralised marketplace.
-The basics of a marketplace should work, so users have to be able to trade (virtual) commodities.
+The basics of a marketplace should work.
+This means users should be able to place an offer, i.e. an ask or bid.
+They should also be able to see offers from other users.
+From an offer, a trade can be initiated.
+
 The system should be decentralised.
+The lack of a clear single point of failure is the theme of this project.
+Tsukiji can take inspiration from peer-to-peer networks such as BitTorrent.
+
 It should scale to thousands of users.
-A nice user interface is not a priority, so only command line input is required.
+If our goal is to create a usable application, the network should be able to handle many connections.
+The choice for thousands of users (as opposed to hundreds or millions) is motivated by the scale of other applications. %i.e. Tribler
+
+A good user interface is not a priority of this project.
+A good user interface is important for a usable application, but a lot of time would have to be devoted to this.
+We believe this time is better spent on other areas of the application.
+The focus will be on the bare minimum, i.e. a command line interface.
 
 Spoofing of message would of course be a big problem in a trading network.
 However, since this is a solved problem, the focus of the project should be on other areas.
