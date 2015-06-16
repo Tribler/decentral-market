@@ -1,5 +1,5 @@
 \section{Requirements}
-The goal of tsukiji is to create a decentralised market where users can trade commodities.
+The goal of Tsukiji is to create a decentralised market where users can trade commodities.
 Tsukiji is primarily a proof-of-concept, i.e. it should showcase the technologies and viability of a decentralised market.
 While Tsukiji is a proof-of-concept, this does not mean we have to forego a usable application altogether.
 
@@ -11,39 +11,46 @@ From an offer, a trade can be initiated.
 The system should be decentralised.
 The lack of a clear single point of failure is the theme of this project.
 Tsukiji can take inspiration from peer-to-peer networks such as BitTorrent.
+Paired with a decentralised system comes some form of peer discovery.
 
 It should scale to thousands of users.
 If our goal is to create a usable application, the network should be able to handle many connections.
 The choice for thousands of users (as opposed to hundreds or millions) is motivated by the scale of other applications. %i.e. Tribler
 
 A good user interface is not a priority of this project.
-A good user interface is important for a usable application, but a lot of time would have to be devoted to this.
+While it is important for a usable application, a lot of time would have to be devoted to this.
 We believe this time is better spent on other areas of the application.
-The focus will be on the bare minimum, i.e. a command line interface.
+The user interface will feature the bare minimum, i.e. a command line interface.
 
-Spoofing of message would of course be a big problem in a trading network.
+Spoofing of message would of course form a big problem in a trading network.
 However, since this is a solved problem, the focus of the project should be on other areas.
+For the time being, it is assumed that every message is legitimate.
 
 It would be nice to ensure the privacy of the users.
-
 In order to achieve this, strong encryption of messages is required.
 Further thought is also necessary on what information is exposed.
+At the very least, no personal information should be stored.
+Networking information, such as ip addresses, are exposed.
+
 It would be nice to have a network resistant against hostile takeover.
 Having a decentralised system plays a big role in this.
 However, other attack vectors could also be possible.
+The main weapon against this is a well thought out protocol.
+
 Finally, it would be nice to trade real, verified commodities.
 Before we can do this however, the requirements listed above should be satisfied first.
 
+\newpage
 
-The requirements are summarized in this MoSCoW list: \\
+The requirements are summarized in this MoSCoW list:
 
 \begin{myitemize}
 \item Must
 \begin{myitemize}
-	\item Place an ask/bid
-	\item Trade an ask/bid
-    \item Find each other (peer discovery)
+	\item Place an offer
+	\item Respond to an offer, facilitating a trade
     \item Decentralised
+    \item Peer discovery
     \item Scalable to 1000s of users
     \item Command line input
 \end{myitemize}
