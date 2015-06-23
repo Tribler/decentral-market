@@ -1,7 +1,7 @@
 import json
 import requests
-import webbrowser
-
+from selenium import webdriver
+import time
 
 def paycall(email, amount):
     heads = {
@@ -31,6 +31,20 @@ def paycall(email, amount):
             "detailLevel":"ReturnAll"
         }
     }
-    req = urllib2.Request("https://svcs.sandbox.paypal.com/AdaptivePayments/Pay/", json.dumps(payload), heads)
-    pay_key = json.loads(urllib2.urlopen(req).read())['payKey']
-    webbrowser.open_new_tab("https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey="+pay_key)
+
+    req = requests.post('https://svcs.sandbox.paypal.com/AdaptivePayments/Pay/', json.dumps(payload), headers=headers)
+    pay_key = req.json()['payKey']
+    return 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey=' + pay_key
+
+
+def dothethings(target_email='example@gmail.com', amount=0.01, own_email='mcgthe-buyer-1@gmail.com', password='lovelive'):
+    url = paycall(target_email, amount)
+    driver = webdriver.Firefox()
+    driver.get(url)
+    driver.find_element_by_id('loadLogin').click()
+    time.sleep(2)
+    driver.find_element_by_id('login_email').send_keys(own_email)
+    driver.find_element_by_id('login_password').send_keys(password)
+    driver.find_element_by_id('submitLogin').click()
+    time.sleep(2)
+    driver.find_element_by_id('submit.x').click()
