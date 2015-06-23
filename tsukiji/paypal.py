@@ -1,6 +1,7 @@
 import json
-import urllib2
+import requests
 import webbrowser
+
 
 def paycall(email, amount):
     heads = {
