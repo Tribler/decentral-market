@@ -15,9 +15,52 @@ Mt.Gox was plagued by problems early on that eventually led to its bankruptcy.
 With its downfall, it took a large amount of funds with it.
 The trust users have put into the institution was violated.
 
+% Third example: stock market?
+
 Similar stories exist all over the place. Hacking attempts, government shutdowns, or simply incompetent companies.
 These are all common among marketplaces of all kinds.
 In this report we present \textit{tsukiji}, a decentralized marketplace.
 This proof-of-concept marketplace has no central server bottleneck, no central point of trust, full self-organisation, and unbounded scalability.
+
+%Torrents
+Motivation and inspiration for creating Tsukiji originally came from Bittorrent communities.
+The sharing of files has become more and more popular over the years.
+Napster, Kazaa and LimeWire no longer exist, but one protocol has survived: BitTorrent.
+BitTorrent is a peer-to-peer file sharing protocol.
+Instead of downloading from a central server, each peer downloads from and uploads to other peers.
+It offered a solution to the bottleneck of existing websites.
+
+With more and more people using BitTorrent, the amount of people downloading a certain file increases.
+Ideally, every peer should upload at least as much as they download.
+Sadly, this does not happen in reality.
+The amount of users only downloading and not uploading is significantly higher than people uploading at least as much as they download.
+There is no incentive for an individual to upload, but with few peers who upload the download speed is significantly hampered.
+To solve this issue, uploaders decided to work together in separate, private groups that only allow people with a good upload/download ratio.
+
+This seems like a good solution to motivate peers to actively upload, but a couple of issues occur.
+With peers motivated to upload, a certain oversupply of uploading rises.
+A peer with a low speed connection, has a hard time competing with many high-speed connections within the group.
+This peer now loses reputation because of competition, even though they are putting in the effort to upload.
+
+Unpopular files form another issue.
+If someone downloads a large file and wants to upload it to increase his reputation, it is possible that there are no users interested in downloading that file.
+This gives the peer a large deficit in his reputation that he cannot solve by uploading his unpopular taste.
+
+Lastly, torrenting may induce with legal issues. In some countries, it is illegal to upload files, whereas downloading is allowed.
+Citizens of such countries would like the high speed download of private communities, but cannot participate since they are legally not allowed to share whatever they have downloaded.
+
+To solve these issues, peers need a way te obtain reputation in a way other than uploading.
+We propose that users can trade reputation points for currency.
+Reputation is still gained by uploading.
+Peers can create offers on a marketplace to buy or sell reputation points.
+This will give peers the incentive to upload data to the swarm.
+At the same time, it will still be possible for peers to have access to the community by spending money and buying into a community.
+This will lead to a more accessible and scalable community than traditional private torrent communities.
+
+Keeping in line with BitTorrent's philosophy, Tsukiji will be fully decentralised and peer-to-peer.
+With secure cryptography, the users will be able to keep their real identity hidden, while still being able to make trades with their network-alias.
+Certain users will attempt to upload as much as possible to sell large amounts of reputation, keeping the network attractive with very high download speeds.
+With no central authority, the market is completely free to decide on a price for their reputation.
+There is no added value of intermediaries since peers can directly sell to each other, keeping the price as low as possible.
 
 % Insert description of each chapter, e.g. "In chapter 5 we will talk about wooly elephants."

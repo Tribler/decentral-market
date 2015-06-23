@@ -1,0 +1,24 @@
+\subsection{Sprint 3: Testing at scale}
+\label{methodoloy:sprint3}
+The theme of the third sprint is testing.
+Testing is an important part of software development.
+It gives the developers certainty over the quality of their program.
+We felt like this sprint would be the perfect time to start testing.
+It is better to start testing as early as possible.
+We started relatively late compared to, for example, the Test Driven Development methodology, where tests are written even before the application logic is written.
+However, it has allowed us to quickly iterate on Tsukiji in the early sprints.
+At this stage, Tsukiji had reached a level of maturity where logic starts to become significantly more complex.
+Tests give us assurance our program works correctly for the test cases we have defined.
+There are two forms of testing focused on during this sprint: unit testing and scalibility testing.
+Another form of testing that isn't focused on during this sprint is integration testing.
+The purpose of integration testing is combine the components of a system and to test whether or not they produce the desired result.
+However, at this point tsukiji is still sufficiently small that we believe producing such tests would yield little benefit.
+
+\subsubsection{Unit testing}
+Unit testing is the testing of small units of code, ideally the smallest block of code possible.
+For our purposes, the smallest block of code is an individual function or class method.
+Each unit should be tested in isolation, i.e. each test case is independent of each other.
+
+\subsubsection{Scalibility testing}
+The other form of testing focused on during this sprint is large scale testing.
+The purpose of our large scale test is to test how functional the network remains with a large amount of peers.

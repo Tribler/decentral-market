@@ -1,37 +1,34 @@
 \section{Problem definition}
-%Torrents
-Over the past years the sharing of files has become more and more popular. 
-With this, many ways to share files have risen and fallen.
-Napster, Kazaa and LimeWire no longer exist, but there is one protocol that has survived many attempts of large companies, BitTorrent.
-Released in 2001, BitTorrent offered a solution to the bottleneck of the existing websites.
-It did not contain a central server that contained data or a single website that offered links to data for peer to peer sharing.
-In the worst case, a large website containing links to trackers of files get taken down, but those can easily be available on a different website. \\
-\\
-With more and more people starting to change to BitTorrent, the amount of people downloading a certain file increases.
-This would not be a problem if every peer uploads an equal amount of data to what he downloads.
-Sadly this does not happen.
-The amount of users only downloading and not uploading is significantly higher than people uploading at least as much as they download.
-This property is held with an increasing number of users, which leads to a bigger and bigger gap between uploaded and downloaded data.
-To solve this issue, uploaders decided to work together in separate, private groups that only allow people that upload a certain percentage of their download.\\
-\\
-On the surface, this seems to be a good solution to motivate peers to upload actively, but it brings a couple of issues.
-With peers motivated to upload, a certain oversupply of uploading rises.
-A peer with a low speed connection, has a hard time competing with many high-speed connections within the group. The peer now loses reputation because of this competition even though the it is putting in effort to upload.
+\epigraph{\textbf{mar - ket - place}
 
-Another issue is unpopular files. 
-If someone downloads a large file and wants to upload it to increase his reputation, it is possible that there are no users interested in downloading that file. 
-This gives the peer a large deficit in his reputation that he cannot solve by uploading his unpopular taste.
+1. An open square or place in a town where markets or public sales are held.
 
-Then there is also a legal problem that comes with torrenting. Some countries have banned the upload of files while allowing the download of files.
-Citizens of such countries would like the high speed download of private communities but cannot participate since they are legally not allowed to share whatever they have downloaded.\\
-\\
-To solve these issues, peers need a way te receive reputation in a different way than uploading. We propose that users can receive reputation points in exchange for bitcoins. 
-They can create incentive for a different user to seed more than would be necessary for that user, by offering money.
-The peers can then create offers on a marketplace to buy and sell reputation points.
-This way there is more of a reason to upload data to the swarm, but it will still be possible for peers to have access to the community buy spending money to reward other people effort, which will lead to a more accessible and scalable community than traditional private torrent communities.
+2. The world of trade or economic activity.}{Merriam-Webster}
 
-To keep in line with the philosophy of BitTorrent, this system will be fully decentralised and peer to peer.
-With secure cryptography, the users will be able to keep their real identity hidden, while still being able to make trades with their network-alias. 
-In the same style as BitCoin, certain users will attempt to upload as much as they can just so they can sell large amounts of reputation, keeping the network attractive with very high download speeds.
-With no central authority, the market is completely free to decide on a price for their reputation. There is essentially no added value of intermediaries since peers can directly sell to each other, keeping the price as low as possible.
+To combat the issues associated with centralised marketplaces, Tsukiji aims to be a fully decentralised marketplace.
 
+A marketplace is a place where public sales are held.
+For our purposes, a marketplace is a place where people can place bids or asks.
+A bid is placed when a buyer wants to buy goods for a set price.
+An ask is placed when a seller wants to sell goods for a set price.
+
+Using the example of BitTorrent communities, a transaction would occur as follows: a seller places an "ask", wanting to sell 500 MBit for €3.
+An interested buyer sees the ask and requests a trade to be made.
+The buyer and seller exchange information necessary for the transaction to occur (e.g. bank account numbers).
+A trade is made and the original ask is taken down.
+A similar transaction occurs when a "bid" is placed.
+
+Current marketplaces are centralised.
+Usually, this type of centralised system follows the client-server model, where one server serves a large amount of clients.
+In this model, information passes through one central point.
+This means that if this central point fails, the entire marketplace is shut down.
+A decentralised system operates without such a single point.
+Instead of a central server connected to several users, peers are connected to each other.
+This is follows the peer-to-peer model.
+If a single peer fails, this might impact the marketplace, but it will not shut it down.
+
+For a network of such peers to exist, peers first have to find each other.
+Peer discovery is generally done by exchanging information about other peers.
+When a peer first signs on, it knows of no other peers.
+We can bootstrap its network by having them connect to a predefined set of super peers, who are known to be well connected.
+From there, they can exchange information about other peers.

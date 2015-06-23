@@ -1,0 +1,84 @@
+\section{SIG feedback}
+
+This appendix describes the feedback received from the Software Improvement Group (SIG) and how we processed the feedback.
+On the 26th of May 2015, project code was sent to SIG for feedback.
+Feedback on our code was received on the 29th of May.
+After processing this feedback, a second code submission was sent on June 9th.
+The second feedback response was received on June 17th.
+
+\subsection{First feedback}
+
+De code van het systeem scoort bijna vier sterren op ons onderhoudbaarheidsmodel, wat betekent dat de code bovengemiddeld onderhoudbaar is.
+De hoogste score is niet behaald door een lagere score voor Component Balance en Unit Interfacing.
+
+
+Wat opvalt bij het bekijken van de code is dat er geen duidelijke componenten-structuur zichtbaar is op het file-systeem, terwijl het er wel op lijkt dat sommige files bij elkaar horen (bijvoorbeeld de twee 'udp' files).
+Dit maakt het voor een ontwikkelaar in eerste instantie lastiger om een algemeen beeld te krijgen van de functionaliteit die het systeem aanbied.
+Wij raden aan om kritisch te overwegen om de code in verschillende (functionele) componenten op te delen om zo een eerste indruk te geven van de high-level structuur van het systeem.
+
+
+Voor Unit Interfacing wordt er gekeken naar het percentage code in units met een bovengemiddeld aantal parameters.
+Doorgaans duidt een bovengemiddeld aantal parameters op een gebrek aan abstractie.
+Daarnaast leidt een groot aantal parameters nogal eens tot verwarring in het aanroepen van de methode en in de meeste gevallen ook tot langere en complexere methoden.
+Binnen dit systeem wordt er op meerderee plaatsen een combinatie van 'price' en 'quantity' meegegeven, iets wat samen het concept 'bid' lijkt te vormen.
+Ook zien we op meerdere plekken een 'host' / 'port' combinatie, deze vormen samen het concept 'peer'.
+Om bij toekomstige aanpassingen duidelijker te maken wat er precies meegegeven moet worden aan deze methodes en om de code duidelijker te maken is het aan te raden een specifiek type te introduceren voor deze concepten.
+
+
+Over het algemeen scoort de code bovengemiddeld, hopelijk lukt het om dit niveau te behouden tijdens de rest van de ontwikkelfase.
+Als laatste nog de opmerking dat er geen (unit)test-code is gevonden in de code-upload.
+Het is sterk aan te raden om in ieder geval voor de belangrijkste delen van de functionaliteit automatische tests gedefinieerd te hebben om ervoor te zorgen dat eventuele aanpassingen niet voor ongewenst gedrag zorgen.
+
+\subsection{Response to feedback}
+Three points of attention are given in the feedback: component balance, unit interfacing, and testing.
+
+We agree on the points regarding component balance.
+At the time, the code was split up into three main files: orderbook.py, crypto.py, and udpreceive.py.
+While the first two files are fairly self-explanatory, udpreceive is fairly ambiguous.
+There were also some extraneous components (e.g. udpsend) that were not core to the system, but possibly confusing to newcomers.
+In response to this feedback, udpreceive.py was renamed to trader.py.
+This more accurately describes what this file stands for.
+If you invoke trader.py, you start up a new trader server.
+However, we find it difficult to split the remaining parts up into more components.
+
+The second point given talked about unit interfacing.
+In this case, we believe SIG's feedback to be correct, but their solution undesirable.
+It is true that many functions contain many arguments.
+A lot of these shared common functionality, so we have abstracted these further into a main function.
+However, SIG's solution is to introduce more classes.
+In our project, these classes would be little more than packaging.
+Rather than using classes, we use a lot of pure functions that return python dictionaries, and good variable names.
+These can be seen as a replacement for classes.
+There's a great talk from pycon 2012 called "Stop writing classes".
+We believe the principles given in this talk to apply to our situation here.
+
+% https://www.youtube.com/watch?v=o9pEzgHorH0
+
+The final piece of feedback given talked about testing.
+We agree completely with this feedback and have since then implemented our own test suite.
+The process of creating this test suite is described in section \ref{methodoloy:sprint3}.
+
+\subsection{Second feedback}
+
+In de tweede upload zien we dat zowel het codevolume als de score voor onderhoudbaarheid ongeveer gelijk zijn gebleven.
+
+Bij Unit Interfacing zien we dat jullie een aantal methodes hebben aangepast, maar deze verbeteringen worden grotendeels weer ongedaan gemaakt door de introductie van nieuwe methodes met 3-4 parameters.
+Dat lijkt niet zo veel, maar als je steeds het lijstje (price, quantity, timeout) tussen methodes moet doorgeven is dat een teken dat er iets in de abstractie niet helemaal lekker zit.
+
+Bij Component Balance is onze eerste opmerking uit de analyse van de eerste upload nog steeds van kracht.
+
+Jullie hebben onze aanbeveling om unit tests te gaan schrijven opgevolgd.
+De hoeveelheid testcode die jullie sinds de eerste upload hebben geproduceerd is ook aanzienlijk, complimenten.
+Op lange termijn zal dit zowel de onderhoudbaarheid als de stabiliteit van je systeem verbeteren.
+
+Uit deze observaties kunnen we concluderen dat de aanbevelingen van de vorige evaluatie grotendeels zijn meegenomen in het ontwikkeltraject.
+
+\subsection{Reponse to the second feedback}
+
+The second round of feedback largely matches our response.
+We have not adjusted unit interfacing because of the reasons explained previously.
+We have not adjusted component balance in a major way.
+We have added a lot of test code, which is acknowledged.
+For the future course of this project, we will continue to keep a closer look at testing and component balance.
+We do not believe unit interfacing poses a problem currently, but it is of course possible that it might in the future.
+We will continue to monitor throughout the project's lifespan.
