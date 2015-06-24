@@ -49,12 +49,17 @@ The implementation of sprint 1 used the broadcasting protocol to bring informati
 This protocol is easy to implement but does not scale well. 
 When the network grows larger, every peer has more recipients to contact and there are more peers sending messages all around.
 To increase the scalability, a better protocol is required.
-
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{gossip}
+  \caption{Gossip: The color of the cubes represent the groups of the peers and the lines represent connections between peers}
+  \label{gossipfig}
+\end{figure}
 The peer discovery discussed in the previous section inherently creates a situation where subgroups of peers are created that know each other.
 A peer can be in multiple groups and they provide the connection between groups.
 The collection of groups connected to each other is called a clique.
 This property of the network is exactly what an epidemic or gossip protocol uses.
-In this type of protocol, a peer relays all the messages it receives to all peers in its group, which eventually spreads through the entire clique.
+In this type of protocol, a peer relays all the messages it receives to all peers in its group, which eventually spreads through the entire clique, as shown in figure \ref{gossipfig}.
 Since the peers in a group have randomly chosen who sends them their peerlist, every peer should have a slightly different group of other peers that it knows.
 Even in the case that every peer only encounters users within its own subgroup, the original master-peers can still act as a bridge between the groups.
 

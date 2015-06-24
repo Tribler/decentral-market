@@ -7,9 +7,15 @@ The options considered for this were approaching a subset and relaying the infor
 The issue that arose with the subset approach was that in a competitive market, someone that is selling an item is not easily motivated to advertise in the name of another seller.
 This could lead to certain peers, that are offering an item for sale, to not relay other offers that would endanger their own offer.
 This could lead to a disjoint of the network and therefor destroy communication between certain peers.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{broadcasting}
+  \caption{Broadcasting: The cubes represent peers and the lines represent connections between peers}
+  \label{broadcastingfig}
+\end{figure}
 
 Broadcasting does not have this issue.
-In broadcasting, every peer in the network is directly connected to each other.
+In broadcasting, every peer in the network is directly connected to each other, as depicted in figure \ref{broadcastingfig}.
 Everyone personally takes care of their own advertising and there is no peer between origin and destination that could disrupt the communication.
 The issue with broadcasting is that it scales rather poorly.
 The increase of data over the network increases exponentially as the amount of users rises.
