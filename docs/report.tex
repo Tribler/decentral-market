@@ -5,6 +5,7 @@
 \usepackage{epigraph}
 \usepackage{fontspec}
 \usepackage[toc,title]{appendix}
+\usepackage{float}
 
 % Itemize with custom spacing
 \newenvironment{myitemize}
@@ -41,11 +42,13 @@
 \include{foreword}
 
 \tableofcontents
-
+\newpage
+\listoffigures
 \include{summary}
 \include{introduction}
 \include{problem_definition}
 \include{requirements}
+\include{design}
 \include{methodology}
 
 % \section{Conclusion}
