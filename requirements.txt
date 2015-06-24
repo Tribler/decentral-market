@@ -2,3 +2,6 @@ PyCrypto
 twisted
 nose
 coverage
+
+selenium
+requests

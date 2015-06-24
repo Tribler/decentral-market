@@ -1,7 +1,10 @@
 import json
 import requests
 from selenium import webdriver
-import time
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 
 def paycall(email, amount):
     heads = {
@@ -37,14 +40,21 @@ def paycall(email, amount):
     return 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey=' + pay_key
 
 
-def dothethings(target_email='example@gmail.com', amount=0.01, own_email='mcgthe-buyer-1@gmail.com', password='lovelive'):
+def make_a_payment(target_email='example@gmail.com', amount=0.01, own_email='mcgthe-buyer-1@gmail.com', password='lovelive'):
     url = paycall(target_email, amount)
-    driver = webdriver.Firefox()
+    driver = webdriver.Chrome()
     driver.get(url)
-    driver.find_element_by_id('loadLogin').click()
-    time.sleep(2)
-    driver.find_element_by_id('login_email').send_keys(own_email)
-    driver.find_element_by_id('login_password').send_keys(password)
-    driver.find_element_by_id('submitLogin').click()
-    time.sleep(2)
-    driver.find_element_by_id('submit.x').click()
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, 'loadLogin'))
+        ).click()
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, 'login_email'))
+        ).send_keys(own_email)
+        driver.find_element_by_id('login_password').send_keys(password)
+        driver.find_element_by_id('submitLogin').click()
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, 'submit.x'))
+        ).click()
+    finally:
+        driver.quit()
