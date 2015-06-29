@@ -18,7 +18,52 @@ However, at this point tsukiji is still sufficiently small that we believe produ
 Unit testing is the testing of small units of code, ideally the smallest block of code possible.
 For our purposes, the smallest block of code is an individual function or class method.
 Each unit should be tested in isolation, i.e. each test case is independent of each other.
+For unit testing Tsukiji, we use the nosetests library \cite{nosetests}.
+nosetests is an extension of the default python unittest library.
+With nosetests, it is also possible to measure code coverage.
 
-\subsubsection{Scalibility testing}
+A large part of what makes testing easy or difficult is expressed in the testability of the code.
+How well is the code divided into sufficiently small enough functions, classes and modules?
+How large are these components, and how dependant are they upon each other?
+Many books, articles, and blog posts have been written on this subject.
+An example of such an article is Writing Testable Code\cite{writingtestablecode}, a guide used at Google.
+While this guide is written specifically for the Java programming language, its four main points still hold:
+
+\begin{enumerate}
+\item Constructor does Real Work
+\item Digging into Collaborators
+\item Brittle Global State \& Singletons
+\item Class Does Too Much
+\end{enumerate}
+
+At this point, Tsukiji has two main modules: orderbook.py and trader.py.
+The orderbook module consists mainly of functions that concern offers and message creation.
+
+From a unit testing standpoint, the orderbook module is very easy to test.
+The functions concerning offers are pure functions, i.e., they have no side-effects.
+The functions concerning message creation address a few global variables (e.g. the message counter), but there is a limited amount of these variables and their scope
+It could also be said that this module does too much and should be split up.
+This is definitely something to keep in mind for the future.
+
+The trader module consists of a relatively large class called Trader.
+It implements the DatagramProtocol from the Twisted library.
+In essence, very little logic occurs here.
+Its main purpose is matching the right message with the right action on the orderbook.
+Using the right kind of mocks, this module too is easy to test.
+
+One way of measuring the effectiveness of your tests is by code coverage: how much of your code is run during your tests.
+nosetests provides both statement coverage and branch coverage.
+Statement coverage is the coverage of each line of code; 100\% statement coverage means that every line of code is run at least once.
+Branch coverage is like statement coverage, but takes branches into account.
+For example, a boolean condition with one literal has two branches, True or False.
+A condition with two literals has four branches.
+The total coverage for Tsukiji is reported in section \ref{evaluation}.
+
+
+\subsubsection{Scalability testing}
 The other form of testing focused on during this sprint is large scale testing.
 The purpose of our large scale test is to test how functional the network remains with a large amount of peers.
+Of course, it is not very practical to run our program on hundreds of different devices.
+Our solution is to run a simulation locally.
+It takes a list of orders and has different peers post those orders in the network.
+The tests show that the network could handle thousands of users and that duplicate messages are correctly filtered out.
