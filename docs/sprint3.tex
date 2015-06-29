@@ -60,6 +60,10 @@ A condition with two literals has four branches.
 The total coverage for Tsukiji is reported in section \ref{evaluation}.
 
 
-\subsubsection{Scalibility testing}
+\subsubsection{Scalability testing}
 The other form of testing focused on during this sprint is large scale testing.
 The purpose of our large scale test is to test how functional the network remains with a large amount of peers.
+Of course, it is not very practical to run our program on hundreds of different devices.
+Our solution is to run a simulation locally.
+It takes a list of orders and has different peers post those orders in the network.
+The tests show that the network could handle thousands of users and that duplicate messages are correctly filtered out.
