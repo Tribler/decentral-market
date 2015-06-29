@@ -35,6 +35,7 @@ This would however cost a lot of time that could be spent on trying to solve dif
 Given these advantages, Twisted seems like a great way to improve the current networking implementation and provide reliability and scalability.
 
 \subsubsection{Peer discovery}
+\label{sprint2:peerdiscovery}
 One of the issues of having a decentralised system is that there is no central authority that can provide information about all the users and all the data. 
 Because of this, when a peer is not yet part of the network, it has no knowledge of who to contact for more information about the network and all the peers connected to it. 
 This problem of peer discovery has not yet been solved in a truly decentralised way. 
@@ -46,6 +47,7 @@ This list is added to the current peerlist of the new peer so the next time it c
 With this implementation, the system is still mostly decentralised, but it still requires a number of master-peers to be online to support a first-time connection of new users.
 
 \subsubsection{Gossip}
+\label{sprint2:gossip}
 The implementation of sprint 1 used the broadcasting protocol to bring information of one peer to all the other peers.
 This protocol is easy to implement but does not scale well. 
 When the network grows larger, every peer has more recipients to contact and there are more peers sending messages all around.
