@@ -1,40 +1,33 @@
-\subsection{Recommendations}
+\section{Recommendations}
 \label{recommendations}
-%At least one page
-This project required the creating of a proof of concept in a limited amount of time.
-Because of this, there are multiple possible features that can be added to this proof of concept to either make it a full-fledged easy to use program, or to further the research of possibilities of a decentral market.
+The goal of this project is to create a proof of concept in a limited amount of time.
+Because of this, there are multiple possible features that have been glossed over in favour of other features deemed more essential.
+In this chapter we suggest some recommendations for further progress on the project.
+They can be added to this proof of concept to further build Tsukiji into a fully fledged user program, or to further the research of possibilities of a decentral market.
 
-\begin{itemize}
-\item \textbf{Graphical User Interface}
-\end{itemize}
-A big improvement to Tsukiji would be to add a user interface. 
+\subsubsection*{$\bullet$ Graphical User Interface}
+A big improvement to Tsukiji would be to add a graphical user interface. 
 This would make it much easier to use the program and understand what is going on.
 Graphs and lists with variable ordering can vastly improve the format that information is displayed.
-Besides that, with a clear interface, Tsukiji would be far more inviting to the average user than a command-line tool.
-A command line bring multiple challenges, such as requiring the user to know the right commands and the syntax of those instructions.
-A GUI can represent those instructions with buttons and obvious icons.
+Additionally, with a clear interface, Tsukiji would be far more inviting to the average user than a command-line tool.
+Command line input brings multiple challenges, such as requiring the user to know the right commands and the syntax of those instructions.
+A GUI can represent those instructions with a more intuitive interface.
 
-\begin{itemize}
-\item \textbf{Anti-spoofing}
-\end{itemize}
-Section \ref{knownissues} covered this issue of people referencing false transactions are pretending to have more trade-able goods that they in reality have.
+\subsubsection*{$\bullet$ Anti-spoofing}
+Section \ref{knownissues} covered the issue of people referencing false transactions are pretending to have more trade-able goods that they in reality have.
 A possible solution is to implement a block chain like BitCoin has done \cite{bitcoin}.
 Their structure requires the whole userbase to agree on a set of transactions made.
 These trades are hashed and used to determine whether the following set of transactions are real.
 For a more in-depth explanation of the block-chain verification, see the BitCoin paper.
-\begin{itemize}
-\item \textbf{Trading large quantities}
-\end{itemize}
+
+\subsubsection*{$\bullet$ Trading large quantities}
 The current implementation of Tsukiji only supports trading a single unit of an item.
 It is very possible that users want to trade a larger quantity at a time.
 This will also reduce the amount of offers needed to perform a certain trade, decreasing clutter in the list of open offers.
 
-\begin{itemize}
-\item \textbf{Incremental payments}
-\end{itemize}
-A way to combat trust issues with large transactions is to implement a structure of incremental payments.
-The idea behind this is that rather than one large transaction, the trade is split into many smaller trades that increase in size.
-The first transaction only trades one cent worth of the item. If this trade is successful, the next transaction of two cents will be made. If this also succeeds the next one is made with another increase the value, and so forth.
+\subsubsection*{$\bullet$ Incremental payments}
+One way to combat trust issues with large transactions is to implement a structure of incremental payments.
+The idea behind this is that, rather than one large transaction, the trade is split into many smaller trades that increase in size.
+For example, the first transaction only trades one cent worth of goods. If this trade is successful, the next transaction involves two cents worth of goods. If this also succeeds another transaction is made with another increase the value, and so forth, and so on.
 This way, the seller shows that he is willing to pay, since he has been sending the right amount of the product, corresponding with the current payment.
 Even if the seller decides to not send the product, the buyer only loses a small portion of his money in the transaction.
-
