@@ -15,6 +15,8 @@ Its main purpose is to communicate with other remote Traders.
 The Trader class is a subclass of the DatagramProtocol class provided by the Twisted library \cite{twisted}.
 This means the Trader class implements the UDP protocol.
 The UDP protocol is the transport protocol used to talk to other traders.
+UDP is chosen over TCP, because UDP travels more easily over NATs and firewalls.
+This follows the design of Tribler and BitTorrent.
 In section \ref{protocol} the application protocol is specified in detail.
 
 The orderbook module has three main functionalities: 1. message creation for the application protocol and 2. managing the state of the orderbook itself and 3. matching bids and asks.
@@ -33,7 +35,7 @@ An example of a function in the third category is the function \texttt{match\_bi
 Given a bid as input, check if there are compatible asks from yourself and output the most favourable one.
 The second category has few functions specifically created for this task.
 Rather, it is managed mostly by side-effects from other functions.
-For more detail, it is best to look at the code itself and its accompanying comments.
+For more detail, it is best to look at the code itself and its accompanying comments \cite{tsukiji}.
 
 The cryptography module contains everything related to actions with public-key cryptography.
 At the moment, it mostly functions as a wrapper around the PyCrypto library, for easier use within Tsukiji.
