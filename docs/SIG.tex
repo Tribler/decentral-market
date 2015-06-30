@@ -29,33 +29,6 @@ Over het algemeen scoort de code bovengemiddeld, hopelijk lukt het om dit niveau
 Als laatste nog de opmerking dat er geen (unit)test-code is gevonden in de code-upload.
 Het is sterk aan te raden om in ieder geval voor de belangrijkste delen van de functionaliteit automatische tests gedefinieerd te hebben om ervoor te zorgen dat eventuele aanpassingen niet voor ongewenst gedrag zorgen.
 
-\subsection{Response to feedback}
-Three points of attention are given in the feedback: component balance, unit interfacing, and testing.
-
-We agree on the points regarding component balance.
-At the time, the code was split up into three main files: orderbook.py, crypto.py, and udpreceive.py.
-While the first two files are fairly self-explanatory, udpreceive is fairly ambiguous.
-There were also some extraneous components (e.g. udpsend) that were not core to the system, but possibly confusing to newcomers.
-In response to this feedback, udpreceive.py was renamed to trader.py.
-This more accurately describes what this file stands for.
-If you invoke trader.py, you start up a new trader server.
-However, we find it difficult to split the remaining parts up into more components.
-
-The second point given talked about unit interfacing.
-In this case, we believe SIG's feedback to be correct, but their solution undesirable.
-It is true that many functions contain many arguments.
-A lot of these shared common functionality, so we have abstracted these further into a main function.
-However, SIG's solution is to introduce more classes.
-In our project, these classes would be little more than packaging.
-Rather than using classes, we use a lot of pure functions that return python dictionaries, and good variable names.
-These can be seen as a replacement for classes.
-There's a great talk from pycon 2012 called "Stop writing classes" \cite{noclassesvid}.
-We believe the principles given in this talk to apply to our situation here.
-
-The final piece of feedback given talked about testing.
-We agree completely with this feedback and have since then implemented our own test suite.
-The process of creating this test suite is described in section \ref{methodoloy:sprint3}.
-
 \subsection{Second feedback}
 
 In de tweede upload zien we dat zowel het codevolume als de score voor onderhoudbaarheid ongeveer gelijk zijn gebleven.
@@ -70,13 +43,3 @@ De hoeveelheid testcode die jullie sinds de eerste upload hebben geproduceerd is
 Op lange termijn zal dit zowel de onderhoudbaarheid als de stabiliteit van je systeem verbeteren.
 
 Uit deze observaties kunnen we concluderen dat de aanbevelingen van de vorige evaluatie grotendeels zijn meegenomen in het ontwikkeltraject.
-
-\subsection{Reponse to the second feedback}
-
-The second round of feedback largely matches our response.
-We have not adjusted unit interfacing because of the reasons explained previously.
-We have not adjusted component balance in a major way.
-We have added a lot of test code, which is acknowledged.
-For the future course of this project, we will continue to keep a closer look at testing and component balance.
-We do not believe unit interfacing poses a problem currently, but it is of course possible that it might in the future.
-We will continue to monitor throughout the project's lifespan.
