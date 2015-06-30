@@ -85,15 +85,15 @@ This is because Alice has no way to check the transactions Bob has made.
 Alice would only be able to see that a certain bid or ask is no longer in the list of offers.
 If Bob spoofed a message that says that a certain transaction has been made, Alice has no way to verify the truth of that.
 This creates a trust-issue that is currently not resolved.
-Section \ref{recommendations} provides a possible solution for this problem.\\
-\\
-Another known issue of Tsukiji is that it is risky to make a large transaction, since incremental payments (see section 7.5) have not been implemented.
-Whenever a user now send someone else money to buy points, there is no way to force the other party to actually send the points.
-This creates a situation where only small amounts of points will be traded at once and will quickly clutter the marketplace with many small offers.\\
-\\
-These issues can be resolved, but not within the time given for this project.
-It would be interesting to extend Tsukiji to support the solution for these issues, since that would make it possible for this proof of concept to be used a real piece of software.
+Section \ref{recommendations} provides a possible solution for this problem.
 
+Another known issue of Tsukiji is that it is risky to make a large transaction, since incremental payments (see section 7.5) have not been implemented.
+Whenever a user sends someone else money to buy goods, there is no way to force the other party to actually send the goods.
+This creates a situation where only small amounts of goods will be traded at once and will quickly clutter the marketplace with many small offers.
+
+We believe it to be feasible to solve these issues, but were unable to within the time frame given for this project.
+It would be interesting to extend Tsukiji to support solutions for these issues.
+These are the first steps towards transforming this proof of concept to be used a real piece of software.
 
 %trust issues
 %security
@@ -103,8 +103,11 @@ It would be interesting to extend Tsukiji to support the solution for these issu
 \subsection{Code quality}
 <<Talk about testing and coverage>>
 
-Besides testing with nodetest, the code has also been sent to the Software Inspection Group at two points during development. Appendix \ref{SIG} contains their response to the code of Tsukiji and this section will cover our response to that.\\
-\\
+\subsubsection{Response to first round of SIG feedback}
+Aside from our own testing, the code was also sent to the Software Inspection Group at two points during development.
+Appendix \ref{SIG} contains their analysis of Tsukiji's code base.
+This section will cover our response and how we handled the feedback.
+
 Three points of attention are given in the first feedback: component balance, unit interfacing, and testing.
 
 We agree on the points regarding component balance.
@@ -129,8 +132,9 @@ We believe the principles given in this talk to apply to our situation here.
 
 The final piece of feedback given talked about testing.
 We agree completely with this feedback and have since then implemented our own test suite.
-The process of creating this test suite is described in section \ref{methodoloy:sprint3}.\\
-\\
+The process of creating this test suite is described in section \ref{methodoloy:sprint3}.
+
+\subsubsection{Response to second round of SIG feedback}
 The second round of feedback largely matches our response.
 We have not adjusted unit interfacing because of the reasons explained previously.
 We have not adjusted component balance in a major way.
