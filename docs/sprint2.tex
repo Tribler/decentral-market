@@ -36,15 +36,16 @@ Given these advantages, Twisted seems like a great way to improve the current ne
 
 \subsubsection{Peer discovery}
 \label{sprint2:peerdiscovery}
-One of the issues of having a decentralised system is that there is no central authority that can provide information about all the users and all the data. 
+One issue of having a decentralised system is that there is no central authority that can provide information about all the users and all the data. 
 Because of this, when a peer is not yet part of the network, it has no knowledge of who to contact for more information about the network and all the peers connected to it. 
 This problem of peer discovery has not yet been solved in a truly decentralised way. 
-The current solution of this protocol is to give a peerlist to the new user.
-This peerlist contains a number of peers that should always be online. 
-The new peer then connects with one random peer of this list. 
-This one master-peer then send a list of other peers back to the new peer.
-This list is added to the current peerlist of the new peer so the next time it comes online it can try one of the master peers and, if they all happen to be taken down, it can also try to contact one of the peers it has once connected to.
-With this implementation, the system is still mostly decentralised, but it still requires a number of master-peers to be online to support a first-time connection of new users.
+The current solution is to bootstrap a user by giving them a peerlist.
+This peerlist contains a number of "super peers" that should always be online. 
+The new peer then connects with one random super peer. 
+This super peer sends a list of other peers back to the new peer.
+Now the new peer knows about who is in the network.
+From now on, the exchanging of peer lists does not necessarily have to occur with a super peer, but can also occur with other, regular peers.
+With this implementation, the system is still mostly decentralised, but it still requires a number of super peers to be online to support the initial connection of a new user.
 
 \subsubsection{Gossip}
 \label{sprint2:gossip}
