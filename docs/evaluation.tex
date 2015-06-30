@@ -1,75 +1,79 @@
-\subsection{Evaluation}
+\section{Evaluation}
 \label{evaluation}
-The project's development process and end-product will be discussed in this section.
-Tsukiji will be analysed in terms of code quality and how much requirements have been fulfilled.
+This section evaluates the project's development process and end product.
+Tsukiji will be analysed in terms of code quality and how much requirements have been fulfilled. An overview of known issues will be given at the end.
 
 %3 pages
 %Talk about planning, development style
-\subsubsection{Development process}
-The planning of the development was to spend 2 weeks researching the given problem and then spend around 6 weeks developing a solution and document the decisions made during those weeks on the go.
+\subsection{Development process}
+The planning was to spend 2 weeks researching the given problem and then spend around 6 weeks developing a solution, while documenting the decisions made during those weeks.
 This structure was uphold throughout the lifespan of the project.
-It was notable that documentation began lacking halfway, but this was quickly corrected to make sure every decision was written down as accurate as possible.\\
-\\
-Due to agile development methodology, it was difficult to plan every sprint beforehand, since requirements could change and the focus of the project could diverge from what was decided in the first meeting with the client.
-Regardless of this, the Scrum way of developing proved to be very useful.
-Exactly because of the volatile nature of the project, creating additions to the software on a week to week basis turned out perfect. 
-Along the way decision such as ignoring people possibly cheating the system, the protocol design could be simplified without having lost time on preemptively implementing a structure for such a protocol.\\
-\\
-%Communication
-A large help to the development of Tsukiji was that the team always worked together. 
-Since it consisted out of only 2 developers, it became very easy to discuss issues and decide to pick a certain library or protocol.
-The developers sat next to each other which eliminated that delay of response that email brings. 
-The load of work was divided such that both members were responsible for a certain feature of the software.
-Whenever a member finished his implementation for the current sprint, he immediately documented what he had written, while the other member finished his code.
+Documentation began lacking halfway through the project, but this was quickly corrected to make sure every decision was written down as accurately as possible.
 
-%Talk about fullfillment of requirements
-\subsubsection{Fulfillment of requirements}
+Due to the agile development methodology, it was difficult to plan every sprint ahead of time.
+Requirements could change and the focus of the project could diverge from the decisions made in the first meeting with the client.
+Regardless, the Scrum way of developing proved to be very useful.
+Exactly because of the volatile nature of the project, creating additions to the software on a week to week basis fit the project perfectly. 
+Decisions made along the way, such as ignoring the possibility of people cheating the system, greatly simplified protocol design without losing time on pre-emptively implementing a structure for such a protocol.
+
+%Communication
+A large benefit to the development of Tsukiji was that the team consisted out of two developers.
+The advantage this brings is that the team could always work together in the same physical room.
+It became very easy to discuss issues and make decisions, such as whether to use a certain library or protocol.
+The developers sat next to each other which eliminated any overhead or inaccuracies in communication typical in technologies such as e-mail or instant messaging.
+The load of work was divided such that both members were responsible for a certain feature of the software.
+Whenever a member finished their implementation for the current sprint, they immediately documented what they had written.
+
+\subsection{Fulfillment of requirements}
 \label{requirementsfill}
-In chapter \ref{requirements}, the requirements of this project are discussed. 
-One of the most important parts of a piece of software is whether it complies with the requirements given by the client.
-This section will follow along with the MoSCoW list given in chapter \ref{requirements}, beginnen with the 'Must have'-requirements and ending with the 'Would have's. \\
-\\
-Every 'Must have'-requirement has been fulfilled by the implementation.
+Section \ref{requirements} discusses the requirements of Tsukiji.
+Important in the evaluation of a project is whether it complies with the requirements given by the client.
+This section will follow along with the MoSCoW list given in chapter \ref{requirements}, beginning with the 'Must have'-requirements and ending with the 'Would have's.
+
+Every 'Must have'-requirement has been fulfilled by Tsukiji.
 Users are able to place offers and respond to offers. 
-The response is currently handled by a trading engine, that matches the asks with bids, given the same quantity and value.
-Apart of a peerlist that is distributed with the software, the system is completely decetralised. 
+The response is currently handled by a trading engine that matches the asks with bids, given the same quantity and value.
+Apart from a peerlist that is distributed with the software, the system is completely decentralised. 
 Every peer can find another peer through the peerlist.
-Passing messages happens with the gossip protocol, which does not require a message-server.
+Passing messages happens with the gossip protocol, which does not require a central message-server.
 Authentication is done through public and private keys.
 This also does not require a central point.
-
 The scalability is tested with a simulation on a single computer.
 This test showed that messages can easily be handled in the range of 1000s of users and that duplicate messages are not passed along when received.
+More on this can be found in section \ref{sprint3:scalability}
+All of these tests were performed in a linux terminal, so the requirement of control through command line input has been fulfilled as well.
 
-All of these tests were preformed in a linux terminal, so the requirement of accepting command line input has been fulfilled as well.\\
-\\
 The only 'Should have'-requirement has been fulfilled.
-Users are able to spend real money (currently any currency supported by PayPal) on the good traded in tsukiji.
-We have chosen not to use BitCoin for this since real money is not far more stable and is far less likely to suddenly disappear. 
-The currency used by the software should not impact a person's ability to make trades, so if BitCoin ever stops existing, Tsukiji will not fall as well.\\
-\\
-The current implementation fulfills no 'Could have'- or 'Would have'-requirements.
-Implementing a User Interface takes a lot of time while not increasing the functionality.
+Users are able to spend real money (currently any currency supported by PayPal) on the good traded in Tsukiji.
+We have chosen not to use BitCoin, for this since real money is not far more stable and is far less likely to suddenly disappear. 
+The currency used by the software should not impact the program's ability to make trades
+Should BitCoin ever stop existing, then Tsukiji can easily make use of other currencies.
+
+The current implementation fulfils no 'Could have' or 'Would have' requirements.
+Implementing a User Interface takes a lot of time without increasing any functionality.
 Since Tsukiji is a proof of concept, we wanted to create as much functionality as possible in the time given.
-This lead to the decision to focus on other features than a GUI, and kept interaction with the program in a terminal.
+This lead to the decision to focus on other features than a GUI.
+Interaction with the program occurs through a terminal.
 
 The 'Would have'-requirements are mainly security issues.
-These problems can certainly be solved, but would require a lot of time to achieve something that is outside the scope of this project.
+These problems can certainly be solved, but it would require a lot of time to achieve something that is outside the scope of this project.
 Tsukiji was created to show that it is possible to create a marketplace without a central authority, it was not created to protect users of an online marketplace from fraud.
-This could possibly be addressed in a different project, using the existing code-base.
+While this is certainly a requirement for a functional program to be used by many users, it is still a solved problem.
+This issue could be addressed in a future project, using the existing code-base.
 
-The privacy requirement is party fulfilled. Users do not directly have an identifier bound to their real identity.
-It is simply an MD5 hash sent across the network.
+The privacy requirement is partly fulfilled.
+Users do not have an identifier bound directly to their real identity.
+They simply have an MD5 hash sent across the network.
 The offers created can be tracked down to the hash, and to the IP that sent the message.
-A user spoof his IP whenever he is creating trades to stay hidden, but this is its own responsibility.
-Besides that, a possibly privacy breach could be PayPal.
+A user could spoof his IP whenever he is creating trades to stay hidden, but this is its own responsibility.
+Besides that, a possible privacy breach could be PayPal.
 To avoid using ones real account, it is possible to create a new PayPal account on a fake email address and use that to make transactions.
-The bank accounts linked to PayPal are not visible in transactions, so the trades will not give away a users identity.\\
-\\
-The past paragraphs show that all the crucial requirements have been met.
-This means that the software created as sufficient for what the client asked for.
+The bank accounts linked to PayPal are not visible in transactions, so the trades will not give away a users identity.
 
-\subsubsection{Known issues}
+It is clear that all the crucial requirements have been met.
+Tsukiji sufficiently fulfils what the client had asked for.
+
+\subsection{Known issues}
 \label{knownissues}
 The current implementation of Tsukiji has a couple of issues that have not been addressed.
 Section \ref{requirementsfill} already touched on a couple of missing features such as perfect anonymity and security.
@@ -96,7 +100,7 @@ It would be interesting to extend Tsukiji to support the solution for these issu
 %anonimization
 
 %Talk about test coverage(picture!) and SIG feedback
-\subsubsection{Code quality}
+\subsection{Code quality}
 <<Talk about testing and coverage>>
 
 Besides testing with nodetest, the code has also been sent to the Software Inspection Group at two points during development. Appendix \ref{SIG} contains their response to the code of Tsukiji and this section will cover our response to that.\\
