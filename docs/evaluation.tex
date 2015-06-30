@@ -1,10 +1,9 @@
 \section{Evaluation}
 \label{evaluation}
 This section evaluates the project's development process and end product.
-Tsukiji will be analysed in terms of code quality and how much requirements have been fulfilled. An overview of known issues will be given at the end.
+Tsukiji itself will be analysed by how many requirements have been fulfilled and by its code quality.
+An overview of known issues will be given at the end.
 
-%3 pages
-%Talk about planning, development style
 \subsection{Development process}
 The planning was to spend 2 weeks researching the given problem and then spend around 6 weeks developing a solution, while documenting the decisions made during those weeks.
 This structure was uphold throughout the lifespan of the project.
@@ -28,38 +27,76 @@ Whenever a member finished their implementation for the current sprint, they imm
 \label{requirementsfill}
 Section \ref{requirements} discusses the requirements of Tsukiji.
 Important in the evaluation of a project is whether it complies with the requirements given by the client.
-This section will follow along with the MoSCoW list given in chapter \ref{requirements}, beginning with the 'Must have'-requirements and ending with the 'Would have's.
+This section will follow the MoSCoW list given in section \ref{requirements}, and evaluating each item.
 
+\subsubsection{Must Have(s)}
 Every 'Must have'-requirement has been fulfilled by Tsukiji.
-Users are able to place offers and respond to offers. 
+
+\begin{itemize}
+\item Place an offer
+
+Users are able to place offers and respond to offers.
+
+\item Respond to an offer, facilitating a trade
+
 The response is currently handled by a trading engine that matches the asks with bids, given the same quantity and value.
-Apart from a peerlist that is distributed with the software, the system is completely decentralised. 
-Every peer can find another peer through the peerlist.
+
+\item Decentralised
+
+Apart from a peerlist that is distributed with the software, the system is completely decentralised.
 Passing messages happens with the gossip protocol, which does not require a central message-server.
 Authentication is done through public and private keys.
 This also does not require a central point.
+
+\item Peer discovery 
+
+Peer discovery is achieved by having peers exchange information about each other.
+Initially, this is bootstrapped with a set of super peers known to be well connected and online.
+These super peers can share information about the network.
+After being bootstrapped, peer discovery is achieved by exchanging information with other peers in the network.
+
+\item Scalable to thousands of users
+
 The scalability is tested with a simulation on a single computer.
 This test showed that messages can easily be handled in the range of 1000s of users and that duplicate messages are not passed along when received.
 More on this can be found in section \ref{sprint3:scalability}
+
+\item Command line input
+
 All of these tests were performed in a linux terminal, so the requirement of control through command line input has been fulfilled as well.
+\end{itemize}
 
-The only 'Should have'-requirement has been fulfilled.
+\subsubsection{Should Have(s)}
+\begin{itemize}
+\item Trade using real money
+
 Users are able to spend real money (currently any currency supported by PayPal) on the good traded in Tsukiji.
-We have chosen not to use BitCoin, for this since real money is not far more stable and is far less likely to suddenly disappear. 
 The currency used by the software should not impact the program's ability to make trades
-Should BitCoin ever stop existing, then Tsukiji can easily make use of other currencies.
+\end{itemize}
 
-The current implementation fulfils no 'Could have' or 'Would have' requirements.
+\subsubsection{Could Have(s)}
+The current implementation does not fulfils the only 'Could have' requirement.
+
+\begin{itemize}
+\item Nice user interface
+
 Implementing a User Interface takes a lot of time without increasing any functionality.
 Since Tsukiji is a proof of concept, we wanted to create as much functionality as possible in the time given.
 This lead to the decision to focus on other features than a GUI.
 Interaction with the program occurs through a terminal.
+\end{itemize}
 
+\subsubsection{Would Have(s)}
+The current implementation does not fulfil any of the 'Would Have' requirements.
 The 'Would have'-requirements are mainly security issues.
+
 These problems can certainly be solved, but it would require a lot of time to achieve something that is outside the scope of this project.
 Tsukiji was created to show that it is possible to create a marketplace without a central authority, it was not created to protect users of an online marketplace from fraud.
 While this is certainly a requirement for a functional program to be used by many users, it is still a solved problem.
 This issue could be addressed in a future project, using the existing code-base.
+
+\begin{itemize}
+\item Privacy
 
 The privacy requirement is partly fulfilled.
 Users do not have an identifier bound directly to their real identity.
@@ -69,6 +106,19 @@ A user could spoof his IP whenever he is creating trades to stay hidden, but thi
 Besides that, a possible privacy breach could be PayPal.
 To avoid using ones real account, it is possible to create a new PayPal account on a fake email address and use that to make transactions.
 The bank accounts linked to PayPal are not visible in transactions, so the trades will not give away a users identity.
+
+\item Protection against hostile attacks
+
+It is currently unknown how resistant the network is against a hostile attack.
+It is certainly possible that the network may fall against a sufficiently motivated attacker.
+
+\item Anti-spoofing
+
+It is currently possible to spoof messages.
+Messages are currently not encrypted.
+No proof of authentication is required.
+The system assumes full trust from all parties.
+\end{itemize}
 
 It is clear that all the crucial requirements have been met.
 Tsukiji sufficiently fulfils what the client had asked for.
