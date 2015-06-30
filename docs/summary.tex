@@ -1,27 +1,28 @@
 \section{Summary} 
 %problem description
+This project creates a marketplace to trade commodities for real money.
+While many online marketplaces exist, they usually have one thing in common: a central point of authority.
+Our solution is completely decentralised and is capable of scaling to thousands of users.
+
 File-sharing has become incredibly popular in recent years. 
 Especially with the wide-spread adaption of BitTorrent. 
 The big problem that peer-to-peer sharing brings is that the files need to be actively uploaded by users of the network.
 To force users to upload actively rather than simply reap the benefits without work, small invite-based private groups are formed that only allow users that upload a certain amount of data, respectively to what they download.
 In return, those groups can promise reliable download speed, since everyone is uploading frequently.
-Due to various reasons, people cannot upload data, but still want to make use of the private groups.
+For various reasons, some people are unable to upload data, but still want to make use of the private groups.
 
-To allow them to still participate, this project creates a marketplace to trade commodities for real money.
-While many online marketplaces exist, they usually have one thing in common: a central point of authority.
-Our solution is completely decentralised and is capable of scaling to 1000s of users.\\
-\\
 %research
-Research showed that current implementations of this idea are scarce.
-A couple of other articles have been published but never a true application that has not been shut down.
-Since the project is in assignment of the group responsible for the creation of Tribler, this project follows their example in programming languages and libraries, such as Python and Twisted.\\
-\\
+Research shows that implementations of this idea are scarce.
+A couple of articles have been published, but a workable application has never been produced.
+Since the project is assigned by the group responsible for creating Tribler \cite{tribler}, this project follows their example in programming languages and libraries, such as Python and Twisted \cite{twisted}.
+
 %process
-The development happened in sprints of around 1 week, focusing on one or two specific features.
-After every development cycle, a meeting with the product owner showed what had to be created next and whether the current implementation was what the client expected.\\
-\\
+Development of Tsukiji occurred in sprints of around 1 week, each sprint focusing on one or two specific features.
+After every development cycle, a meeting with the product owner guided the focus of the following sprint and whether the current implementation followed expectations.
+
 %implementation
 The result is a light-weight terminal-based python application called Tsukiji.
-The peers communicate by sending messages according to the gossip protocol and using the Twisted library.
-Peers agreeing on a certain price can initiate a trade of which the financial transaction is made via PayPal.
-With this, a fully decentralised market with a trustworthy payment system is created allowing users to make trades without the risk of their trading platform being shut down.
+Peers communicate by sending messages using the gossip protocol, implemented with the Twisted library.
+Peers agreeing on a certain price can initiate a trade.
+Financial transactions are made using PayPal.
+With this, a fully decentralised market with a trustworthy payment system is created, allowing users to make trades without the risk of their trading platform being shut down.
