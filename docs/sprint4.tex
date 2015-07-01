@@ -41,8 +41,9 @@ As this is not deemed feasible, we chose to use Paypal instead.
 
 The Paypal API offers many ways to create, send, and verify transactions.
 While poorly documented, there is a python integration suite that uses http calls with JSON objects to communicate with the Paypal servers.
-The current implementation in Tsukiji creates a payment that has the amount (in euros) and the recipient pre-filled whenever a trade is made.
-All the user has to do now is fill in their login details on the Paypal page that opens automatically to authorise the transaction.
+The current implementation in Tsukiji creates a payment page when a trade is made.
+The page has the amount (in euros) and the recipient pre-filled.
+All the user has to do now is login on the Paypal website and authorise the transaction.
 The full process is depicted in Figure \ref{paypal_pay}.
 This way the user does not need to trust Tsukiji with their Paypal credentials and does not even need to know the address of the person they are about to pay.
 This approach keeps Tsukiji decentralised as well, since the Paypal service is not part of the implementation of Tsukiji itself.
