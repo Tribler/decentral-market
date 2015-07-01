@@ -1,11 +1,12 @@
 \subsection{Sprint 4: Using real money}
-With the implementation so far tested and polished, it was time to implement new features. 
-The elephant in the room at this point was linking the virtual marketplace to the real world.
+With the implementation so far tested and polished, the time had come to implement our final feature. 
+The last major challenge remaining at this point was linking the virtual marketplace to the real world.
 So far users can trade their digital commodities for an amount of virtual currency.
 The problem was that this currency had no actual value, since the only way of obtaining it was by trading it for reputation points.
 So the marketplace at this point would consist out of people selling reputation points and others that do not have the means to acquire their own points, trying to buy them.
 Sadly there would be no transactions made since no one had any virtual currency to make the first trade.
 The solution to this problem is to allow users to use real money to either buy the virtual currency or use that money directly in the transaction.
+
 \subsubsection{Usage of virtual currency}
 Virtual currency is a great way to keep the identities of users hidden when making financial transactions. 
 The problem this structure brings is that it requires a way to verify whether the digital money is actually real. 
@@ -35,7 +36,7 @@ While poorly documented, there is a python integration that uses http calls with
 The current implementation in Tsukiji creates a payment that has the amount (in euros) and the recipient pre-filled whenever a trade is made.
 All the user has to do now, is fill in their login details on the Paypal page that opens automatically to authorise the transaction.
 This way the user does not need to trust Tsukiji with their Paypal credentials and does not even need to know the address of the person they are about to pay.
-This approach keeps Tsukiji decentralised as well, since the Paypal service is not part of the implementation of Tsukiji itself.\\
-\\
+This approach keeps Tsukiji decentralised as well, since the Paypal service is not part of the implementation of Tsukiji itself.
+
 Tsukiji now has a way for users to pay eachother that is reliable but leaves itself unaccountable for any errors in transactions.
 Users only have to trust Paypal for their transactions, which complies with the zero-trust ideology of a decentralised system.
