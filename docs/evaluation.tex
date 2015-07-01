@@ -112,7 +112,7 @@ Interaction with the program occurs through a terminal.
 \end{itemize}
 
 \subsubsection{Would Have(s)}
-The current implementation does not fulfil any of the 'Would Have' requirements.
+The current implementation does not fulfill any of the 'Would Have' requirements.
 The 'Would have'-requirements are mainly security issues.
 
 These problems can certainly be solved, but it would require a lot of time to achieve something that is outside the scope of this project.
@@ -125,10 +125,10 @@ This issue could be addressed in a future project, using the existing code-base.
 
 The privacy requirement is partly fulfilled.
 Users do not have an identifier bound directly to their real identity.
-They simply have an MD5 hash sent across the network.
+They have their SHA256 key sent across the network.
 The offers created can be tracked down to the hash, and to the IP that sent the message.
 A user could spoof his IP whenever he is creating trades to stay hidden, but this is its own responsibility.
-Besides that, a possible privacy breach could be PayPal.
+Besides that, a possible privacy breach could be a personal PayPal account.
 To avoid using ones real account, it is possible to create a new PayPal account on a fake email address and use that to make transactions.
 The bank accounts linked to PayPal are not visible in transactions, so the trades will not give away a users identity.
 
@@ -141,8 +141,9 @@ It is certainly possible that the network may fall against a sufficiently motiva
 
 It is currently possible to spoof messages.
 Messages are currently not encrypted.
-No proof of authentication is required.
-The system assumes full trust from all parties.
+The only authentication present in a message is the public key of a user. 
+But since this key is public, it can easily be replicated by a malicious user, which can only be discovered when the user with ill intent is asked to identify itself with the private key.
+This does not stop people from creating fake transactions that will make it seem like they have more items to sell than they in reality have.
 \end{itemize}
 
 It is clear that all the crucial requirements have been met.
@@ -159,7 +160,7 @@ It is possible to pretend to have a certain amount of points for sale, while not
 This is because Alice has no way to check the transactions Bob has made.
 Alice would only be able to see that a certain bid or ask is no longer in the list of offers.
 If Bob spoofed a message that says that a certain transaction has been made, Alice has no way to verify the truth of that.
-This creates a trust-issue that is currently not resolved.
+This creates a trust-issue that is currently not resolved, so the system has to assume full trust from all parties.
 Section \ref{recommendations} provides a possible solution for this problem.
 
 Another known issue of Tsukiji is that it is risky to make a large transaction, since incremental payments (see section 7.5) have not been implemented.
