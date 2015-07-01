@@ -37,7 +37,7 @@ As this is not deemed feasible, we chose to use Paypal instead.
   \label{paypal_pay}
 \end{figure}
 \newpage
-The Paypal API offers many ways to create, send and verify transactions.
+The Paypal API\cite{paypal} offers many ways to create, send and verify transactions.
 While poorly documented, there is a python integration that uses http calls with JSON objects to communicate with the Paypal servers.
 The current implementation in Tsukiji creates a payment that has the amount (in euros) and the recipient pre-filled whenever a trade is made.
 All the user has to do now, is fill in their login details on the Paypal page that opens automatically to authorise the transaction.
