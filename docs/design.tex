@@ -29,14 +29,6 @@ For every new offer, incoming or outgoing, the algorithm checks whether there is
 It tries to match favourable trades.
 These functionalities are closely related, e.g. matching an ask with a bid produces a trade message, after which the orderbook is updated.
 
-An example of a function in the first category is the function \texttt{create\_ask(price, quantity, timeout)}.
-This function creates an 'ask' message, with a given price, quantity, and timeout.
-An example of a function in the third category is the function \texttt{match\_bid(bid)}.
-Given a bid as input, check if there are compatible asks from yourself and output the most favourable one.
-The second category has few functions specifically created for this task.
-Rather, it is managed mostly by side-effects from other functions.
-For more detail, it is best to look at the code itself and its accompanying comments \cite{tsukiji}.
-
 The cryptography module contains everything related to actions with public-key cryptography.
 At the moment, it mostly functions as a wrapper around the PyCrypto library, for easier use within Tsukiji.
 More on this can be read in section \ref{sprint1:identifiers}.
