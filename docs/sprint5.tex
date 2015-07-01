@@ -1,4 +1,5 @@
 \subsection{Sprint 5: Incremental Payments}
+\label{incpay}
 With the payment structure in place, it was time to look at ways to increase the trust of Tsukiji's users.
 Currently when a buyer sends money to a seller, there is no guarantee that any product is shipped the buyer.
 This especially a problem with large transactions, since more money would be lost if nothing is obtained in return.
@@ -17,5 +18,17 @@ Because of this, it is able to increase the amount of money sent to the seller.
 
 It is worth to note that such a system is hard to implement with physical goods, since not every product can be split up in many parts.
 The original idea behind Tsukiji was to be able to buy and sell reputation points for BitTorrent groups. Digital value like that can easily be divided up near infinitely, so this should not prove a problem.
-%selenium
-%paypal polling
+
+Due to time constraints, we have not been able to completely implement the idea behind this.
+The design of a possible implementation of Tsukiji involved using Selenium to simulate a login to PayPal and authorize a payment automatically.
+Selenium \cite{selenium} is a piece of software that creates a dummy browser and lets you autmate the action performed, such as filling in textboxes and pressing buttons.
+This way every incremental payment can be done without the user having to authorize every payment, but only once give its login details to Tsukiji.
+
+The problem lied on the receiving end of the payment.
+The seller required a way to know that he had received a payment.
+The temporary naive implementation would be to constantly poll PayPal whether any new transactions have been received.
+But even this would require a way to identify every payment and link it to a specific chain of transactions.
+This would become increasingly difficult when multiple transaction chains are made with one seller, endangering our scalability.
+
+This issues combined with the lack of time to create a proper solution led to an unfinshed implementation of Incremental Payments.
+It will be very interesting to have this implemented at a later stage since no other project has a similar system with non-digital currency.

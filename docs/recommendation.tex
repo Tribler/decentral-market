@@ -5,6 +5,12 @@ Because of this, there are multiple possible features that have been glossed ove
 In this chapter we suggest some recommendations for further progress on the project.
 They can be added to this proof of concept to further build Tsukiji into a fully fledged user program, or to further the research of possibilities of a decentral market.
 
+\subsubsection*{$\bullet$ Finishing Incremental Payment}
+Section \ref{incpay} covers the concept of incremental payments.
+Possible solutions would be sending messages over the network of Tsukiji to the seller that a payment has been made.
+This message would contain a chain-id and an index of the transaction of in that chain.
+These id's would then have to be added a notification in the PayPal transaction and be extracted when the seller reads its transactionlist.
+
 \subsubsection*{$\bullet$ Graphical User Interface}
 A big improvement to Tsukiji would be to add a graphical user interface. 
 This would make it much easier to use the program and understand what is going on.
