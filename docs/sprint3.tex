@@ -49,7 +49,7 @@ The trader module consists of a relatively large class called Trader.
 It implements the DatagramProtocol from the Twisted library.
 In essence, very little logic occurs here.
 Its main purpose is matching the right message with the right action on the orderbook.
-Using the right kind of mocks, this module too is easy to test.
+Using the right kind of mocks, this module is also relatively easy to test.
 
 One way of measuring the effectiveness of your tests is by code coverage: how much of your code is run during your tests.
 nosetests provides both statement coverage and branch coverage.
@@ -57,7 +57,14 @@ Statement coverage is the coverage of each line of code; 100\% statement coverag
 Branch coverage is like statement coverage, but takes branches into account.
 For example, a boolean condition with one literal has two branches, True or False.
 A condition with two literals has four branches.
-The total coverage for Tsukiji is reported in section \ref{evaluation}.
+See figure \ref{coveragefig} for our coverage report.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{coverage}
+  \caption{A table listing each module's coverage.}
+  \label{coveragefig}
+\end{figure}
 
 
 \subsubsection{Scalability testing}
