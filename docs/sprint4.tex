@@ -30,11 +30,18 @@ After some research two options had our preference: iDeal and Paypal.
 Sadly the iDeal API had a constraint that it only allowed users to give money to a business and not from person to person.
 This would mean that every user has to create a business-account and have it approved by iDeal, just to make payments in Tsukiji.
 As this is not deemed feasible, we chose to use Paypal instead.
-
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{paypal-payment}
+  \caption{Alice finds an interesting item on Tsukiji. Tsukiji then aks the PayPal API to create an authorisation page. This page asks Alice for het login details and then verifies the transaction, sending the money from Alice's paypal account to Bob's.}
+  \label{paypal_pay}
+\end{figure}
+\newpage
 The Paypal API offers many ways to create, send and verify transactions.
 While poorly documented, there is a python integration that uses http calls with JSON objects to communicate with the Paypal servers.
 The current implementation in Tsukiji creates a payment that has the amount (in euros) and the recipient pre-filled whenever a trade is made.
 All the user has to do now, is fill in their login details on the Paypal page that opens automatically to authorise the transaction.
+The full process is depicted in Figure \ref{paypal_pay}.
 This way the user does not need to trust Tsukiji with their Paypal credentials and does not even need to know the address of the person they are about to pay.
 This approach keeps Tsukiji decentralised as well, since the Paypal service is not part of the implementation of Tsukiji itself.
 
