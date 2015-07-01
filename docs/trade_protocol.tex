@@ -1,0 +1,106 @@
+\section{Trade Protocol}
+\label{protocol}
+
+Tsukiji uses a custom application protocol to communicate between peers.
+Traders communicate to each other with messages encoded as JSON objects.
+The choice for JSON objects was made because it has a near-equivalent data type in python called a dictionary.
+It is also a human-readable format.
+Every message has the following additional attributes:
+\begin{myitemize}
+\item \texttt{id}: Public key of the trader sending the message.
+\item \texttt{message-id}: Incremental counter unique across all messages with the same id.
+\item \texttt{timestamp}: Time of creation of this message.
+\item \texttt{type}: The type of message.
+\end{myitemize}
+The combination of the \texttt{id} and \texttt{message-id} attributes uniquely identifies each message.
+
+There are 7 message types in total: \texttt{ask}, \texttt{bid}, \texttt{trade}, \texttt{confirm}, \texttt{cancel}, \texttt{greeting}, and \texttt{greeting\_response}. Each type of message is used in a different scenario and holds different attributes. In the following sections, these scenario's are laid out.
+
+\subsubsection{Placing an offer}
+In order to place an ask or bid, a message is sent where the type is \texttt{ask} or \texttt{bid} accordingly.
+These types of messages have the following additional attributes:
+\begin{myitemize}
+\item \texttt{price}: The price per single unit.
+\item \texttt{quantity}: The amount of items requested to trade.
+\item \texttt{timeout}: The time of expiration for this offer.
+\end{myitemize}
+This type of message is typically sent to the entire network.
+For the purpose of this application, the units of \texttt{price} and \texttt{quantity} are left undefined.
+In the future, the protocol could be updated with a currency string, such as 'EUR' for euros, 'USD' for dollars, or 'BTC' for bitcoin.
+Something similar could be adopted for the \texttt{quantity}, for example, 'kg' for weight, 'm3' for volume, or 'MBit' for data.
+
+\subsubsection{Requesting a trade}
+When a trader sees an offer they are interested in, they might respond to such an offer with a trade message.
+The type of this message is \texttt{trade}.
+This type of message has the following additional attributes:
+
+\begin{myitemize}
+\item \texttt{recipient}: The id of the trader who created the offer.
+\item \texttt{quantity}: The quantity requested to be traded.
+\item \texttt{trade-id}: The message-id of the original offer.
+\end{myitemize}
+
+The combination of \texttt{recipient} and \texttt{trade-id} is used to uniquely identify the specific offer for which the trade is requested.
+The \texttt{quantity} field may be equal to or less than the quantity stated in the original offer.
+Perhaps a trader is interested in an offer, but only can or needs to trade a certain amount that is less than this.
+
+\subsubsection{Accepting a trade}
+
+When a trade request arrives, a trader can either accept or cancel such a request.
+In the event that the trader accepts the trade request, they send a confirm message back.
+The type of this message is \texttt{confirm}.
+This type of message has the following additional attributes:
+
+\begin{myitemize}
+\item \texttt{trade-id}: the message-id of the original offer.
+\end{myitemize}
+
+This time, there's no need to add a recipient attribute because the combination of the \texttt{id} and \texttt{trade-id} fields uniquely identifies the offer to be traded.
+The offer is removed from the internal orderbook of both parties.
+
+\subsubsection{Cancelling an offer}
+
+When a trader decides to cancel one of its offers, e.g., because they want to lower their prices, Tsukiji will respond to any incoming trade requests with a cancel message.
+For a more detailed discussion on why this is implemented in this manner, see section \ref{sprint1:cancelling}.
+The type of this message is \texttt{cancel}.
+This type of message has the following additional attributes:
+
+\begin{myitemize}
+\item \texttt{trade-id}: the message-id of the original offer.
+\end{myitemize}
+
+Similar to a confirm message, there's no need to add a recipient attribute because the combination of the \texttt{id} and \texttt{trade-id} fields uniquely identifies the offer to be traded.
+The offer is removed from the internal orderbook of both parties.
+
+\subsubsection{Peer discovery}
+
+In order to facilitate peer discovery, there needs to be some mechanism for peers to exchange knowledge of other peers. For more information, see sections \ref{sprint2:peerdiscovery} and \ref{sprint2:gossip}.
+
+For a peer to request a list of peers from somebody else, they send a greeting message.
+This message has type \texttt{greeting}.
+No additional attributes are necessary.
+
+When a trader receives a \texttt{greeting} message, they respond with a greeting\_response.
+This message has type \texttt{greeting\_response}.
+This type of message has the following additional attributes:
+\begin{myitemize}
+\item \texttt{peerlist}: a list of peers
+\end{myitemize}
+
+When a peer receives such a list of peers, they can add it to their own list of peers.
+Now the peers they know about has grown with more traders to directly communicate with.
+
+\subsubsection{Example of a trade}
+In order to get a better understanding of the protocol, we will describe an example of a trade. See figure \ref{tradefig} for a graphical depiction of the exchange.
+Alice wants to buy 3 items at price 10.
+She sends out an \texttt{ask} message to the world.
+Bob sees this message and is interested.
+He sends a trade request.
+Alice, who has received no other trade request up until that point, agrees to the trade and returns a confirm message.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{trade}
+  \caption{Example of a trade. Alice sends out an offer. Bob replies with a trade request. Alice agrees with the request and replies with a confirm message.}
+  \label{tradefig}
+\end{figure}
