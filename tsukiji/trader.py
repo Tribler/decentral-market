@@ -101,12 +101,12 @@ class Trader(DatagramProtocol):
             return create_cancel(recipient=trade['id'], trade_id=trade_id)
 
     def handle_confirm(self, confirm):
-        offer = remove_offer(id=confirm['id'], message_id=confirm['trade_id'])
+        offer = remove_offer(id=confirm['id'], message_id=confirm['trade-id'])
         trades.append(offer)
         return 'Trade succesful!'
 
     def handle_cancel(self, cancel):
-        remove_offer(id=cancel['id'], message_id=cancel['trade_id'])
+        remove_offer(id=cancel['id'], message_id=cancel['trade-id'])
         return 'Trade cancelled'
 
     def handle_greeting(self, host, port):
@@ -127,6 +127,6 @@ class Trader(DatagramProtocol):
         print self.peers
         return 'Peers added'
 
-
-reactor.listenMulticast(8005, Trader("listener1"), listenMultiple=True)
-reactor.run()
+if __name__ == '__main__':
+    reactor.listenMulticast(8005, Trader("listener1"), listenMultiple=True)
+    reactor.run()
