@@ -24,48 +24,11 @@ However, broadcasting suffices for the first iteration.
 Implementation is simple and it's easily replaced by a more complex system in later sprints.
 
 \subsubsection{Protocol}
-
-In this sprint, the protocol was also defined.
-A message is formatted as a JSON object.
-Each message has 4 required fields:
-\begin{myitemize}
-\item id: Contains the user's public key. See \ref{sprint1:identifiers} for more information.
-\item message-id: Incremented counter unique across messages from one user.
-\item timestamp: Time of message creation in UTC in ISO format.
-\item type: The type of message.
-\end{myitemize}
-
-There are 6 types of messages: ask, bid, trade, confirm, cancel, and greeting.
-Depending on the type of message, other fields may be required.
-
-An 'ask' is posted when a user wants to buy.
-A 'bid' is posted when a user wants to sell.
-The following fields are required for an ask or a bid:
-\begin{myitemize}
-	\item price: Sets the price per quantity.
-	\item quantity: The quantity to be traded.
-	\item timeout: Expiration time of the offer in UTC in ISO format.
-\end{myitemize}
-
-A 'trade' message is sent as a response to an ask or bid message.
-The following fields are required for a trade:
-\begin{myitemize}
-	\item quantity: The quantity to be traded. This may be less than the quantity stated in the ask/bid.
-	\item trade-id: Contains the id and message-id of the ask/bid the trade is requested for. This way the receiver knows which ask/bid the trade is requested for.
-\end{myitemize}
-
-A 'confirm' or a 'cancel' message is sent as a response to a trade message.
-A 'confirm' message confirms the trade.
-A 'cancel' message is sent when the ask/bid the trade is requested for no longer exists, either because it is already traded or the user has decided to cancel their ask/bid.
-See \ref{sprint1:cancelling} for the motivation behind this design.
-The following field is required for a confirm or a cancel:
-\begin{myitemize}
-\item trade-id: the trade-id of the trade responded to.
-\end{myitemize}
-
-A 'greeting' message is sent when a user wants to announce its existence to the network.
-This is used later on for peer discovery.
-No additional fields are required.
+In this sprint, we also defined our application protocol.
+For a detailed specification, see \ref{protocol}.
+Although we have a lot of experience in using protocols and APIs, designing a new protocol is another matter entirely.
+Our approach to designing the protocol was to keep it as simple as possible and make it easy to extend.
+The goal is to make it easy to update the protocol, e.g, when there's a need to extend functionality.
 
 \subsubsection{Broken Pipes}
 Testing the socket connection showed a couple of issues.
