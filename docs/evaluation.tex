@@ -203,11 +203,10 @@ However, we find it difficult to split the remaining parts up into more componen
 
 The second point given talked about unit interfacing.
 In this case, we believe SIG's feedback to be correct, but their solution undesirable.
-It is true that many functions contain many arguments.
+It is true that multiple functions contain many arguments.
 A lot of these shared common functionality, so we have abstracted these further into a main function.
 However, SIG's solution is to introduce more classes.
-In our project, these classes would be little more than packaging.
-Rather than using classes, we use a lot of pure functions that return python dictionaries, and good variable names.
+But rather than using classes, we use a lot of pure functions that return python dictionaries, and good variable names.
 These can be seen as a replacement for classes.
 There's a great talk from pycon 2012 called "Stop writing classes" \cite{noclassesvid}.
 We believe the principles given in this talk to apply to our situation here.
