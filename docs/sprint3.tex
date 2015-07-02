@@ -26,15 +26,15 @@ A large part of what makes testing easy or difficult is expressed in the testabi
 How well is the code divided into sufficiently small enough functions, classes and modules?
 How large are these components, and how dependant are they upon each other?
 Many books, articles, and blog posts have been written on this subject.
-An example of such an article is Writing Testable Code\cite{writingtestablecode}, a guide used at Google.
+An example of such an article is Writing Testable Code \cite{writingtestablecode}, a guide used at Google.
 While this guide is written specifically for the Java programming language, its four main points still hold:
 
-\begin{enumerate}
+\begin{myenumerate}
 \item Constructor does Real Work
 \item Digging into Collaborators
 \item Brittle Global State \& Singletons
 \item Class Does Too Much
-\end{enumerate}
+\end{myenumerate}
 
 At this point, Tsukiji has two main modules: orderbook.py and trader.py.
 The orderbook module consists mainly of functions that concern offers and message creation.
