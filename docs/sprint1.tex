@@ -28,7 +28,6 @@ In this sprint, we also defined our application protocol.
 For a detailed specification, see \ref{protocol}.
 Although we have a lot of experience in using protocols and APIs, designing a new protocol is another matter entirely.
 Our approach to designing the protocol was to keep it as simple as possible and make it easy to extend.
-The goal is to make it easy to update the protocol, e.g, when there's a need to extend functionality.
 
 \subsubsection{Broken Pipes}
 Testing the socket connection showed a couple of issues.
@@ -47,7 +46,7 @@ A regular username and password structure is not possible in a decentralised net
 
 Simply using a username without a password is possible by broadcasting a request to receive all the usernames and allowing only nonexistent names to be used during creation.
 While this creates a unique identifier for the user, it does not create a safety measure against impostors.
-Anyone can declare that his username is Alice and can then validate transactions in the name of Alice, without the consent of the actual real Alice.
+Anyone can declare that his username is Alice and can then validate transactions in the name of Alice, without the consent of the real Alice.
 
 A solution to this problem lies in cryptography.
 We need a way for users to prove that they are authentic.
@@ -92,7 +91,7 @@ Suppose Alice wants to cancel her ask/bid.
 Internally, she will mark her ask/bid as cancelled.
 If Bob requests a trade, Alice responds with a cancel message.
 If Bob wants to authenticate Alice, he can piggyback a verification request with the trade message.
-In the cancel message Alice responds with, she will also verify her identity with her private key.
+In the cancel message that Alice responds with, she will also verify her identity with her private key.
 This protocol only needs two messages, instead of three.
 This exchange only happens between interested parties, instead of the entire network.
-Lastly, this only occurs until the time of expiration.
+Lastly, once an offer is expired, Bob can no longer request a trade on it.

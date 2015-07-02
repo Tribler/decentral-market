@@ -3,7 +3,7 @@
 With the payment structure in place, it was time to look at ways to increase the trust of Tsukiji's users.
 Currently when a buyer sends money to a seller, there is no guarantee that any product is shipped the buyer.
 This especially a problem with large transactions, since more money would be lost if nothing is obtained in return.
-A possible solution that BitCoin offers is a multisigned deposit, that requires multiple parties to sign for the release of the money.
+A possible solution that BitCoin offers is a multisigned deposit that requires multiple parties to sign for the release of the money.
 Sadly this only works with a digital currency.
 A physical currency would have to hire an independent physical deposit that needs to support money being transferred to a different account than the one that deposited it.
 This would require a lot of extra work if money needs to be brought to a safe and most likely increase the cost of every transaction.
@@ -12,7 +12,7 @@ A way to at least dramatically reduce the trust issues involved with large payme
 This way, if a seller does not deliver on his promise, the buyer has only lost a small amount of money.
 Splitting transaction would result in a drastic increase of data flow. 
 In order to reduce this, a system of building trust can be implemented.
-This system is Incremental Payments.
+This system is called Incremental Payments.
 After every successful part of a transaction, the buyer trusts the seller more.
 Because of this, it is able to increase the amount of money sent to the seller.
 
@@ -24,7 +24,7 @@ The design of a possible implementation of Tsukiji involved using Selenium to si
 Selenium \cite{selenium} is a piece of software that creates a dummy browser and lets you autmate the action performed, such as filling in textboxes and pressing buttons.
 This way every incremental payment can be done without the user having to authorize every payment, but only once give its login details to Tsukiji.
 
-The problem lied on the receiving end of the payment.
+The problem lay on the receiving end of the payment.
 The seller required a way to know that he had received a payment.
 The temporary naive implementation would be to constantly poll PayPal whether any new transactions have been received.
 But even this would require a way to identify every payment and link it to a specific chain of transactions.

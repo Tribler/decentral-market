@@ -41,7 +41,7 @@ The orderbook module consists mainly of functions that concern offers and messag
 
 From a unit testing standpoint, the orderbook module is very easy to test.
 The functions concerning offers are pure functions, i.e., they have no side-effects.
-The functions concerning message creation address a few global variables (e.g. the message counter), but there is a limited amount of these variables and their scope
+The functions concerning message creation address a few global variables (e.g. the message counter), but there are only a few of such variables and their scope limited to one file.
 It could also be said that this module does too much and should be split up.
 This is definitely something to keep in mind for the future.
 
