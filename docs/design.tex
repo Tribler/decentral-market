@@ -1,6 +1,6 @@
 \section{Design}
 This chapter describes the general design of Tsukiji.
-We will discuss the architecture of the code base and specify the trade protocol that instances of Tsukiji use to communicate with each other.
+We will discuss the architecture of the code base of Tsukiji and the dependencies that the program relies on.
 For more detailed issues during the process of implementation, see section \ref{implementation}.
 
 \subsection{Architecture}
@@ -33,7 +33,7 @@ The cryptography module contains everything related to actions with public-key c
 At the moment, it mostly functions as a wrapper around the PyCrypto library, for easier use within Tsukiji.
 More on this can be read in section \ref{sprint1:identifiers}.
 
-\begin{figure}
+\begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{modules}
   \caption{A diagram with all of Tsukiji's modules}

@@ -27,7 +27,7 @@ All the user has to do is approve of the trade.
 The design of a possible implementation of Tsukiji involved using Selenium to simulate a login to PayPal and authorize a payment automatically.
 Selenium \cite{selenium} is a piece of software that creates a dummy browser and lets you automate the action performed, such as filling in textboxes and pressing buttons.
 This way every incremental payment can be done without the user having to authorize every payment, but only give its login details to Tsukiji once.
-
+ 
 The problem lay on the receiving end of the payment.
 The seller required a way to know that he had received a payment.
 The temporary naive implementation would be to constantly poll PayPal whether any new transactions have been received.
