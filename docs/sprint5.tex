@@ -5,30 +5,28 @@ Currently when a buyer sends money to a seller, there is no guarantee that any p
 
 This is a problem, especially with large transactions, since more money would be lost if nothing is obtained in return.
 The solution BitCoin offers is a multisigned deposit, that requires multiple parties to sign for the release of the money.
-Sadly this only works with digital currency.
-Physical currency would have to hire an independent physical deposit that needs to support money being transferred to a different account than the one that deposited it.
-This would require a lot of extra work if money needs to be brought to a safe and most likely increase the cost of every transaction.
+Sadly, no such system is available within Paypal itself.
 
 One way to dramatically reduce any trust issues involved with large payments is by dividing them into many small payments.
-This way, if a seller does not deliver on his promise, the buyer has only lost a relatively small amount of money.
+This way, if a seller does not deliver on their promise, the buyer has only lost a relatively small amount of money.
 Splitting transactions evenly would result in a drastic increase of data flow. 
 In order to reduce this, a system of building trust can be implemented.
 This system is called Incremental Payments.
 After every successful transaction, the buyer trusts the seller more.
 The buyer increases the amount of money they send to the seller.
 
-It is worth noting that such a system is hard to implement with physical goods, since not every product can be split up in many parts.
+It is worth noting that such a system is hard to implement with physical goods, since not every product can be split up in parts.
 The original idea behind Tsukiji was to be able to buy and sell reputation points for BitTorrent groups.
-Digital value can easily be divided up near infinitely, so this should not prove a problem.
+Digital value can easily be divided up, so it is not a problem in this scenario.
 
 Due to time constraints, we have not been able to finish our implementation of incremental payments.
 Our goal was to completely automate this process.
 All the user has to do is approve of the trade.
-The design of a possible implementation of Tsukiji involved using Selenium to simulate a login to PayPal and authorize a payment automatically.
-Selenium \cite{selenium} is a piece of software that creates a dummy browser and lets you automate the action performed, such as filling in textboxes and pressing buttons.
-This way every incremental payment can be done without the user having to authorize every payment, but only give its login details to Tsukiji once.
+The design of a possible implementation of Tsukiji involved using Selenium \cite{selenium} to simulate a login to PayPal and authorize a payment automatically.
+Selenium is a piece of software that creates a dummy browser and lets you automate the actions performed, such as filling in textboxes and pressing buttons.
+This way, every incremental payment can be made without the user having to authorize every individual payment, but only give its login details to Tsukiji once.
  
-The problem lay on the receiving end of the payment.
+The problem lied at the receiving end of the payment.
 The seller required a way to know that he had received a payment.
 The temporary naive implementation would be to constantly poll PayPal whether any new transactions have been received.
 But even this would require a way to identify every payment and link it to a specific chain of transactions.
