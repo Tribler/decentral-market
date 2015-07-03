@@ -9,6 +9,7 @@ from orderbook import (match_incoming_ask, match_incoming_bid,
         trades, offers, get_offer, remove_offer,
         trade_offer, create_confirm, create_cancel, create_greeting_response)
 from utils import print_all_offers
+from paypal import paycall
 
 
 class Trader(DatagramProtocol):
@@ -79,6 +80,7 @@ class Trader(DatagramProtocol):
         if bid:
             offers.remove(bid)
             trades.append(bid)
+            paycall('mcgthe@gmail.com', ask['price'])
             return trade_offer(ask, bid)
         else:
             offers.append(ask)
