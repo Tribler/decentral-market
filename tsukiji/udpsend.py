@@ -1,6 +1,6 @@
 import datetime
 import json
-import os
+import random
 
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor, threads
@@ -45,8 +45,17 @@ class UdpSender(DatagramProtocol):
             print "Transported message"
 
 
-
 def create_peer(id, qty, price, msgtype):
     senderObj = UdpSender(id, "224.0.0.1", 8005, qty, price, msgtype)
+    senderObj.send_message()
     reactor.listenMulticast(8005, senderObj, listenMultiple=True)
 
+
+def createask():
+    obj = UdpSender("bla", "224.0.0.1", 8005, 1, random.randint(1, 5), 'A')
+    reactor.listenMulticast(8005, obj, listenMultiple=True)
+
+
+def createbid():
+    obj = UdpSender("bla", "224.0.0.1", 8005, 1, random.randint(1, 5), 'B')
+    reactor.listenMulticast(8005, obj, listenMultiple=True)

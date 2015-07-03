@@ -77,6 +77,8 @@ class Trader(DatagramProtocol):
     def handle_ask(self, ask):
         bid = match_incoming_ask(ask)
         if bid:
+            offers.remove(bid)
+            trades.append(bid)
             return trade_offer(ask, bid)
         else:
             offers.append(ask)
@@ -85,6 +87,8 @@ class Trader(DatagramProtocol):
     def handle_bid(self, bid):
         ask = match_incoming_bid(bid)
         if ask:
+            offers.remove(ask)
+            trades.append(ask)
             return trade_offer(bid, ask)
         else:
             offers.append(bid)

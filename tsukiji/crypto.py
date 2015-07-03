@@ -7,10 +7,11 @@ Reading a message
 """
 
 import os
+import random
 
 from Crypto.PublicKey import RSA
 
-KEYFILE_NAME = 'key.pem'
+KEYFILE_NAME = 'key1.pem'
 
 
 def create_key():
@@ -38,6 +39,13 @@ def retrieve_key():
 def get_public_bytestring():
     key = retrieve_key()
     return key.publickey().exportKey()
+
+
+def get_random_key():
+    n = random.randint(1, 5)
+    with open("key"+str(n)+".pem", 'r') as f:
+        key = RSA.importKey(f.read())
+        return key.publickey().exportKey()
 
 
 def decrypt_message(message):
