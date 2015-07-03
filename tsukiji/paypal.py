@@ -5,9 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
-def paycall(email, amount):
-    heads = {
+headers = {
         # API credentials for the API caller business account
         'X-PAYPAL-SECURITY-USERID':    'hugoreinbergen-facilitator_api1.hotmail.com',
         'X-PAYPAL-SECURITY-PASSWORD':  '4SD6JYJ85P7HFTXP',
@@ -16,6 +14,8 @@ def paycall(email, amount):
         'X-PAYPAL-REQUEST-DATA-FORMAT': 'JSON',
         'X-PAYPAL-RESPONSE-DATA-FORMAT': 'JSON'
     }
+
+def paycall(email, amount, headers=headers):
     payload = {
         "actionType": "PAY",
         "currencyCode": "EUR",
