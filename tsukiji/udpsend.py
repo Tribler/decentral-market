@@ -59,3 +59,7 @@ def createask(ip):
 def createbid(ip):
     obj = UdpSender("bla", ip, 8005, 1, random.randint(1, 5), 'B')
     reactor.listenMulticast(8005, obj, listenMultiple=True)
+
+def creategreeting(ip):
+    obj = UdpSender("bla", ip, 8005, 1, random.randint(1, 5), 'G')
+    reactor.listenMulticast(8005, obj, listenMultiple=True)
