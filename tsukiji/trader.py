@@ -7,7 +7,7 @@ from crypto import get_public_bytestring
 from orderbook import (match_incoming_ask, match_incoming_bid,
         trades, offers, get_offer, remove_offer,
         trade_offer, create_confirm, create_cancel, create_greeting_response,
-        create_bid)
+        create_bid, create_ask)
 from utils import print_all_offers
 from paypal import make_a_payment
 
@@ -16,7 +16,7 @@ class Trader(DatagramProtocol):
     def __init__(self, name):
         self.name = name
         self.history = set()
-        self.peers = {}
+        self.peers = self.read_peerlist()
 
     def startProtocol(self):
         pass
@@ -25,17 +25,22 @@ class Trader(DatagramProtocol):
         pass
 
     def datagramReceived(self, raw_data, (host, port)):
-        data = json.loads(raw_data)
-        print "Printing data: {}".format(data)
-        id, message_id = data['id'], data['message-id']
+        try:
+            data = json.loads(raw_data)
+            print "Printing data: {}".format(data)
+            id, message_id = data['id'], data['message-id']
 
-        if (id, message_id) not in self.history:
-            self.handle_data(data, host, port)
-            self.relay_message(raw_data)
-            self.history.add((id, message_id))
-            print_all_offers()
-        else:
-            print "Duplicate message received. id: {}..., message-id: {}".format(id[26:50], message_id)
+            if (id, message_id) not in self.history:
+                self.handle_data(data, host, port)
+                self.relay_message(raw_data)
+                self.history.add((id, message_id))
+                print_all_offers()
+            else:
+                print 'Duplicate message received.\n id: {}..., message-id: {}'.format(id[26:50], message_id)
+        except ValueError:
+            print 'Data was a string: {}'.format(data)
+        except TypeError:
+            print 'Data was a string: {}'.format(data)
 
     def relay_message(self, message):
         for address in self.peers:
@@ -74,7 +79,7 @@ class Trader(DatagramProtocol):
                 self.transport.write(response, (host, port))
         except ValueError, e:
             print e.message
-            return e.message
+            return 'Error: something bad happened'
 
     def handle_ask(self, ask):
         bid = match_incoming_ask(ask)
@@ -130,8 +135,23 @@ class Trader(DatagramProtocol):
         print self.peers
         return 'Peers added'
 
+    def send_demo_offer(self, ask=True):
+        if ask:
+            offer = create_ask(1, 1)
+        else:
+            offer = create_bid(1, 1)
+        offer['timeout'] = offer['timeout'].isoformat()
+        offer = json.dumps(offer)
+        self.relay_message(offer)
+
 if __name__ == '__main__':
-    create_bid(1, 1)
+    trader = Trader("listener1")
+    choice = raw_input('1 or 2 ')
+    reactor.listenMulticast(8005, trader, listenMultiple=True)
+    if choice == '1':
+        trader.send_demo_offer()
+    elif choice == '2':
+        trader.send_demo_offer(ask=False)
+
     print_all_offers()
-    reactor.listenMulticast(8005, Trader("listener1"), listenMultiple=True)
     reactor.run()
