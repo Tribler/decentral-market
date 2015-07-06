@@ -115,7 +115,7 @@ class Trader(DatagramProtocol):
     def handle_greeting(self, host, port):
         peer_list = self.read_peerlist()
         if host not in peer_list:
-            self.add_to_peerlist(host, str(port) + "\n")
+            self.add_to_peerlist(host, port)
 
         msg = create_greeting_response(peer_list)
         msg = json.dumps(msg)
