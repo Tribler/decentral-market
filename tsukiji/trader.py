@@ -9,7 +9,7 @@ from orderbook import (match_incoming_ask, match_incoming_bid,
         trade_offer, create_confirm, create_cancel, create_greeting_response,
         create_bid)
 from utils import print_all_offers
-from paypal import paycall
+from paypal import make_a_payment 
 
 
 class Trader(DatagramProtocol):
@@ -79,7 +79,7 @@ class Trader(DatagramProtocol):
         if bid:
             offers.remove(bid)
             trades.append(bid)
-            paycall('mcgthe-facilitator-1@gmail.com', ask['price'])
+            make_a_payment(price=bid['price'])
             return trade_offer(ask, bid)
         else:
             offers.append(ask)
@@ -134,5 +134,6 @@ class Trader(DatagramProtocol):
 
 if __name__ == '__main__':
     create_bid(1, 1)
+    print_all_offers()
     reactor.listenMulticast(8005, Trader("listener1"), listenMultiple=True)
     reactor.run()
