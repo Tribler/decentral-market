@@ -139,7 +139,10 @@ def clean_offers(f):
     '''Decorator that scans the list of offers and removes any offers whose timeout has passed.'''
     def func_wrapper(*args, **kwargs):
         for offer in offers:
-            if offer['timeout'] < datetime.datetime.now():
+            timeout = offer['timeout']
+            if type(offer['timeout']) is str:
+                timeout = datetime.datetime.strptime(timeout, '%Y-%m-%dT%H:%M:%S.%f')
+            if timeout < datetime.datetime.now():
                 offers.remove(offer)
         return f(*args, **kwargs)
     return func_wrapper
