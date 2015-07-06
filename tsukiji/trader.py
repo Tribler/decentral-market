@@ -6,7 +6,8 @@ from twisted.internet import reactor
 from crypto import get_public_bytestring
 from orderbook import (match_incoming_ask, match_incoming_bid,
         trades, offers, get_offer, remove_offer,
-        trade_offer, create_confirm, create_cancel, create_greeting_response)
+        trade_offer, create_confirm, create_cancel, create_greeting_response,
+        create_bid)
 from utils import print_all_offers
 from paypal import paycall
 
@@ -28,12 +29,12 @@ class Trader(DatagramProtocol):
         id, message_id = data['id'], data['message-id']
 
         if (id, message_id) not in self.history:
-            self.handle_data(raw_data, host, port)
+            self.handle_data(data, host, port)
             self.relay_message(raw_data)
             self.history.add((id, message_id))
             print_all_offers()
         else:
-            print "Duplicate message received. id: {:20}..., message-id: {}".format(id, message_id)
+            print "Duplicate message received. id: {}..., message-id: {}".format(id[26:50], message_id)
 
     def relay_message(self, message):
         for address in self.peers:
@@ -50,8 +51,6 @@ class Trader(DatagramProtocol):
 
     def handle_data(self, data, host='127.0.0.1', port=8005):
         try:
-            data = json.loads(data)
-
             # Turn isoformatted datetime into a python datetime
             if 'timeout' in data:
                 data['timeout'] = datetime.datetime.strptime(data['timeout'], '%Y-%m-%dT%H:%M:%S.%f')
@@ -134,5 +133,6 @@ class Trader(DatagramProtocol):
         return 'Peers added'
 
 if __name__ == '__main__':
+    create_bid(1, 1)
     reactor.listenMulticast(8005, Trader("listener1"), listenMultiple=True)
     reactor.run()
