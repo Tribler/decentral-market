@@ -34,9 +34,10 @@ class MessageSender(DatagramProtocol):
         print "Transported message"
 
 
-def send_ask(ip='224.0.0.1'):
+def send_ask(ip='224.0.0.1', message_id=None):
     ask = create_ask(100, 1)
-    ask['timeout'] = ask['timeout'].isoformat()
+    if message_id:
+        ask['message-id'] = message_id
     return MessageSender("bla", ask)
 
 
@@ -46,14 +47,21 @@ def send_greeting():
 
 
 if __name__ == '__main__':
-    choice = raw_input('Do you want to send a greeting (g) or an ask (a)? ')
-    if choice not in ['g', 'a']:
-        print "Naughty naughty"
-        exit()
-    elif choice == 'g':
+    choice = raw_input('''Which scenario do you want to run?
+    Post a greeting? (g)
+    Post an ask? (a)
+    Send duplicate messages? (d)
+    ''')
+    if choice == 'g':
         sender = send_greeting()
     elif choice == 'a':
         sender = send_ask()
+    elif choice == 'd':
+        sender = send_ask(message_id=100)
+        reactor.listenMulticast(8005, send_ask(message_id=100), listenMultiple=True)
+    else:
+        print 'Naughty Naughty'
+        exit()
     print 'Identifier is : {}'.format(get_public_bytestring())
     reactor.listenMulticast(8005, sender, listenMultiple=True)
     reactor.run()

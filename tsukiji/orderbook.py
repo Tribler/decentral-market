@@ -21,7 +21,7 @@ def create_ask(price, quantity, timeout=None):
         'type': 'ask',
         'price': price,
         'quantity': quantity,
-        'timeout': timeout
+        'timeout': timeout.isoformat()
     })
 
     offers.append(message)
@@ -36,7 +36,7 @@ def create_bid(price, quantity, timeout=None):
         'type': 'bid',
         'price': price,
         'quantity': quantity,
-        'timeout': timeout
+        'timeout': timeout.isoformat()
     })
 
     offers.append(message)

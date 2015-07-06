@@ -57,10 +57,6 @@ class Trader(DatagramProtocol):
 
     def handle_data(self, data, host, port):
         try:
-            # Turn isoformatted datetime into a python datetime
-            if 'timeout' in data:
-                data['timeout'] = datetime.datetime.strptime(data['timeout'], '%Y-%m-%dT%H:%M:%S.%f')
-
             responses = {
                 'ask': self.handle_ask,
                 'bid': self.handle_bid,
@@ -140,7 +136,6 @@ class Trader(DatagramProtocol):
             offer = create_ask(1, 1)
         else:
             offer = create_bid(1, 1)
-        offer['timeout'] = offer['timeout'].isoformat()
         offer = json.dumps(offer)
         self.relay_message(offer)
 
