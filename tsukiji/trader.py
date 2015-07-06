@@ -27,7 +27,6 @@ class Trader(DatagramProtocol):
     def datagramReceived(self, raw_data, (host, port)):
         try:
             data = json.loads(raw_data)
-            print "Printing data: {}".format(data)
             id, message_id = data['id'], data['message-id']
 
             if (id, message_id) not in self.history:
@@ -38,9 +37,9 @@ class Trader(DatagramProtocol):
             else:
                 print 'Duplicate message received.\n id: {}..., message-id: {}'.format(id[26:50], message_id)
         except ValueError:
-            print 'Data was a string: {}'.format(data)
+            print 'Data received was a string: {}'.format(data)
         except TypeError:
-            print 'Data was a string: {}'.format(data)
+            print 'Data received was a string: {}'.format(data)
 
     def relay_message(self, message):
         for address in self.peers:
@@ -128,7 +127,6 @@ class Trader(DatagramProtocol):
         self.peers.update(data['peerlist'])
         for key, value in self.peers.iteritems():
             self.add_to_peerlist(key, value)
-        print self.peers
         return 'Peers added'
 
     def send_demo_offer(self, ask=True):
@@ -140,9 +138,10 @@ class Trader(DatagramProtocol):
         self.relay_message(offer)
 
 if __name__ == '__main__':
-    trader = Trader("listener1")
-    choice = raw_input('1 or 2 ')
+    trader = Trader("Fan of Tsukiji")
     reactor.listenMulticast(8005, trader, listenMultiple=True)
+
+    choice = raw_input('1 or 2 ')
     if choice == '1':
         trader.send_demo_offer()
     elif choice == '2':
