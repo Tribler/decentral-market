@@ -31,5 +31,6 @@ class MessageSender(DatagramProtocol):
 
 def createask(ip='224.0.0.1'):
     ask = create_ask(1, 1)
+    ask['timeout'] = ask['timeout'].isoformat()
     sender = MessageSender("bla", ask)
     reactor.listenMulticast(8005, sender, listenMultiple=True)
