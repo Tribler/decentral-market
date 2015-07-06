@@ -79,7 +79,7 @@ class Trader(DatagramProtocol):
         if bid:
             offers.remove(bid)
             trades.append(bid)
-            paycall('mcgthe@gmail.com', ask['price'])
+            paycall('mcgthe-facilitator-1@gmail.com', ask['price'])
             return trade_offer(ask, bid)
         else:
             offers.append(ask)
