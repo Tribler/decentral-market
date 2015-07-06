@@ -1,28 +1,27 @@
 """
 Sending a message:
     Encrypt your plaintext with encrypt_message
-    Your id will serve as your public key
+    Your public key will serve as your id
 Reading a message
     Use decrypt_message and validate contents
 """
 
 import os
-import random
 
 from Crypto.PublicKey import RSA
 
-KEYFILE_NAME = 'key1.pem'
+KEYFILE_NAME = 'key.pem'
 
 
-def create_key():
+def create_key(keyfile_name=KEYFILE_NAME):
     '''Generates and writes byte string with object of RSA key object.'''
     key = RSA.generate(2048)
-    with open(KEYFILE_NAME, 'w') as f:
+    with open(keyfile_name, 'w') as f:
         f.write(key.exportKey('PEM'))
     return key
 
 
-def retrieve_key():
+def retrieve_key(keyfile_name=KEYFILE_NAME):
     '''
     Reads an exported key-bytestring from file.
     If the file does not exist, create one.
@@ -37,15 +36,9 @@ def retrieve_key():
 
 
 def get_public_bytestring():
+    '''Retrieve public key string.'''
     key = retrieve_key()
     return key.publickey().exportKey()
-
-
-def get_random_key():
-    n = random.randint(1, 5)
-    with open("key"+str(n)+".pem", 'r') as f:
-        key = RSA.importKey(f.read())
-        return key.publickey().exportKey()
 
 
 def decrypt_message(message):
