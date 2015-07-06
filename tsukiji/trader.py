@@ -125,7 +125,7 @@ class Trader(DatagramProtocol):
 
     def handle_greeting_response(self, data):
         self.peers.update(data['peerlist'])
-        for key, value in self.peers.iteritems():
+        for key, value in data['peerlist']:
             self.add_to_peerlist(key, value)
         return 'Peers added'
 
