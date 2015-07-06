@@ -34,3 +34,7 @@ def createask(ip='224.0.0.1'):
     ask['timeout'] = ask['timeout'].isoformat()
     sender = MessageSender("bla", ask)
     reactor.listenMulticast(8005, sender, listenMultiple=True)
+
+
+if __name__ == '__main__':
+    createask()
