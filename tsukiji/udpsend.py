@@ -1,25 +1,21 @@
-import datetime
 import json
-import random
 
+from twisted.internet import reactor
 from twisted.internet.protocol import DatagramProtocol
-from twisted.internet import reactor, threads
-from twisted.python import threadable
-from orderbook import create_ask, create_bid, create_greeting
+from orderbook import create_ask
 
 
-class UdpSender(DatagramProtocol):
+class MessageSender(DatagramProtocol):
+    '''Sole purpose is to send one message'''
 
-    def __init__(self, name, host, port, qty, price, msgtype):
+    def __init__(self, name, msg):
         self.name = name
-        self.host = host
-        self.port = port
-        self.msgtype = msgtype
-        self.price = price
-        self.qty = qty
+        self.msg = msg
+        self.host = '224.0.0.1'
+        self.port = 8005
 
     def startProtocol(self):
-        self.send_message()
+        self.send_message(self.msg)
 
     def stopProtocol(self):
         pass
@@ -27,39 +23,13 @@ class UdpSender(DatagramProtocol):
     def datagramReceived(self, data, (host, port)):
         pass
 
-    def send_message(self):
-        now = datetime.datetime.now()
-        next_year = now.replace(year=now.year + 1).isoformat()
-
-        if self.msgtype == 'G':
-            msg = create_greeting()
-            msg = json.dumps(msg)
-            self.transport.write(msg, (self.host, self.port))
-        else:
-            if self.msgtype == 'A':
-                msg = create_ask(self.price, self.qty, timeout=next_year)
-            elif self.msgtype == 'B':
-                msg = create_bid(self.price, self.qty, timeout=next_year)
-            msg = json.dumps(msg)
-            self.transport.write(msg, (self.host, self.port))
-            print "Transported message"
+    def send_message(self, msg):
+        msg = json.dumps(msg)
+        self.transport.write(msg, (self.host, self.port))
+        print "Transported message"
 
 
-def create_peer(id, qty, price, msgtype):
-    senderObj = UdpSender(id, "145.94.158.80", 8005, qty, price, msgtype)
-    senderObj.send_message()
-    reactor.listenMulticast(8005, senderObj, listenMultiple=True)
-
-
-def createask(ip):
-    obj = UdpSender("bla", ip, 8005, 1, random.randint(1, 5), 'A')
-    reactor.listenMulticast(8005, obj, listenMultiple=True)
-
-
-def createbid(ip):
-    obj = UdpSender("bla", ip, 8005, 1, random.randint(1, 5), 'B')
-    reactor.listenMulticast(8005, obj, listenMultiple=True)
-
-def creategreeting(ip):
-    obj = UdpSender("bla", ip, 8005, 1, random.randint(1, 5), 'G')
-    reactor.listenMulticast(8005, obj, listenMultiple=True)
+def createask(ip='224.0.0.1'):
+    ask = create_ask(1, 1)
+    sender = MessageSender("bla", ask)
+    reactor.listenMulticast(8005, sender, listenMultiple=True)
