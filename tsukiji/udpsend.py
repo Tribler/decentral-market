@@ -22,11 +22,16 @@ class MessageSender(DatagramProtocol):
         pass
 
     def datagramReceived(self, data, (host, port)):
-        data = json.loads(data)
-        if data['type'] == 'greeting_response':
-            print 'Peerlist received: {}'.format(data['peerlist'])
-        else:
-            print "Response received: {}".format(data)
+        try:
+            data = json.loads(data)
+            if data['type'] == 'greeting_response':
+                print 'Peerlist received: {}'.format(data['peerlist'])
+            else:
+                print "Response received: {}".format(data)
+        except ValueError:
+            print 'Data received was a string: {}'.format(data)
+        except TypeError:
+            print 'Data received was a string: {}'.format(data)
 
     def send_message(self, msg):
         msg = json.dumps(msg)
