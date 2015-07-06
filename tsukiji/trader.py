@@ -16,6 +16,7 @@ class Trader(DatagramProtocol):
         self.name = name
         self.history = {}
         self.peers = {}
+        self.counter = 0;
 
     def startProtocol(self):
         self.read_peerlist()
@@ -26,11 +27,13 @@ class Trader(DatagramProtocol):
     def datagramReceived(self, data, (host, port)):
         real_data = json.loads(data)
 
-        if real_data['message-id'] not in self.history:
+        if real_data['message-id'] not in self.history  :
             self.relay_message(self.handle_data(data, host, port)[0])
             self.relay_message(data)
             self.history[real_data['message-id']] = True
-            print_all_offers()
+            #print_all_offers()
+            print('offer received ' + str(self.counter))
+            self.counter += 1
         else:
             print "Duplicate message received. ID:%d" % real_data['message-id']
 

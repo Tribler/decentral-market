@@ -10,16 +10,13 @@ from orderbook import create_ask, create_bid, create_greeting
 
 class UdpSender(DatagramProtocol):
 
-    def __init__(self, name, host, port, qty, price, msgtype):
+    def __init__(self, name, host, port):
         self.name = name
         self.host = host
         self.port = port
-        self.msgtype = msgtype
-        self.price = price
-        self.qty = qty
 
     def startProtocol(self):
-        self.send_message()
+        pass
 
     def stopProtocol(self):
         pass
@@ -27,26 +24,26 @@ class UdpSender(DatagramProtocol):
     def datagramReceived(self, data, (host, port)):
         pass
 
-    def send_message(self):
+    def send_message(self, price, qty, msgtype):
         now = datetime.datetime.now()
         next_year = now.replace(year=now.year + 1).isoformat()
 
-        if self.msgtype == 'G':
+        if msgtype == 'G':
             msg = create_greeting()
             msg = json.dumps(msg)
             self.transport.write(msg, (self.host, self.port))
         else:
-            if self.msgtype == 'A':
-                msg = create_ask(self.price, self.qty, timeout=next_year)
-            elif self.msgtype == 'B':
-                msg = create_bid(self.price, self.qty, timeout=next_year)
+            if msgtype == 'A':
+                msg = create_ask(price, qty, timeout=next_year)
+            elif msgtype == 'B':
+                msg = create_bid(price, qty, timeout=next_year)
             msg = json.dumps(msg)
             self.transport.write(msg, (self.host, self.port))
             print "Transported message"
 
 
-
-def create_peer(id, qty, price, msgtype):
-    senderObj = UdpSender(id, "224.0.0.1", 8005, qty, price, msgtype)
+def create_peer(id):
+    senderObj = UdpSender(id, "224.0.0.1", 8005)
     reactor.listenMulticast(8005, senderObj, listenMultiple=True)
+    return senderObj
 

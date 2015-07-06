@@ -11,7 +11,7 @@ import random
 from Crypto.PublicKey import RSA
 
 KEYFILE_NAME = 'key1.pem'
-
+keys = {}
 
 def create_key(name=KEYFILE_NAME):
     '''Generates and writes byte string with object of RSA key object.'''
@@ -27,12 +27,18 @@ def retrieve_key():
     If the file does not exist, create one.
     Returns an RSA key object.
     '''
-    #if not os.path.isfile(KEYFILE_NAME):
-    #   return create_key()
+
+
     n = random.randint(1, 5)
-    with open("key"+str(n)+".pem", 'r') as f:
-        key = RSA.importKey(f.read())
-        return key
+    keyname = "key"+str(n)+".pem"
+    if keyname in keys:
+        return keys[keyname]
+
+    else:
+        with open(keyname, 'r') as f:
+            key = RSA.importKey(f.read())
+            keys[keyname] = key
+            return key
 
 
 def get_public_bytestring():
