@@ -46,16 +46,16 @@ class UdpSender(DatagramProtocol):
 
 
 def create_peer(id, qty, price, msgtype):
-    senderObj = UdpSender(id, "224.0.0.1", 8005, qty, price, msgtype)
+    senderObj = UdpSender(id, "145.94.158.80", 8005, qty, price, msgtype)
     senderObj.send_message()
     reactor.listenMulticast(8005, senderObj, listenMultiple=True)
 
 
-def createask():
-    obj = UdpSender("bla", "224.0.0.1", 8005, 1, random.randint(1, 5), 'A')
+def createask(ip):
+    obj = UdpSender("bla", ip, 8005, 1, random.randint(1, 5), 'A')
     reactor.listenMulticast(8005, obj, listenMultiple=True)
 
 
-def createbid():
-    obj = UdpSender("bla", "224.0.0.1", 8005, 1, random.randint(1, 5), 'B')
+def createbid(ip):
+    obj = UdpSender("bla", ip, 8005, 1, random.randint(1, 5), 'B')
     reactor.listenMulticast(8005, obj, listenMultiple=True)
