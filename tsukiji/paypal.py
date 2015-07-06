@@ -42,7 +42,7 @@ def paycall(email, amount, headers=headers):
 
 def make_a_payment(target_email='example@gmail.com', price=0.01, own_email='mcgthe-buyer-1@gmail.com', password='lovelive'):
     url = paycall(target_email, price)
-    driver = webdriver.Chrome()
+    driver = webdriver.Firefox()
     driver.get(url)
     try:
         WebDriverWait(driver, 10).until(
