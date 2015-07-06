@@ -1,7 +1,7 @@
 """
 Sending a message:
     Encrypt your plaintext with encrypt_message
-    Your id will serve as your public key
+    Your public key will serve as your id
 Reading a message
     Use decrypt_message and validate contents
 """
@@ -11,7 +11,7 @@ import random
 
 from Crypto.PublicKey import RSA
 
-KEYFILE_NAME = 'key1.pem'
+KEYFILE_NAME = 'key{}.pem'.format(random.randint(1, 1024))
 
 
 def create_key():
@@ -37,15 +37,9 @@ def retrieve_key():
 
 
 def get_public_bytestring():
+    '''Retrieve public key string.'''
     key = retrieve_key()
     return key.publickey().exportKey()
-
-
-def get_random_key():
-    n = random.randint(1, 5)
-    with open("key"+str(n)+".pem", 'r') as f:
-        key = RSA.importKey(f.read())
-        return key.publickey().exportKey()
 
 
 def decrypt_message(message):

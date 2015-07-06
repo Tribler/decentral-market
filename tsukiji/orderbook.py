@@ -1,6 +1,6 @@
 import datetime
 
-from crypto import get_public_bytestring, get_random_key
+from crypto import get_public_bytestring
 
 offers = []
 trades = []
@@ -89,7 +89,7 @@ def create_msg(options=None):
     global message_id
 
     message = {
-        "id": get_random_key(),
+        "id": get_public_bytestring(),
         "message-id": message_id,
         "timestamp": datetime.datetime.now().isoformat(),
     }
