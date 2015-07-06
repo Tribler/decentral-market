@@ -7,21 +7,22 @@ Reading a message
 """
 
 import os
+import random
 
 from Crypto.PublicKey import RSA
 
-KEYFILE_NAME = 'key.pem'
+KEYFILE_NAME = 'key{}.pem'.format(random.randint(1, 1024))
 
 
-def create_key(keyfile_name=KEYFILE_NAME):
+def create_key():
     '''Generates and writes byte string with object of RSA key object.'''
     key = RSA.generate(2048)
-    with open(keyfile_name, 'w') as f:
+    with open(KEYFILE_NAME, 'w') as f:
         f.write(key.exportKey('PEM'))
     return key
 
 
-def retrieve_key(keyfile_name=KEYFILE_NAME):
+def retrieve_key():
     '''
     Reads an exported key-bytestring from file.
     If the file does not exist, create one.
