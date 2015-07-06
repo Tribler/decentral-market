@@ -9,7 +9,7 @@ from orderbook import (match_incoming_ask, match_incoming_bid,
         trade_offer, create_confirm, create_cancel, create_greeting_response,
         create_bid)
 from utils import print_all_offers
-from paypal import make_a_payment 
+from paypal import make_a_payment
 
 
 class Trader(DatagramProtocol):
@@ -26,6 +26,7 @@ class Trader(DatagramProtocol):
 
     def datagramReceived(self, raw_data, (host, port)):
         data = json.loads(raw_data)
+        print "Printing data: {}".format(data)
         id, message_id = data['id'], data['message-id']
 
         if (id, message_id) not in self.history:
@@ -46,10 +47,10 @@ class Trader(DatagramProtocol):
 
     def add_to_peerlist(self, host, port):
         with open("peerlist.txt", "a") as f:
-            new_peer = host + ":" + str(port)
+            new_peer = '{}:{}\n'.format(host, port)
             f.write(new_peer)
 
-    def handle_data(self, data, host='127.0.0.1', port=8005):
+    def handle_data(self, data, host, port):
         try:
             # Turn isoformatted datetime into a python datetime
             if 'timeout' in data:
@@ -69,7 +70,8 @@ class Trader(DatagramProtocol):
                 response = self.handle_greeting(host, port)
             else:
                 response = responses[data['type']](data)
-            return json.dumps(response), data['type']
+                response = json.dumps(response)
+                self.transport.write(response, (host, port))
         except ValueError, e:
             print e.message
             return e.message
@@ -77,9 +79,6 @@ class Trader(DatagramProtocol):
     def handle_ask(self, ask):
         bid = match_incoming_ask(ask)
         if bid:
-            offers.remove(bid)
-            trades.append(bid)
-            make_a_payment(price=bid['price'])
             return trade_offer(ask, bid)
         else:
             offers.append(ask)
@@ -88,8 +87,6 @@ class Trader(DatagramProtocol):
     def handle_bid(self, bid):
         ask = match_incoming_bid(bid)
         if ask:
-            offers.remove(ask)
-            trades.append(ask)
             return trade_offer(bid, ask)
         else:
             offers.append(bid)
@@ -101,6 +98,7 @@ class Trader(DatagramProtocol):
         if offer:
             offers.remove(offer)
             trades.append(offer)
+            make_a_payment(price=offer['price'])
             return create_confirm(recipient=trade['id'], trade_id=trade_id)
         else:
             return create_cancel(recipient=trade['id'], trade_id=trade_id)
