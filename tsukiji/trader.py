@@ -14,7 +14,7 @@ from paypal import paycall
 class Trader(DatagramProtocol):
     def __init__(self, name):
         self.name = name
-        self.history = {}
+        self.history = set()
         self.peers = {}
 
     def startProtocol(self):
@@ -23,16 +23,17 @@ class Trader(DatagramProtocol):
     def stopProtocol(self):
         pass
 
-    def datagramReceived(self, data, (host, port)):
-        real_data = json.loads(data)
+    def datagramReceived(self, raw_data, (host, port)):
+        data = json.loads(raw_data)
+        id, message_id = data['id'], data['message-id']
 
-        if real_data['message-id'] not in self.history:
-            self.handle_data(data, host, port)
-            self.relay_message(data)
-            self.history[real_data['message-id']] = True
+        if (id, message_id) not in self.history:
+            self.handle_data(raw_data, host, port)
+            self.relay_message(raw_data)
+            self.history.add((id, message_id))
             print_all_offers()
         else:
-            print "Duplicate message received. ID:%d" % real_data['message-id']
+            print "Duplicate message received. id: {:20}..., message-id: {}".format(id, message_id)
 
     def relay_message(self, message):
         for address in self.peers:
