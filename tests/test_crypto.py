@@ -23,18 +23,18 @@ class CryptoTest(unittest.TestCase):
     Since crypto is essentially just a wrapper around the PyCrypto library, we will not test this module extensively.
     '''
     def test_create_key(self):
-        silentremove('key.pem')
+        silentremove(cr.KEYFILE_NAME)
         cr.create_key()
-        assert os.path.isfile('key.pem')
+        assert os.path.isfile(cr.KEYFILE_NAME)
 
     def test_retrieve_key_does_not_exist_yet(self):
-        silentremove('key.pem')
+        silentremove(cr.KEYFILE_NAME)
         cr.retrieve_key()
-        assert os.path.isfile('key.pem')
+        assert os.path.isfile(cr.KEYFILE_NAME)
 
     def test_retrieve_key(self):
         cr.retrieve_key()
-        assert os.path.isfile('key.pem')
+        assert os.path.isfile(cr.KEYFILE_NAME)
 
     def test_encrypt_decrypt_message(self):
         message = "Hello, world"
