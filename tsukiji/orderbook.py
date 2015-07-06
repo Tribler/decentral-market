@@ -7,8 +7,16 @@ trades = []
 
 message_id = 0
 
+def now_and_next_year():
+    '''Return datetime objects for now and a year from now.'''
+    now = datetime.datetime.now()
+    next_year = now.replace(year=now.year+1)
+    return now, next_year
 
-def create_ask(price, quantity, timeout):
+def create_ask(price, quantity, timeout=None):
+    if timeout is None:
+        timeout = now_and_next_year()[1]
+
     message = create_msg(options={
         'type': 'ask',
         'price': price,
@@ -17,11 +25,13 @@ def create_ask(price, quantity, timeout):
     })
 
     offers.append(message)
-
     return message
 
 
-def create_bid(price, quantity, timeout):
+def create_bid(price, quantity, timeout=None):
+    if timeout is None:
+        timeout = now_and_next_year()[1]
+
     message = create_msg(options={
         'type': 'bid',
         'price': price,
@@ -30,7 +40,6 @@ def create_bid(price, quantity, timeout):
     })
 
     offers.append(message)
-
     return message
 
 
