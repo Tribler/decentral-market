@@ -32,8 +32,7 @@ class Trader(DatagramProtocol):
             self.relay_message(data)
             self.history[real_data['message-id']] = True
             #print_all_offers()
-            print('offer received ' + str(self.counter))
-            self.counter += 1
+
         else:
             print "Duplicate message received. ID:%d" % real_data['message-id']
 

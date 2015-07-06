@@ -9,7 +9,7 @@ import threading
 import os.path
 from crypto import create_key
 
-PEER_AMOUNT = 2000
+PEER_AMOUNT = 1000
 allocated_msgs = [list() for x in range(PEER_AMOUNT)]
 
 
@@ -18,7 +18,7 @@ def get_orders():
     with open("orderlist.csv") as f:
         reader = csv.reader(f)
         for ind, row in enumerate(reader):
-            if ind > 2000:
+            if ind > 32000:
                 return orders
             if not row[0] == 'T':
                 orders.append(row)
