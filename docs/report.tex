@@ -3,6 +3,9 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{epigraph}
+\usepackage{fontspec}
+\usepackage[toc,title]{appendix}
+\usepackage{float}
 
 % Itemize with custom spacing
 \newenvironment{myitemize}
@@ -12,42 +15,47 @@
     \setlength{\parsep}{0pt}     }
 { \end{itemize}                  }
 
+\newenvironment{myenumerate}
+{ \begin{enumerate}
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}     }
+{ \end{enumerate}                  }
+
+% color setting for inline code embedding
+
 %opening
 \title{Tsukiji}
 \author{Michael The \and Hugo Reinbergen}
 
 \begin{document}
 
-\maketitle
-
-\section*{Related Work}
-\begin{tabular}{|c|c|}
- \hline
- Document & Contents  \\
- \hline
- \url{http://tinyurl.com/ojjeqcc} & Online Marketplace \\
- \url{https://tinyurl.com/lrqbb2c} & Reputation \\
- \url{https://tinyurl.com/n3v5jsy} & Dispersy \\
- \url{https://bitcoin.org/bitcoin.pdf} & Bitcoin \\
- \url{http://www.weidai.com/bmoney.txt} & b-money \\
- Mailtje van Pouwelse & Credit Based P2P \\
- Book: Computer Networks & DHT, P2P \\
- \hline
-\end{tabular}
-
+\input{frontpage}
 
 \include{foreword}
+\include{summary}
 
 \tableofcontents
+\listoffigures
 
-\include{summary}
 \include{introduction}
 \include{problem_definition}
+\include{relatedwork}
 \include{requirements}
-\include{methodology}
+\include{design}
+\include{implementation}
+\include{evaluation}
+\include{conclusion}
+\include{recommendation}
 
-% \section{Conclusion}
-% \section{Discussion}
-% \section{References}
+\bibliographystyle{unsrt} % sort references by appearance
+\bibliography{refs}
+
+\begin{appendices}
+\include{trade_protocol}
+\include{SIG}
+\include{project_description}
+\include{infosheet}
+\end{appendices}
 
 \end{document}

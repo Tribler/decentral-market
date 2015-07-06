@@ -1,0 +1,33 @@
+\section{Recommendations}
+\label{recommendations}
+The goal of this project is to create a proof of concept in a limited amount of time.
+Because of this, there are multiple possible features that have been put aside over in favour of other features deemed more essential.
+In this chapter we suggest some recommendations for further progress on the project.
+They can be added to this proof of concept to build Tsukiji into a fully fledged user program, or to further the research of possibilities of a decentral market.
+
+\subsubsection*{$\bullet$ Finishing Incremental Payment}
+Section \ref{incpay} covers the concept of incremental payments. One of the issues discussed was identifying which payment on Paypal corresponds with which trade on Tsukiji.
+One possible solution would be sending messages over the network of Tsukiji to the seller that a payment has been made.
+This message would contain a chain-id and an index of the transaction of in that chain.
+These id's would then have to be added a notification in the PayPal transaction and be extracted when the seller reads its transactionlist.
+
+\subsubsection*{$\bullet$ Graphical User Interface}
+A big improvement to Tsukiji would be to add a graphical user interface. 
+This would make it much easier to use the program and understand what is going on.
+Graphs and lists with variable ordering can vastly improve the format in which information is displayed.
+Additionally, with a clear interface, Tsukiji would be far more inviting to the average user than a command-line tool.
+Command line input brings multiple challenges, such as requiring the user to know the right commands and the syntax of those instructions.
+A GUI can represent those instructions with a more intuitive interface.
+
+\subsubsection*{$\bullet$ Anti-spoofing}
+Section \ref{knownissues} covered the issue of people referencing false transactions.
+They are pretending to have more tradable goods that they in reality have.
+A possible solution is to implement a block chain like BitCoin has done.
+Their structure requires the whole userbase to agree on a set of transactions made.
+These trades are hashed and used to determine whether the following set of transactions are real.
+For a more in-depth explanation of the block-chain verification, we refer to the BitCoin paper \cite{bitcoin}.
+
+\subsubsection*{$\bullet$ Trading large quantities}
+The current implementation of Tsukiji only supports trading a single unit of an item.
+It is very possible that users want to trade a larger quantity at a time.
+This will also reduce the amount of offers needed to perform a certain trade, decreasing clutter in the list of open offers.

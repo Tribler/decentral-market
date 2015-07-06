@@ -1,0 +1,45 @@
+\section{SIG feedback}
+\label{SIG}
+This appendix describes the feedback received from the Software Improvement Group (SIG).
+On the 26th of May 2015, project code was sent to SIG for feedback.
+Feedback on our code was received on the 29th of May.
+After processing this feedback, a second code submission was sent on June 9th.
+The second feedback response was received on June 17th.
+
+\subsection{First feedback (Dutch)}
+
+De code van het systeem scoort bijna vier sterren op ons onderhoudbaarheidsmodel, wat betekent dat de code bovengemiddeld onderhoudbaar is.
+De hoogste score is niet behaald door een lagere score voor Component Balance en Unit Interfacing.
+
+
+Wat opvalt bij het bekijken van de code is dat er geen duidelijke componenten-structuur zichtbaar is op het file-systeem, terwijl het er wel op lijkt dat sommige files bij elkaar horen (bijvoorbeeld de twee 'udp' files).
+Dit maakt het voor een ontwikkelaar in eerste instantie lastiger om een algemeen beeld te krijgen van de functionaliteit die het systeem aanbied.
+Wij raden aan om kritisch te overwegen om de code in verschillende (functionele) componenten op te delen om zo een eerste indruk te geven van de high-level structuur van het systeem.
+
+
+Voor Unit Interfacing wordt er gekeken naar het percentage code in units met een bovengemiddeld aantal parameters.
+Doorgaans duidt een bovengemiddeld aantal parameters op een gebrek aan abstractie.
+Daarnaast leidt een groot aantal parameters nogal eens tot verwarring in het aanroepen van de methode en in de meeste gevallen ook tot langere en complexere methoden.
+Binnen dit systeem wordt er op meerderee plaatsen een combinatie van 'price' en 'quantity' meegegeven, iets wat samen het concept 'bid' lijkt te vormen.
+Ook zien we op meerdere plekken een 'host' / 'port' combinatie, deze vormen samen het concept 'peer'.
+Om bij toekomstige aanpassingen duidelijker te maken wat er precies meegegeven moet worden aan deze methodes en om de code duidelijker te maken is het aan te raden een specifiek type te introduceren voor deze concepten.
+
+
+Over het algemeen scoort de code bovengemiddeld, hopelijk lukt het om dit niveau te behouden tijdens de rest van de ontwikkelfase.
+Als laatste nog de opmerking dat er geen (unit)test-code is gevonden in de code-upload.
+Het is sterk aan te raden om in ieder geval voor de belangrijkste delen van de functionaliteit automatische tests gedefinieerd te hebben om ervoor te zorgen dat eventuele aanpassingen niet voor ongewenst gedrag zorgen.
+
+\subsection{Second feedback (Dutch)}
+
+In de tweede upload zien we dat zowel het codevolume als de score voor onderhoudbaarheid ongeveer gelijk zijn gebleven.
+
+Bij Unit Interfacing zien we dat jullie een aantal methodes hebben aangepast, maar deze verbeteringen worden grotendeels weer ongedaan gemaakt door de introductie van nieuwe methodes met 3-4 parameters.
+Dat lijkt niet zo veel, maar als je steeds het lijstje (price, quantity, timeout) tussen methodes moet doorgeven is dat een teken dat er iets in de abstractie niet helemaal lekker zit.
+
+Bij Component Balance is onze eerste opmerking uit de analyse van de eerste upload nog steeds van kracht.
+
+Jullie hebben onze aanbeveling om unit tests te gaan schrijven opgevolgd.
+De hoeveelheid testcode die jullie sinds de eerste upload hebben geproduceerd is ook aanzienlijk, complimenten.
+Op lange termijn zal dit zowel de onderhoudbaarheid als de stabiliteit van je systeem verbeteren.
+
+Uit deze observaties kunnen we concluderen dat de aanbevelingen van de vorige evaluatie grotendeels zijn meegenomen in het ontwikkeltraject.

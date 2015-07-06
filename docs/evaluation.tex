@@ -1,0 +1,225 @@
+\section{Evaluation}
+\label{evaluation}
+This section evaluates the project's development process and end product.
+Tsukiji itself will be analysed by how many requirements have been fulfilled and by its code quality.
+An overview of known issues will be given at the end.
+
+\subsection{Development process}
+The planning was to spend 2 weeks researching the given problem, then spend around 6 weeks developing a solution, while documenting the decisions made during the development.
+This structure was held up throughout the lifespan of the project.
+Documentation began lacking halfway through the project, but this was quickly corrected to make sure every decision was written down as accurately as possible.
+
+Due to the agile development methodology, it was difficult to plan every sprint ahead of time.
+Requirements could change and the focus of the project could diverge from the decisions made in the first meeting with the client.
+Regardless, the agile development methodology proved to be very useful.
+Exactly because of the volatile nature of the project, creating additions to the software on a week to week basis fit the project perfectly. 
+Decisions made along the way, such as ignoring the possibility of people cheating the system, greatly simplified protocol design without losing time on pre-emptively implementing a structure for such a protocol.
+
+%Communication
+A large benefit to the efficiency of the development of Tsukiji was that the team consisted out of two developers.
+The advantage this brings is that the team could always work together in the same room.
+It became very easy to discuss issues and make decisions, such as whether to use a certain library or protocol.
+The developers sat next to each other which eliminated any overhead or inaccuracies in communication typical in technologies such as e-mail or instant messaging.
+The load of work was divided such that both members were responsible for a certain feature of the software.
+Whenever a member finished their implementation for the current sprint, they immediately documented what they had written.
+
+\subsection{Fulfillment of requirements}
+\label{requirementsfill}
+Section \ref{requirements} discusses the requirements of Tsukiji.
+Important in the evaluation of a project is whether it complies with the requirements given by the client.
+This section will follow the MoSCoW list given in section \ref{requirements}, and evaluate each item.
+\begin{table}[H]
+\centering
+    \begin{tabular}{|l|l|}
+    \hline
+    Must have                          & ~              \\ \hline
+    Place an offer                     & Done           \\
+    Respond to an offer                & Done           \\
+    Decentralised                      & Done           \\
+    Peer discovery                     & Done           \\
+    Scalable to thousands of users     & Done           \\
+    Command line input                 & Done           \\
+    ~                                  & ~              \\ \hline
+    Should have                        & ~              \\ \hline
+    Trade using real money             & Done           \\
+    ~                                  & ~              \\ \hline
+    Could have                         & ~              \\ \hline
+    Nice user interface                & Not done       \\
+    ~                                  & ~              \\ \hline
+    Would have                         & ~              \\ \hline
+    Privacy                            & Partially done \\
+    Protection against hostile attacks & Not Done       \\
+    Anti-Spoofing                      & Partially done \\ \hline
+    \end{tabular}
+    \caption {Overview of what requirements are completed}
+\end{table}
+
+\subsubsection{Must Have(s)}
+Every 'Must have'-requirement has been fulfilled by Tsukiji.
+
+\begin{itemize}
+\item Place an offer
+
+Users are able to place offers and respond to offers.
+
+\item Respond to an offer, facilitating a trade
+
+The response is currently handled by a trading engine that matches the asks with bids, given the same quantity and value.
+
+\item Decentralised
+
+Apart from a peerlist that is distributed with the software, the system is completely decentralised.
+Passing on messages uses the gossip protocol.
+Authentication is done through public and private keys.
+Neither of these use a central point.
+
+\item Peer discovery 
+
+Peer discovery is achieved by having peers exchange information about each other.
+Initially, this is bootstrapped with a set of super peers known to be well connected and online.
+These super peers can share information about the network.
+After being bootstrapped, peer discovery is achieved by exchanging information with other peers in the network.
+
+\item Scalable to thousands of users
+
+The scalability is tested with a simulation on a single computer.
+This test showed that messages can easily be handled in the range of thousands of users and that duplicate messages are not passed along when received.
+More on this can be found in section \ref{sprint3:scalability}
+
+\item Command line input
+
+The entire application is controlled via a linux terminal, so the requirement of control through command line input has been fulfilled as well.
+\end{itemize}
+
+\subsubsection{Should Have(s)}
+\begin{itemize}
+\item Trade using real money
+
+Users are able to spend real money (currently any currency supported by PayPal) on the goods traded in Tsukiji.
+The currency used by the software should not impact the program's ability to make trades
+\end{itemize}
+
+\subsubsection{Could Have(s)}
+The current implementation does not fulfill the 'Could have' requirement.
+
+\begin{itemize}
+\item Nice user interface
+
+Implementing a User Interface takes a lot of time without increasing any functionality.
+Since Tsukiji is a proof of concept, we wanted to create as much functionality as possible in the time given.
+This lead to the decision to focus on other features than a GUI.
+Interaction with the program occurs through a terminal.
+However, we still recognize a good GUI as a huge asset to increasing usage of Tsukiji.
+\end{itemize}
+
+\subsubsection{Would Have(s)}
+The current implementation does not fulfil any of the 'Would Have' requirements.
+The 'Would have'-requirements are mainly security issues.
+These problems can certainly be solved, but it would require a lot of time to achieve something that is outside the scope of this project.
+Tsukiji was created to show that it is possible to create a marketplace without a central authority, it was not created to protect users of an online marketplace from fraud.
+While this is certainly a requirement for a functional program to be used by many users, it is still a solved problem.
+This issue could be addressed in any future extensions of the project.
+
+\begin{itemize}
+\item Privacy
+
+The privacy requirement is partly fulfilled.
+Users do not have an identifier bound directly to their real identity.
+They have their SHA256 key sent across the network.
+The offers created can be tracked down to the hash, and to the IP that sent the message.
+A user could spoof their IP whenever they are creating trades to stay hidden, but this is their own responsibility.
+Besides that, a possible privacy breach could be a personal PayPal account.
+To avoid using one's real account, it is possible to create a new PayPal account on a fake email address and use that to make transactions.
+The bank accounts linked to PayPal are not visible in transactions, so the trades will not give away a users identity.
+
+\item Protection against hostile attacks
+
+It is currently unknown how resistant the network is against a hostile attack.
+It is certainly possible that the network may fall against a sufficiently motivated attacker.
+
+\item Anti-spoofing
+
+It is currently possible to spoof messages.
+Messages are currently not encrypted.
+The only authentication present in a message is the public key of a user. 
+But since this key is public, it can easily be replicated by a malicious user, which can only be discovered when the user with ill intent is asked to identify itself with the private key.
+This does not stop people from creating fake transactions that will make it seem like they have more items to sell than they in reality have.
+\end{itemize}
+
+It is clear that all the crucial requirements have been met.
+Tsukiji sufficiently fulfils what the client had asked for.
+
+\subsection{Known issues}
+\label{knownissues}
+The current implementation of Tsukiji has a couple of issues that have not been addressed.
+Section \ref{requirementsfill} already touched on a couple of missing features such as perfect anonymity and security.
+There is another major factor that is problematic for the current state of the protocol.
+
+Currently, a user can lie about his transactions.
+It is possible to pretend to have a certain amount of points for sale, while not actually having any at all.
+This is because Alice has no way to check the transactions Bob has made.
+Alice would only be able to see that a certain bid or ask is no longer in the list of offers.
+If Bob spoofed a message that says that a certain transaction has been made, Alice has no way to verify this.
+This creates a trust issue that is currently not resolved, so the system has to assume full trust from all parties.
+Section \ref{recommendations} provides a possible solution for this problem.
+
+Another known issue of Tsukiji is that it is risky to make a large transaction, since incremental payments (see section 7.5) have not been implemented.
+Whenever a user sends someone else money to buy goods, there is no way to force the other party to actually send the goods.
+This creates a situation where only small amounts of goods will be traded at once and will quickly clutter the marketplace with many small offers.
+
+We believe it to be feasible to solve these issues, but were unable to within the time frame given for this project.
+It would be interesting to extend Tsukiji to support solutions for these issues.
+These are the first steps towards transforming this proof of concept to be used a real piece of software.
+
+%trust issues
+%security
+%anonimization
+
+%Talk about test coverage(picture!) and SIG feedback
+\subsection{Code quality}
+A desirable goal of Tsukiji is to keep the code of high quality.
+Testing is an obvious way to maintain a certain quality.
+To read more on our testing process, see section \ref{methodoloy:sprint3}.
+Aside from our own testing, the code was also sent to the Software Improvement Group at two points during development.
+Appendix \ref{SIG} contains their analysis of Tsukiji's code base.
+This section will cover our response and how we handled the feedback.
+
+Overall, we are satisfied with the quality of our code.
+We believe our code to be easy to read.
+This is partly due to the fact that our code base is not very large.
+The rating SIG assigned to Tsukiji supports our opinion.
+
+\subsubsection{Response to first round of SIG feedback}
+Three points of attention are given in the first feedback: component balance, unit interfacing, and testing.
+
+We agree on the points regarding component balance.
+At the time, the code was split up into three main files: orderbook.py, crypto.py, and udpreceive.py.
+While the first two files are fairly self-explanatory, udpreceive is fairly ambiguous.
+There were also some extraneous components (e.g. udpsend) that were not core to the system, but possibly confusing to newcomers.
+In response to this feedback, udpreceive.py was renamed to trader.py.
+This more accurately describes what this file stands for.
+If you invoke trader.py, you start up a new trader server.
+However, we find it difficult to split the remaining parts up into more components.
+
+The second point given talked about unit interfacing.
+In this case, we believe SIG's feedback to be correct, but their solution undesirable.
+It is true that multiple functions contain many arguments.
+A lot of these shared common functionality, so we have abstracted these further into a main function.
+However, SIG's solution is to introduce more classes.
+But rather than using classes, we use a lot of pure functions that return python dictionaries, and good variable names.
+These can be seen as a replacement for classes.
+There's a great talk from pycon 2012 called "Stop writing classes" \cite{noclassesvid}.
+We believe the principles given in this talk to apply to our situation here.
+
+The final piece of feedback given talked about testing.
+We agree completely with this feedback and have since then implemented our own test suite.
+The process of creating this test suite is described in section \ref{methodoloy:sprint3}.
+
+\subsubsection{Response to second round of SIG feedback}
+The second round of feedback largely matches our response.
+We have not adjusted unit interfacing because of the reasons explained previously.
+We have not adjusted component balance in a major way.
+We have added a lot of test code, which is acknowledged.
+For the future course of this project, we will continue to keep a closer look at testing and component balance.
+We do not believe unit interfacing poses a problem currently, but it is of course possible that it might in the future.
+We will continue to monitor throughout the project's lifespan.

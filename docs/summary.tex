@@ -1,1 +1,20 @@
-\section{Summary}
+\section*{Summary} 
+%problem description
+This project creates a marketplace to trade commodities for real money.
+While many online marketplaces exist, they usually have one thing in common: a central point of authority.
+Our solution is Tsukiji, a completely decentralised marketplace, capable of scaling to thousands of users.
+
+%research
+Research has shown that implementations of this idea are scarce.
+Since the project is assigned by the group responsible for creating Tribler \cite{tribler}, this project follows their example in programming languages and libraries, such as Python and Twisted \cite{twisted}.
+
+%process
+Development of Tsukiji occurred in sprints of around 1 week, each sprint focusing on one or two specific features.
+Meetings with the product owner were planned after every development cycle, giving us feedback on the previous sprint and guiding the focus of the following sprint.
+
+%implementation
+The result is a light-weight, terminal-based, python application called Tsukiji.
+Users can post offers on the network and trade commodities for money.
+They communicate by sending messages using the gossip protocol, implemented with the Twisted library.
+Financial transactions are made using PayPal.
+With this, a fully decentralised market with a trustworthy payment system is created, allowing users to make trades without the risk of their trading platform being shut down.
