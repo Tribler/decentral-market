@@ -140,7 +140,7 @@ def clean_offers(f):
     def func_wrapper(*args, **kwargs):
         for offer in offers:
             timeout = offer['timeout']
-            if type(offer['timeout']) is str:
+            if type(offer['timeout']) in [str, unicode]:
                 timeout = datetime.datetime.strptime(timeout, '%Y-%m-%dT%H:%M:%S.%f')
             if timeout < datetime.datetime.now():
                 offers.remove(offer)
