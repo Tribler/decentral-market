@@ -27,6 +27,8 @@ class Trader(DatagramProtocol):
     def datagramReceived(self, raw_data, (host, port)):
         try:
             data = json.loads(raw_data)
+            if type(data) is unicode:
+                raise ValueError('Data received was a string.')
             id, message_id = data['id'], data['message-id']
 
             if (id, message_id) not in self.history:
@@ -42,10 +44,8 @@ class Trader(DatagramProtocol):
                 self.history.add((id, message_id))
             else:
                 print 'Duplicate message received.\n id: {}..., message-id: {}'.format(id[26:50], message_id)
-        except ValueError:
-            print 'Data received was a string: {}'.format(data)
-        except TypeError:
-            print 'Data received was a string: {}'.format(data)
+        except ValueError, e:
+            print 'Data received: {}'.format(data)
 
     def relay_message(self, message):
         for address in self.peers:
