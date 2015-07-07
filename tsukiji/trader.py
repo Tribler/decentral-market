@@ -1,4 +1,3 @@
-import datetime
 import json
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
@@ -44,7 +43,7 @@ class Trader(DatagramProtocol):
                 self.history.add((id, message_id))
             else:
                 print 'Duplicate message received.\n id: {}..., message-id: {}'.format(id[26:50], message_id)
-        except ValueError, e:
+        except ValueError:
             print 'Data received: {}'.format(data)
 
     def relay_message(self, message):
@@ -56,9 +55,10 @@ class Trader(DatagramProtocol):
             return dict(line.strip().split(':') for line in f.readlines())
 
     def add_to_peerlist(self, host, port):
-        with open("peerlist.txt", "a") as f:
-            new_peer = '{}:{}\n'.format(host, port)
-            f.write(new_peer)
+        if not host == self.transport.getHost().host:
+            with open("peerlist.txt", "a") as f:
+                new_peer = '{}:{}\n'.format(host, port)
+                f.write(new_peer)
 
     def handle_data(self, data, host, port):
         try:
