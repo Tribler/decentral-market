@@ -30,10 +30,16 @@ class Trader(DatagramProtocol):
             id, message_id = data['id'], data['message-id']
 
             if (id, message_id) not in self.history:
+                # Process incoming messages
                 self.handle_data(data, host, port)
-                self.relay_message(raw_data)
+
+                # Relay offers
+                if data['type'] in ['ask', 'bid']:
+                    print_all_offers()
+                    self.relay_message(raw_data)
+
+                # Add message to history to eliminate duplicate messages
                 self.history.add((id, message_id))
-                print_all_offers()
             else:
                 print 'Duplicate message received.\n id: {}..., message-id: {}'.format(id[26:50], message_id)
         except ValueError:
