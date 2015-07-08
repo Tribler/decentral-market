@@ -66,6 +66,15 @@ class Repl(basic.LineReceiver):
         self.sendLine('さよなら')
         self.transport.loseConnection()
 
+    def do_peer(self, host=None, port=None):
+        '''peer [ip, port]: Add a peer to your network.'''
+        if not host:
+            print 'Please enter a valid host.'
+        elif not port:
+            print 'Please enter a valid port.'
+        elif host and port:
+            self.trader.add_to_peerlist(host, port)
+
     def connectionLost(self, reason):
         reactor.stop()
 
