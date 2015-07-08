@@ -4,7 +4,8 @@ from twisted.internet.protocol import DatagramProtocol
 from crypto import get_public_bytestring
 from orderbook import (match_incoming_ask, match_incoming_bid,
         trades, offers, get_offer, remove_offer,
-        trade_offer, create_confirm, create_cancel, create_greeting_response)
+        trade_offer, create_confirm, create_cancel,
+        create_greeting, create_greeting_response)
 from utils import print_all_offers
 from paypal import make_a_payment
 
@@ -137,6 +138,7 @@ class Trader(DatagramProtocol):
         offer = json.dumps(offer)
         self.relay_message(offer)
 
-    def send_greeting(self, greeting):
+    def send_greeting(self):
+        greeting = create_greeting()
         greeting = json.dumps(greeting)
         self.relay_message(greeting)
