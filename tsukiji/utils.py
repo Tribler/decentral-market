@@ -20,6 +20,7 @@ def offers_to_string(offers):
 def print_all_offers():
 
     print '''
+    -------------------------------------------------------------------
     Bids
     =========
     {}
@@ -39,4 +40,5 @@ def print_all_offers():
     Trades
     ========
     {}
+    -------------------------------------------------------------------
     '''.format(*[offers_to_string(o) for o in (get_bids(), get_asks(), get_own_bids(), get_own_asks(), trades)])
