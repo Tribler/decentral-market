@@ -14,7 +14,6 @@ def offer_to_string(offer):
 
 
 def offers_to_string(offers):
-    print offers
     return '\n    '.join(offer_to_string(offer) for offer in offers)
 
 
