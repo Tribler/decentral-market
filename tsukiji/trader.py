@@ -46,8 +46,8 @@ class Trader(DatagramProtocol):
             print 'Data received: {}'.format(data)
 
     def relay_message(self, message):
-        for address in self.peers:
-            self.transport.write(message, (address, int(self.peers[address])))
+        for host, port in self.peers.iteritems():
+            self.transport.write(message, (host, int(port)))
 
     def read_peerlist(self):
         with open("peerlist.txt") as f:
@@ -76,7 +76,7 @@ class Trader(DatagramProtocol):
             else:
                 response = responses[data['type']](data)
                 response = json.dumps(response)
-                self.history.add(response)
+                self.history.add((response['id'], response['message-id']))
                 self.transport.write(response, (host, port))
         except ValueError, e:
             print e.message
