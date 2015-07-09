@@ -36,7 +36,7 @@ class Trader(DatagramProtocol):
                 # Relay offers
                 if data['type'] in ['ask', 'bid']:
                     print_all_offers()
-                    self.relay_message(raw_data)
+                    self.relay_message(raw_data, host)
 
                 # Add message to history to eliminate duplicate messages
                 self.history.add((id, message_id))
@@ -45,9 +45,10 @@ class Trader(DatagramProtocol):
         except ValueError:
             print 'Data received: {}'.format(data)
 
-    def relay_message(self, message):
+    def relay_message(self, message, host_of_message_owner=None):
         for host, port in self.peers.iteritems():
-            self.transport.write(message, (host, int(port)))
+            if host != host_of_message_owner:
+                self.transport.write(message, (host, int(port)))
 
     def read_peerlist(self):
         with open("peerlist.txt") as f:
