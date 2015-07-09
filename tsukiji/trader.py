@@ -75,8 +75,8 @@ class Trader(DatagramProtocol):
                 response = self.handle_greeting(host, port)
             else:
                 response = responses[data['type']](data)
-                response = json.dumps(response)
                 self.history.add((response['id'], response['message-id']))
+                response = json.dumps(response)
                 self.transport.write(response, (host, port))
         except ValueError, e:
             print e.message
