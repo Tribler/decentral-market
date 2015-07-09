@@ -132,7 +132,7 @@ def remove_offer(id, message_id):
     offer = get_offer(id, message_id)
     if offer:
         offers.remove(offer)
-    return offer
+        return offer
 
 
 def clean_offers(f):

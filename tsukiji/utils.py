@@ -2,6 +2,8 @@ from orderbook import get_bids, get_asks, get_own_bids, get_own_asks, trades
 
 
 def offer_to_string(offer):
+    if offer is None:
+        return
     s = "{\n"
     for k, v in offer.iteritems():
         if k == 'id':
@@ -12,6 +14,7 @@ def offer_to_string(offer):
 
 
 def offers_to_string(offers):
+    print offers
     return '\n    '.join(offer_to_string(offer) for offer in offers)
 
 

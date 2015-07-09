@@ -88,6 +88,7 @@ class Trader(DatagramProtocol):
             return ''
         bid = match_incoming_ask(ask)
         if bid:
+            offers.append(ask)
             return trade_offer(ask, bid)
         else:
             offers.append(ask)
@@ -98,6 +99,7 @@ class Trader(DatagramProtocol):
             return ''
         ask = match_incoming_bid(bid)
         if ask:
+            offers.append(bid)
             return trade_offer(bid, ask)
         else:
             offers.append(bid)
@@ -116,7 +118,16 @@ class Trader(DatagramProtocol):
 
     def handle_confirm(self, confirm):
         offer = remove_offer(id=confirm['id'], message_id=confirm['trade-id'])
-        trades.append(offer)
+        matching_offer = None
+        if offer is not None:
+            if offer['type'] == 'ask':
+                matching_offer = match_incoming_ask(offer)
+            if offer['type'] == 'bid':
+                matching_offer = match_incoming_bid(offer)
+        if matching_offer is not None:
+            remove_offer(id=matching_offer['id'], message_id=matching_offer['message-id'])
+            trades.append(matching_offer)
+        print_all_offers()
         return 'Trade succesful!'
 
     def handle_cancel(self, cancel):
