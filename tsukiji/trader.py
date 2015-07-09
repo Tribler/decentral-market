@@ -84,6 +84,8 @@ class Trader(DatagramProtocol):
             return 'Error: something bad happened'
 
     def handle_ask(self, ask):
+        if ask['id'] == get_public_bytestring():
+            return ''
         bid = match_incoming_ask(ask)
         if bid:
             return trade_offer(ask, bid)
@@ -92,6 +94,8 @@ class Trader(DatagramProtocol):
             return 'Your ask got processed!'
 
     def handle_bid(self, bid):
+        if bid['id'] == get_public_bytestring():
+            return ''
         ask = match_incoming_bid(bid)
         if ask:
             return trade_offer(bid, ask)
